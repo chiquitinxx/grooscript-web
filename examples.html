@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="description" content="Converts Groovy code to JavaScript"/>
+      <meta name="keywords" content="groovy, scripting language, javascript, groovy to javascript, framework"/>
+      <meta name="author" content="Jorge Franco">
+      <link rel="shortcut icon" href="img/favicon.png">
+
+    <title>Grooscript</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/grooscript.css" rel="stylesheet">
+
+      <link href="css/shCoreDefault.css" rel="stylesheet">
+
+      <script src="js/shCore.js"></script>
+      <script src="js/shBrushJScript.js"></script>
+      <script src="js/shBrushGroovy.js"></script>
+      <script src="js/shAutoloader.js"></script>
+      <script src="js/shCore.min.js"></script>
+
+      <script>
+          SyntaxHighlighter.defaults['light'] = true;
+          SyntaxHighlighter.all();
+      </script>
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <div id="headbar" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html">grooscript</a>
+        </div>
+        <div id="socialIcons" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a data-placement="bottom" title="Send Email" href="mailto:grooscript@gmail.com"><img src="img/gmail-48.png"/></a></li>
+            <li><a data-placement="bottom" title="Twitter" href="http://twitter.com/grooscript"><img src="img/twitter-48.png"/></a></li>
+            <li><a data-placement="bottom" title="Blog" href="http://grooscript.wordpress.com"><img src="img/wordpress-48.png"/></a></li>
+            <li><a data-placement="bottom" title="Github" href="http://github.com/chiquitinxx/grooscript"><img src="img/github-48.png"/></a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class='container'>
+    <p class="centerText">Here you can see some examples of Groovy code converted successfully. Javascript code is below.</p>
+    <div>
+        <ul id="myTab" class="nav nav-pills">
+            <li class="active"><a href="#0_2_2" data-toggle="tab">0_2_2</a></li>
+            <li><a href="#MysticTable" data-toggle="tab">MysticTable</a></li>
+            <li><a href="#ExpandoTree" data-toggle="tab">ExpandoTree</a></li>
+            <li><a href="#Random" data-toggle="tab">Random</a></li>
+            <li><a href="#MethodMissing" data-toggle="tab">MethodMissing</a></li>
+            <li><a href="#SortingLists" data-toggle="tab">SortingLists</a></li>
+            <li><a href="#Strings" data-toggle="tab">Strings</a></li>
+        </ul>
+    </div>
+
+    <div id="myCode" class="tab-content">
+    <div class="tab-pane fade in active" id="0_2_2">
+    <pre class='brush:groovy;'>package advanced
+
+/**
+ * User: jorgefrancoleza
+ * Date: 22/02/13
+ */
+
+class Tests {
+    def 'failTest'() {
+        def a = 2
+
+        then:
+        check(a == 1)
+    }
+
+    def 'okTest'() {
+        check(1 == 1)
+    }
+}
+
+Tests.metaClass.static.doTest = {
+    def result = []
+    def tests = new Tests()
+    tests.metaClass.check = { exp -&gt;
+        if (!exp) {
+            throw new Exception()
+        }
+    }
+
+    tests.metaClass.methods.findAll { !['setProperty','setMetaClass','invokeMethod','getProperty','getMetaClass','__$swapInit',
+       'wait','toString','notifyAll','notify','hashCode','getClass','equals','doTest','check'].contains(it.name) }
+    .each { MetaMethod method -&gt;
+
+        def test = new Expando(name:method.name,fail:false)
+        try {
+            tests."&#36;&#123;method.name}"()
+        } catch (e) {
+            test.fail = true
+        }
+        result &lt;&lt; test
+    }
+
+    return result
+}
+
+def result = Tests.doTest()
+assert result.size() == 2
+assert result.findAll { it.fail == true}.size() == 1
+
+class Components {
+    def static salute(String who) {
+        return "Hello &#36;&#123;who}!"
+    }
+}
+
+
+class LittleDsl {
+
+    def StringBuffer text = new StringBuffer('')
+
+    def static build(Closure closure) {
+        def builder = new LittleDsl()
+        closure.delegate = builder
+        closure()
+        return builder.text.toString()
+    }
+
+    def add(textToAdd) {
+        text &lt;&lt; textToAdd
+    }
+
+    def methodMissing(String name,args) {
+        text &lt;&lt; "&lt;&#36;&#123;name}&gt;"
+        if (args && args.last() instanceof Closure) {
+            def clo = args.last()
+            //clo.delegate = this
+            clo()
+        }
+        text &lt;&lt; "&lt;/&#36;&#123;name}&gt;"
+    }
+}
+
+def text = LittleDsl.build {
+    if (result.size()&lt;=0) {
+        p { add 'No results!' }
+    } else {
+        ul {
+            def i = 0
+            result.each { item -&gt;
+                li { add "(&#36;&#123;i++}) Name: &#36;&#123;item.name} Fail:&#36;&#123;item.fail}"}
+            }
+        }
+        use (Components) {
+            p { add "Jorge".salute()}
+        }
+    }
+}
+
+assert text == '&lt;ul&gt;&lt;li&gt;(0) Name: failTest Fail:true&lt;/li&gt;&lt;li&gt;(1) Name: okTest Fail:false&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Hello Jorge!&lt;/p&gt;'
+
+def name = "Groovy"
+name.metaClass.mixin Components
+assert name.salute() == "Hello Groovy!"
+
+
+</pre><h5>JavaScript code</h5><pre class='brush: js;'>function Tests() {
+  var gSobject = gs.inherit(gs.baseClass,'Tests');
+  gSobject.clazz = { name: 'advanced.Tests', simpleName: 'Tests'};
+  gSobject.clazz.superclass = { name: 'java.lang.Object', simpleName: 'Object'};
+  gSobject['failTest'] = function(it) {
+    var a = 2;
+    return gs.mc(this,"check",gs.list([gs.equals(a, 1)]));
+  }
+  gSobject['okTest'] = function(it) {
+    return gs.mc(this,"check",gs.list([gs.equals(1, 1)]));
+  }
+  gSobject.Tests1 = function(map) { gs.passMapToObject(map,this); return this;};
+  if (arguments.length==1) {gSobject.Tests1(arguments[0]); }
+
+  return gSobject;
+};
+
+function Components() {
+  var gSobject = gs.inherit(gs.baseClass,'Components');
+  gSobject.clazz = { name: 'advanced.Components', simpleName: 'Components'};
+  gSobject.clazz.superclass = { name: 'java.lang.Object', simpleName: 'Object'};
+  gSobject.salute = function(x0) { return Components.salute(x0); }
+  gSobject.Components1 = function(map) { gs.passMapToObject(map,this); return this;};
+  if (arguments.length==1) {gSobject.Components1(arguments[0]); }
+
+  return gSobject;
+};
+Components.salute = function(who) {
+  return "Hello " + (who) + "!";
+}
+
+function LittleDsl() {
+  var gSobject = gs.inherit(gs.baseClass,'LittleDsl');
+  gSobject.clazz = { name: 'advanced.LittleDsl', simpleName: 'LittleDsl'};
+  gSobject.clazz.superclass = { name: 'java.lang.Object', simpleName: 'Object'};
+  gSobject.text = gs.stringBuffer("");
+  gSobject.build = function(x0) { return LittleDsl.build(x0); }
+  gSobject['add'] = function(textToAdd) {
+    return gs.mc(gSobject.text,'leftShift', gs.list([textToAdd]));
+  }
+  gSobject['methodMissing'] = function(name, args) {
+    gs.mc(gSobject.text,'leftShift', gs.list(["&lt;" + (name) + "&gt;"]));
+    if ((gs.bool(args)) && (gs.instanceOf(gs.mc(args,"last",gs.list([])), "Closure"))) {
+      var clo = gs.mc(args,"last",gs.list([]));
+      (clo.delegate!=undefined?gs.applyDelegate(clo,clo.delegate,[]):clo());
+    };
+    return gs.mc(gSobject.text,'leftShift', gs.list(["&lt;/" + (name) + "&gt;"]));
+  }
+  gSobject.LittleDsl1 = function(map) { gs.passMapToObject(map,this); return this;};
+  if (arguments.length==1) {gSobject.LittleDsl1(arguments[0]); }
+
+  return gSobject;
+};
+LittleDsl.build = function(closure) {
+  var builder = LittleDsl();
+  gs.sp(closure,"delegate",builder);
+  (closure.delegate!=undefined?gs.applyDelegate(closure,closure.delegate,[]):closure());
+  return gs.mc(gs.gp(builder,"text"),"toString",gs.list([]));
+}
+
+
+gs.sp(gs.gp(gs.metaClass(Tests),"static"),"doTest",function(it) {
+  var result = gs.list([]);
+  var tests = Tests();
+  gs.sp((tests = gs.metaClass(tests)),"check",function(exp) {
+    if (!gs.bool(exp)) {
+      throw "Exception";
+    };
+  });
+  gs.mc(gs.mc(gs.gp((tests = gs.metaClass(tests)),"methods"),"findAll",gs.list([function(it) {
+    return !gs.mc(gs.list(["setProperty" , "setMetaClass" , "invokeMethod" , "getProperty" , "getMetaClass" , "__$swapInit" , "wait" , "toString" , "notifyAll" , "notify" , "hashCode" , "getClass" , "equals" , "doTest" , "check"]),"contains",gs.list([gs.gp(it,"name")]));
+  }])),"each",gs.list([function(method) {
+    var test = gs.expando(gs.map().add("name",gs.gp(method,"name")).add("fail",false));
+    try {
+      gs.mc(tests,"" + (gs.gp(method,"name")) + "",gs.list([]));
+    } catch (e) {
+      gs.sp(test,"fail",true);
+    };
+    return gs.mc(result,'leftShift', gs.list([test]));
+  }]));
+  return result;
+});
+var result = gs.mc(Tests,"doTest",gs.list([]));
+gs.assert(gs.equals(gs.mc(result,"size",gs.list([])), 2), null);
+gs.assert(gs.equals(gs.mc(gs.mc(result,"findAll",gs.list([function(it) {
+  return gs.equals(gs.gp(it,"fail"), true);
+}])),"size",gs.list([])), 1), null);
+var text = gs.mc(LittleDsl,"build",gs.list([function(it) {
+  if (gs.mc(result,"size",gs.list([])) &lt;= 0) {
+    return gs.mc(this,"p",gs.list([function(it) {
+      return gs.mc(this,"add",gs.list(["No results!"]));
+    }]));
+  } else {
+    gs.mc(this,"ul",gs.list([function(it) {
+      var i = 0;
+      return gs.mc(result,"each",gs.list([function(item) {
+        return gs.mc(this,"li",gs.list([function(it) {
+          return gs.mc(this,"add",gs.list(["(" + (i++) + ") Name: " + (gs.gp(item,"name")) + " Fail:" + (gs.gp(item,"fail")) + ""]));
+        }]));
+      }]));
+    }]));
+    return gs.categoryUse("Components",function(it) {
+      return gs.mc(this,"p",gs.list([function(it) {
+        return gs.mc(this,"add",gs.list([gs.mc("Jorge","salute",gs.list([]))]));
+      }]));
+    });
+  };
+}]));
+gs.assert(gs.equals(text, "&lt;ul&gt;&lt;li&gt;(0) Name: failTest Fail:true&lt;/li&gt;&lt;li&gt;(1) Name: okTest Fail:false&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Hello Jorge!&lt;/p&gt;"), null);
+var name = "Groovy";
+gs.mixinObject(name,["Components"]);
+gs.assert(gs.equals(gs.mc(name,"salute",gs.list([])), "Hello Groovy!"), null);
+</pre></div><div class="tab-pane fade" id="MysticTable">
+<pre class='brush:groovy;'>package advanced
+
+/**
+ * JFL 17/09/12
+ */
+class Mystic {
+
+    def items = []
+    def closures = []
+
+    //Add objects
+    def add(object) {
+        //object.metaClass.date = new Date()
+        closures.each { it -&gt;
+            it object
+        }
+        items &lt;&lt; object
+    }
+
+    //Insert multiple items
+    def addMultiple(head,property,number) {
+        number.times {
+            def object = new Expando()
+            object."$property" = head + it
+            add object
+        }
+    }
+
+    //Add a closure to apply all items gonna be added to Mystic
+    def addClosureToApplyAllItems(closure) {
+        closures &lt;&lt; closure
+    }
+}
+
+def mysticTable = new Mystic()
+
+def counter = 0
+//Adding insert date property to all items
+mysticTable.addClosureToApplyAllItems({it-&gt; it.metaClass.date = new Date()})
+//Adding an index property to items
+mysticTable.addClosureToApplyAllItems({it-&gt; it.metaClass.index = counter++})
+
+//Adds 10 items
+mysticTable.addMultiple('Groovy ','name',10)
+
+//Checks added correctly
+assert mysticTable.items[0].name == 'Groovy 0'
+assert mysticTable.items.size() == 10
+
+//Find item inside
+assert mysticTable.items.find({it -&gt; it.name.endsWith('3')}).name == 'Groovy 3'
+
+//Check index there
+assert mysticTable.items[5].index == 5
+
+//Insert 1 item more
+def exp = ''
+exp.metaClass.value = 'Eleven'
+mysticTable.with {
+    add(exp)
+}
+
+//Last checks
+assert mysticTable.items.size() == 11
+assert mysticTable.items[10].value == 'Eleven'
+assert mysticTable.items[10].date &gt; mysticTable.items[0].date
+assert mysticTable.items[8].date &lt; mysticTable.items[10].date</pre><h5>JavaScript code</h5><pre class='brush: js;'>function Mystic() {
+  var gSobject = gs.inherit(gs.baseClass,'Mystic');
+  gSobject.clazz = { name: 'advanced.Mystic', simpleName: 'Mystic'};
+  gSobject.clazz.superclass = { name: 'java.lang.Object', simpleName: 'Object'};
+  gSobject.items = gs.list([]);
+  gSobject.closures = gs.list([]);
+  gSobject['add'] = function(object) {
+    gs.mc(gSobject.closures,"each",gs.list([function(it) {
+      return (it.delegate!=undefined?gs.applyDelegate(it,it.delegate,[object]):it(object));
+    }]));
+    return gs.mc(gSobject.items,'leftShift', gs.list([object]));
+  }
+  gSobject['addMultiple'] = function(head, property, number) {
+    return gs.mc(number,"times",gs.list([function(it) {
+      var object = gs.expando();
+      gs.sp(object,"" + (property) + "",(gs.plus(head, it)));
+      return gs.mc(gSobject,"add",gs.list([object]));
+    }]));
+  }
+  gSobject['addClosureToApplyAllItems'] = function(closure) {
+    return gs.mc(gSobject.closures,'leftShift', gs.list([closure]));
+  }
+  gSobject.Mystic1 = function(map) { gs.passMapToObject(map,this); return this;};
+  if (arguments.length==1) {gSobject.Mystic1(arguments[0]); }
+
+  return gSobject;
+};
+
+
+var mysticTable = Mystic();
+var counter = 0;
+gs.mc(mysticTable,"addClosureToApplyAllItems",gs.list([function(it) {
+  return gs.sp((it = gs.metaClass(it)),"date",gs.date());
+}]));
+gs.mc(mysticTable,"addClosureToApplyAllItems",gs.list([function(it) {
+  return gs.sp((it = gs.metaClass(it)),"index",counter++);
+}]));
+gs.mc(mysticTable,"addMultiple",gs.list(["Groovy ", "name", 10]));
+gs.assert(gs.equals(gs.gp(gs.gp(mysticTable,"items") [ 0],"name"), "Groovy 0"), null);
+gs.assert(gs.equals(gs.mc(gs.gp(mysticTable,"items"),"size",gs.list([])), 10), null);
+gs.assert(gs.equals(gs.gp(gs.mc(gs.gp(mysticTable,"items"),"find",gs.list([function(it) {
+  return gs.mc(gs.gp(it,"name"),"endsWith",gs.list(["3"]));
+}])),"name"), "Groovy 3"), null);
+gs.assert(gs.equals(gs.gp(gs.gp(mysticTable,"items") [ 5],"index"), 5), null);
+var exp = "";
+gs.sp((exp = gs.metaClass(exp)),"value","Eleven");
+mysticTable.withz(function(it) {
+  return gs.mc(this,"add",gs.list([exp]));
+});
+gs.assert(gs.equals(gs.mc(gs.gp(mysticTable,"items"),"size",gs.list([])), 11), null);
+gs.assert(gs.equals(gs.gp(gs.gp(mysticTable,"items") [ 10],"value"), "Eleven"), null);
+gs.assert(gs.gp(gs.gp(mysticTable,"items") [ 10],"date") &gt; gs.gp(gs.gp(mysticTable,"items") [ 0],"date"), null);
+gs.assert(gs.gp(gs.gp(mysticTable,"items") [ 8],"date") &lt; gs.gp(gs.gp(mysticTable,"items") [ 10],"date"), null);
+</pre></div><div class="tab-pane fade" id="ExpandoTree">
+<pre class='brush:groovy;'>/**
+ * JFL 13/09/12
+ */
+class GTree {
+
+    def root
+    def curText
+
+    def private insert(leaf,object) {
+
+        if (leaf==object) {
+            //Nothing to do, we dont add repeated values
+        } else if (leaf &gt; object) {
+            if (leaf.left) {
+                insert leaf.left,object
+            } else {
+                leaf.left = object
+            }
+        } else if (leaf &lt; object) {
+            if (leaf?.right) {
+                insert leaf.right,object
+            } else {
+                leaf.right = object
+            }
+        }
+    }
+
+    def private addText(text) {
+        if (!curText) {
+            curText = text
+        } else {
+            curText += " - &#36;&#123;text}"
+        }
+    }
+
+    def private followPrint(leaf) {
+        if (leaf.left) {
+            followPrint leaf.left
+        }
+        addText(leaf)
+        if (leaf.right) {
+            followPrint leaf.right
+        }
+    }
+
+    def String toString() {
+        def result = '[empty]'
+        if (root) {
+            followPrint root
+            result = curText
+        }
+
+        return result
+    }
+
+    def add(object) {
+        object.metaClass.left = null
+        object.metaClass.right = null
+        if (!root) {
+            root = object
+        } else {
+            insert root,object
+        }
+        this
+    }
+}
+
+def tree = new GTree()
+tree.add('5').add('7').add('3').add('9').add('2').add('8').add('6').add('4').add('1').add('10')
+
+assert tree.toString() == '1 - 10 - 2 - 3 - 4 - 5 - 6 - 7 - 8 - 9'
+
+def treeNumbers = new GTree()
+treeNumbers.add(5).add(7).add(3).add(9).add(2).add(8).add(6).add(4).add(1).add(10)
+
+assert treeNumbers.toString() == '1 - 2 - 3 - 4 - 5 - 6 - 7 - 8 - 9 - 10'
+</pre><h5>JavaScript code</h5><pre class='brush: js;'>function GTree() {
+  var gSobject = gs.inherit(gs.baseClass,'GTree');
+  gSobject.clazz = { name: 'GTree', simpleName: 'GTree'};
+  gSobject.clazz.superclass = { name: 'java.lang.Object', simpleName: 'Object'};
+  gSobject.root = null;
+  gSobject.curText = null;
+  gSobject['insert'] = function(leaf, object) {
+    if (gs.equals(leaf, object)) {
+    } else {
+      if (leaf &gt; object) {
+        if (gs.bool(gs.gp(leaf,"left"))) {
+          return gs.mc(gSobject,"insert",gs.list([gs.gp(leaf,"left"), object]));
+        } else {
+          return gs.sp(leaf,"left",object);
+        };
+      } else {
+        if (leaf &lt; object) {
+          if (gs.bool(gs.gp(leaf,"right",true))) {
+            return gs.mc(gSobject,"insert",gs.list([gs.gp(leaf,"right"), object]));
+          } else {
+            return gs.sp(leaf,"right",object);
+          };
+        };
+      };
+    };
+  }
+  gSobject['addText'] = function(text) {
+    if (!gs.bool(gSobject.curText)) {
+      return gSobject.curText = text;
+    } else {
+      return gSobject.curText += " - " + (text) + "";
+    };
+  }
+  gSobject['followPrint'] = function(leaf) {
+    if (gs.bool(gs.gp(leaf,"left"))) {
+      gs.mc(gSobject,"followPrint",gs.list([gs.gp(leaf,"left")]));
+    };
+    gs.mc(gSobject,"addText",gs.list([leaf]));
+    if (gs.bool(gs.gp(leaf,"right"))) {
+      return gs.mc(gSobject,"followPrint",gs.list([gs.gp(leaf,"right")]));
+    };
+  }
+  gSobject['toString'] = function(it) {
+    var result = "[empty]";
+    if (gs.bool(gSobject.root)) {
+      gs.mc(gSobject,"followPrint",gs.list([gSobject.root]));
+      result = gSobject.curText;
+    };
+    return result;
+  }
+  gSobject['add'] = function(object) {
+    gs.sp((object = gs.metaClass(object)),"left",null);
+    gs.sp((object = gs.metaClass(object)),"right",null);
+    if (!gs.bool(gSobject.root)) {
+      gSobject.root = object;
+    } else {
+      gs.mc(gSobject,"insert",gs.list([gSobject.root, object]));
+    };
+    return this;
+  }
+  gSobject.GTree1 = function(map) { gs.passMapToObject(map,this); return this;};
+  if (arguments.length==1) {gSobject.GTree1(arguments[0]); }
+
+  return gSobject;
+};
+var tree = GTree();
+gs.mc(gs.mc(gs.mc(gs.mc(gs.mc(gs.mc(gs.mc(gs.mc(gs.mc(gs.mc(tree,"add",gs.list(["5"])),"add",gs.list(["7"])),"add",gs.list(["3"])),"add",gs.list(["9"])),"add",gs.list(["2"])),"add",gs.list(["8"])),"add",gs.list(["6"])),"add",gs.list(["4"])),"add",gs.list(["1"])),"add",gs.list(["10"]));
+gs.assert(gs.equals(gs.mc(tree,"toString",gs.list([])), "1 - 10 - 2 - 3 - 4 - 5 - 6 - 7 - 8 - 9"), null);
+var treeNumbers = GTree();
+gs.mc(gs.mc(gs.mc(gs.mc(gs.mc(gs.mc(gs.mc(gs.mc(gs.mc(gs.mc(treeNumbers,"add",gs.list([5])),"add",gs.list([7])),"add",gs.list([3])),"add",gs.list([9])),"add",gs.list([2])),"add",gs.list([8])),"add",gs.list([6])),"add",gs.list([4])),"add",gs.list([1])),"add",gs.list([10]));
+gs.assert(gs.equals(gs.mc(treeNumbers,"toString",gs.list([])), "1 - 2 - 3 - 4 - 5 - 6 - 7 - 8 - 9 - 10"), null);
+</pre></div><div class="tab-pane fade" id="Random">
+<pre class='brush:groovy;'>package advanced
+
+/**
+ * JFL 28/10/12
+ */
+final MAX = 5
+
+def randomNumber
+def surprise = false
+def values = [:]
+
+500.times {
+    randomNumber = new Random().nextInt(MAX)
+    if (randomNumber&gt;=MAX) {
+        surprise = true
+    }
+    values."$randomNumber" = (values."$randomNumber"?values."$randomNumber"+1:1)
+}
+
+values.each { key, value -&gt;
+    println "$key repeated $value times"
+}
+
+assert !surprise
+
+result = [heads:0, tails:0]
+500.times {
+    if (new Random().nextBoolean()) {
+        result.heads++
+    } else {
+        result.tails++
+    }
+}
+
+println (result.heads&gt;result.tails?'Next bid on TAILS':(result.heads==result.tails?'WHO KNOWS!':'Next bid on HEADS'))
+println " h:&#36;&#123;result.heads} t:&#36;&#123;result.tails}"
+
+def r = new Random().nextInt(4)
+assert r&gt;=0 && r&lt;4</pre><h5>JavaScript code</h5><pre class='brush: js;'>var MAX = 5;
+var randomNumber = null;
+var surprise = false;
+var values = gs.map();
+(500).times(function(it) {
+  randomNumber = gs.mc(gs.random(),"nextInt",gs.list([MAX]));
+  if (randomNumber &gt;= MAX) {
+    surprise = true;
+  };
+  return gs.sp(values,"" + (randomNumber) + "",(gs.bool(gs.gp(values,"" + (randomNumber) + "")) ? gs.plus(gs.gp(values,"" + (randomNumber) + ""), 1) : 1));
+});
+gs.mc(values,"each",gs.list([function(key, value) {
+  return gs.println("" + (key) + " repeated " + (value) + " times");
+}]));
+gs.assert(!gs.bool(surprise), null);
+result = gs.map().add("heads",0).add("tails",0);
+(500).times(function(it) {
+  if (gs.mc(gs.random(),"nextBoolean",gs.list([]))) {
+    return gs.plusPlus(result,"heads",true,false);
+  } else {
+    return gs.plusPlus(result,"tails",true,false);
+  };
+});
+gs.println((gs.gp(result,"heads") &gt; gs.gp(result,"tails") ? "Next bid on TAILS" : (gs.equals(gs.gp(result,"heads"), gs.gp(result,"tails")) ? "WHO KNOWS!" : "Next bid on HEADS")));
+gs.println(" h:" + (gs.gp(result,"heads")) + " t:" + (gs.gp(result,"tails")) + "");
+var r = gs.mc(gs.random(),"nextInt",gs.list([4]));
+gs.assert((r &gt;= 0) && (r &lt; 4), null);
+</pre></div><div class="tab-pane fade" id="MethodMissing">
+<pre class='brush:groovy;'>package advanced
+
+/**
+ * JFL 22/12/12
+ */
+
+class Missing {
+
+    def a
+
+    def countMissing = 0
+
+    def methodMissing(String name,args) {
+        countMissing++
+        this.metaClass."$name" = { -&gt;
+            a++
+        }
+    }
+
+    Missing() {
+        def mc = new ExpandoMetaClass(Missing, false, true)
+        mc.initialize()
+        this.metaClass = mc
+    }
+
+
+}
+
+def missing = new Missing()
+
+missing.a = 5
+
+assert missing.getA() == 5
+assert missing.countMissing == 0
+
+
+missing.doSomething()
+
+assert missing.countMissing == 1
+
+
+missing.doSomething()
+assert missing.countMissing == 1
+assert missing.a == 6
+
+def expandoMissing = new Expando()
+count = 0
+expandoMissing.metaClass.methodMissing = { String name,args -&gt;
+    count++
+}
+
+expandoMissing.doSomething()
+assert count == 1</pre><h5>JavaScript code</h5><pre class='brush: js;'>function Missing() {
+  var gSobject = gs.inherit(gs.baseClass,'Missing');
+  gSobject.clazz = { name: 'advanced.Missing', simpleName: 'Missing'};
+  gSobject.clazz.superclass = { name: 'java.lang.Object', simpleName: 'Object'};
+  gSobject.a = null;
+  gSobject.countMissing = 0;
+  gSobject['methodMissing'] = function(name, args) {
+    gSobject.countMissing++;
+    return gs.sp(this,"" + (name) + "",function(it) {
+      return gSobject.a++;
+    });
+  }
+  gSobject['Missing0'] = function(it) {
+    var mc = gs.expandoMetaClass(Missing, false, true);
+    gs.mc(mc,"initialize",gs.list([]));
+    gs.sp(this,"metaClass",mc);
+    return this;
+  }
+  if (arguments.length==0) {gSobject.Missing0(); }
+  gSobject.Missing1 = function(map) { gs.passMapToObject(map,this); return this;};
+  if (arguments.length==1) {gSobject.Missing1(arguments[0]); }
+
+  return gSobject;
+};
+
+
+var missing = Missing();
+gs.sp(missing,"a",5);
+gs.assert(gs.equals(gs.mc(missing,"getA",gs.list([])), 5), null);
+gs.assert(gs.equals(gs.gp(missing,"countMissing"), 0), null);
+gs.mc(missing,"doSomething",gs.list([]));
+gs.assert(gs.equals(gs.gp(missing,"countMissing"), 1), null);
+gs.mc(missing,"doSomething",gs.list([]));
+gs.assert(gs.equals(gs.gp(missing,"countMissing"), 1), null);
+gs.assert(gs.equals(gs.gp(missing,"a"), 6), null);
+var expandoMissing = gs.expando();
+count = 0;
+gs.sp((expandoMissing = gs.metaClass(expandoMissing)),"methodMissing",function(name, args) {
+  return count++;
+});
+gs.mc(expandoMissing,"doSomething",gs.list([]));
+gs.assert(gs.equals(count, 1), null);
+</pre></div><div class="tab-pane fade" id="SortingLists">
+<pre class='brush:groovy;'>package advanced
+
+/**
+ * JFL 10/11/12
+ */
+
+def list = [1,3,7,4,9,2,5]
+//False don't modify original list
+assert list.sort(false) == [1,2,3,4,5,7,9]
+
+assert list == [1,3,7,4,9,2,5]
+
+assert list.sort() == [1,2,3,4,5,7,9]
+assert list == [1,2,3,4,5,7,9]
+
+assert ["hi","hey","hello"] == ["hello","hi","hey"].sort { it.size() }
+
+assert ["hi","hey","hello"] == ["hello","hi","hey"].sort { a, b -&gt; a.size() &lt;=&gt; b.size() }
+
+def orig = ["hello","hi","Hey"]
+
+def sorted = orig.sort(false) { it.toUpperCase() }
+
+assert orig == ["hello","hi","Hey"]
+
+assert sorted == ["hello","Hey","hi"]</pre><h5>JavaScript code</h5><pre class='brush: js;'>var list = gs.list([1 , 3 , 7 , 4 , 9 , 2 , 5]);
+gs.assert(gs.equals(gs.mc(list,"sort",gs.list([false])), gs.list([1 , 2 , 3 , 4 , 5 , 7 , 9])), null);
+gs.assert(gs.equals(list, gs.list([1 , 3 , 7 , 4 , 9 , 2 , 5])), null);
+gs.assert(gs.equals(gs.mc(list,"sort",gs.list([])), gs.list([1 , 2 , 3 , 4 , 5 , 7 , 9])), null);
+gs.assert(gs.equals(list, gs.list([1 , 2 , 3 , 4 , 5 , 7 , 9])), null);
+gs.assert(gs.equals(gs.list(["hi" , "hey" , "hello"]), gs.mc(gs.list(["hello" , "hi" , "hey"]),"sort",gs.list([function(it) {
+  return gs.mc(it,"size",gs.list([]));
+}]))), null);
+gs.assert(gs.equals(gs.list(["hi" , "hey" , "hello"]), gs.mc(gs.list(["hello" , "hi" , "hey"]),"sort",gs.list([function(a, b) {
+  return gs.spaceShip(gs.mc(a,"size",gs.list([])), gs.mc(b,"size",gs.list([])));
+}]))), null);
+var orig = gs.list(["hello" , "hi" , "Hey"]);
+var sorted = gs.mc(orig,"sort",gs.list([false, function(it) {
+  return gs.mc(it,"toUpperCase",gs.list([]));
+}]));
+gs.assert(gs.equals(orig, gs.list(["hello" , "hi" , "Hey"])), null);
+gs.assert(gs.equals(sorted, gs.list(["hello" , "Hey" , "hi"])), null);
+</pre></div><div class="tab-pane fade" id="Strings">
+<pre class='brush:groovy;'>package advanced
+
+/**
+ * JFL 22/12/12
+ */
+
+v1 = 'alpha'; v2 = 'omega'
+// this can done with explicit swapping via a temp variable
+// or in a slightly more interesting way with a closure
+swap = { temp = v1; v1 = v2; v2 = temp }
+swap()
+assert v1 == 'omega' && v2 == 'alpha'
+
+assert 'string'.reverse() == 'gnirts'
+
+string = 'Yoda said, "can you see this?"'
+revwords = string.split(' ').toList().reverse().join(' ')
+assert revwords == 'this?" see you "can said, Yoda'
+
+words = ['bob', 'alpha', 'rotator', 'omega', 'reviver']
+long_palindromes = words.findAll{ w -&gt; w == w.reverse() && w.size() &gt; 5 }
+assert long_palindromes == ['rotator', 'reviver']
+//Javascript stuff
+//assert "%22" == "\""
+assert "hello".length() == 5
+
+assert 'hello' in ['bye','hello','hey']
+assert 1 in 0..2
+
+def a = ''
+assert !a
+
+a = '\n'
+assert a
+
+a = '\nHello\nBye\n'
+assert a == '''
+Hello
+Bye
+'''
+
+assert [1,2,3,4].join('-') == '1-2-3-4'
+assert ['a','b','c'].join() == 'abc'
+
+aaa = '"bread","apple","egg"'
+items = aaa.split(',')
+assert items[1] == '"apple"'
+
+def multiline = '''\
+Groovy is closely related to Java,
+so it is quite easy to make a transition.
+'''
+
+multiline.eachLine {
+    if (it =~ /Groovy/) {
+        assert it == 'Groovy is closely related to Java,'
+    }
+}
+
+multiline.eachLine { line, count -&gt;
+    if (count == 0) {
+        assert line == 'Groovy is closely related to Java,'
+    } else {
+        assert line == 'so it is quite easy to make a transition.'
+    }
+}
+
+assert multiline.readLines().size() == 2
+
+assert 'Groovy      ' == "Groovy".padRight(12)
+assert '      Groovy' == /Groovy/.padLeft(12)
+
+assert 'Groovy * * *' == "Groovy".padRight(12, ' *')
+assert 'Groovy Groovy Groovy' == 'Groovy'.padLeft(20, 'Groovy ')
+
+assert 'groovy ruby groovy'.count('groovy') == 2
+assert '123'.isNumber()
+assert '123 '.isNumber()
+assert ' 123'.isNumber()
+assert '123.2'.isNumber()
+assert !'123 4'.isNumber()
+assert !'12h3'.isNumber()
+assert !''.isNumber()
+assert !' '.isNumber()
+
+assert 'hello'.capitalize() == 'Hello'
+assert 'HELLO'.capitalize() == 'HELLO'
+
+def languages = ['Groovy', 'Java', 'Clojure']
+def multiGString = """\
+My favourites languages:
+&#36;&#123;languages[0]}
+&#36;&#123;languages[1]}
+&#36;&#123;languages[2]}
+"""
+
+multiGString.eachLine { line, count -&gt;
+    if (count == 0) {
+        assert line == 'My favourites languages:'
+    }
+    if (count == 1) {
+        assert line == 'Groovy'
+    }
+    if (count == 2) {
+        assert line == 'Java'
+    }
+    if (count == 3) {
+        assert line == 'Clojure'
+    }
+}</pre><h5>JavaScript code</h5><pre class='brush: js;'>v1 = "alpha";
+v2 = "omega";
+swap = function(it) {
+  temp = v1;
+  v1 = v2;
+  return v2 = temp;
+};
+gs.mc(this,"swap",gs.list([]));
+gs.assert((gs.equals(v1, "omega")) && (gs.equals(v2, "alpha")), null);
+gs.assert(gs.equals(gs.mc("string","reverse",gs.list([])), "gnirts"), null);
+string = "Yoda said, \"can you see this?\"";
+revwords = gs.mc(gs.mc(gs.mc(gs.mc(string,"split",gs.list([" "])),"toList",gs.list([])),"reverse",gs.list([])),"join",gs.list([" "]));
+gs.assert(gs.equals(revwords, "this?\" see you \"can said, Yoda"), null);
+words = gs.list(["bob" , "alpha" , "rotator" , "omega" , "reviver"]);
+long_palindromes = gs.mc(words,"findAll",gs.list([function(w) {
+  return (gs.equals(w, gs.mc(w,"reverse",gs.list([])))) && (gs.mc(w,"size",gs.list([])) &gt; 5);
+}]));
+gs.assert(gs.equals(long_palindromes, gs.list(["rotator" , "reviver"])), null);
+gs.assert(gs.equals(gs.mc("hello","length",gs.list([])), 5), null);
+gs.assert(gs.gSin("hello", gs.list(["bye" , "hello" , "hey"])), null);
+gs.assert(gs.gSin(1, gs.range(0, 2, true)), null);
+var a = "";
+gs.assert(!gs.bool(a), null);
+a = "\n";
+gs.assert(gs.bool(a), null);
+a = "\nHello\nBye\n";
+gs.assert(gs.equals(a, "\nHello\nBye\n"), null);
+gs.assert(gs.equals(gs.mc(gs.list([1 , 2 , 3 , 4]),"join",gs.list(["-"])), "1-2-3-4"), null);
+gs.assert(gs.equals(gs.mc(gs.list(["a" , "b" , "c"]),"join",gs.list([])), "abc"), null);
+aaa = "\"bread\",\"apple\",\"egg\"";
+items = gs.mc(aaa,"split",gs.list([","]));
+gs.assert(gs.equals((items [ 1]), "\"apple\""), null);
+var multiline = "Groovy is closely related to Java,\nso it is quite easy to make a transition.\n";
+gs.mc(multiline,"eachLine",gs.list([function(it) {
+  if (gs.regExp(it,/Groovy/)) {
+    gs.assert(gs.equals(it, "Groovy is closely related to Java,"), null);
+  };
+}]));
+gs.mc(multiline,"eachLine",gs.list([function(line, count) {
+  if (gs.equals(count, 0)) {
+    gs.assert(gs.equals(line, "Groovy is closely related to Java,"), null);
+  } else {
+    gs.assert(gs.equals(line, "so it is quite easy to make a transition."), null);
+  };
+}]));
+gs.assert(gs.equals(gs.mc(gs.mc(multiline,"readLines",gs.list([])),"size",gs.list([])), 2), null);
+gs.assert(gs.equals("Groovy      ", gs.mc("Groovy","padRight",gs.list([12]))), null);
+gs.assert(gs.equals("      Groovy", gs.mc("Groovy","padLeft",gs.list([12]))), null);
+gs.assert(gs.equals("Groovy * * *", gs.mc("Groovy","padRight",gs.list([12, " *"]))), null);
+gs.assert(gs.equals("Groovy Groovy Groovy", gs.mc("Groovy","padLeft",gs.list([20, "Groovy "]))), null);
+gs.assert(gs.equals(gs.mc("groovy ruby groovy","count",gs.list(["groovy"])), 2), null);
+gs.assert(gs.mc("123","isNumber",gs.list([])), null);
+gs.assert(gs.mc("123 ","isNumber",gs.list([])), null);
+gs.assert(gs.mc(" 123","isNumber",gs.list([])), null);
+gs.assert(gs.mc("123.2","isNumber",gs.list([])), null);
+gs.assert(!gs.mc("123 4","isNumber",gs.list([])), null);
+gs.assert(!gs.mc("12h3","isNumber",gs.list([])), null);
+gs.assert(!gs.mc("","isNumber",gs.list([])), null);
+gs.assert(!gs.mc(" ","isNumber",gs.list([])), null);
+gs.assert(gs.equals(gs.mc("hello","capitalize",gs.list([])), "Hello"), null);
+gs.assert(gs.equals(gs.mc("HELLO","capitalize",gs.list([])), "HELLO"), null);
+var languages = gs.list(["Groovy" , "Java" , "Clojure"]);
+var multiGString = "My favourites languages:\n" + (languages [ 0]) + "\n" + (languages [ 1]) + "\n" + (languages [ 2]) + "\n";
+gs.mc(multiGString,"eachLine",gs.list([function(line, count) {
+  if (gs.equals(count, 0)) {
+    gs.assert(gs.equals(line, "My favourites languages:"), null);
+  };
+  if (gs.equals(count, 1)) {
+    gs.assert(gs.equals(line, "Groovy"), null);
+  };
+  if (gs.equals(count, 2)) {
+    gs.assert(gs.equals(line, "Java"), null);
+  };
+  if (gs.equals(count, 3)) {
+    gs.assert(gs.equals(line, "Clojure"), null);
+  };
+}]));
+</pre></div>
+    </div>
+    </div>
+
+
+      <p class="text-center">@GrooScript 2014</p>
+
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+      <script>
+          $('#socialIcons a').hover(function(e) {
+              $(e.target).tooltip('show');
+          }, function(e) {
+              $(e.target).tooltip('hide');
+          });
+      </script>
+  </body>
+</html>

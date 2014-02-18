@@ -1,0 +1,143 @@
+body {
+    padding-top: 50px;
+}
+a {
+    color: royalblue;
+    font-weight: bold;
+}
+.starter-template {
+    padding: 40px 15px;
+    text-align: center;
+}
+#headbar {
+    background-color: #808080;
+    border: 0px;
+}
+
+#headbar a {
+    color: #ffffff;
+}
+
+.navbar-header a {
+    font-size: 34px;
+    padding-bottom: 17px;
+}
+
+#socialIcons a {
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+#description h3 {
+    padding-bottom: 20px;
+}
+
+.col-md-6 {
+    padding-top: 15px;
+}
+
+.features {
+    padding-bottom: 20px;
+}
+
+.feature {
+    padding: 10px;
+    height: 125px;
+}
+
+.feature h4 {
+    padding: 5px;
+    border: 10px;
+    text-align: center;
+    background-color: #808080;
+    color: white;
+}
+
+.feature p {
+    border-radius: 6px;
+    text-align: center;
+    min-height: 80px;
+}
+
+.current {
+    text-align: right;
+    padding-bottom: 10px;
+}
+
+.motivations {
+    text-align: center;
+    padding-top: 5px;
+}
+
+#buttonSpace {
+    padding-top: 0px;
+    padding-bottom: 10px;
+}
+
+.openSource {
+    padding-top: 20px;
+}
+
+.news {
+    clear: both;
+}
+
+.releaseDate {
+    font-style: italic;
+}
+
+#buttonSpace button {
+    background-color: darkorange;
+    color: #ffffff;
+}
+
+canvas {
+    position:relative; top:0;left:0;
+    visibility: hidden;
+}
+
+.red {background-color:Red;}
+.blue {background-color:Blue;color: white;}
+.yellow {background-color:Yellow;}
+.green {background-color:Green;}
+.purple {background-color:Fuchsia;}
+.cyan {background-color:Aqua;}
+.orange {background-color:Orange;}
+.black {background-color:Black;color: white;}
+
+.padLeft {
+    padding-left: 50px;
+}
+
+.padTop {
+    padding-top: 20px;
+}
+
+.badSupport {
+    background-color: #8b0000;
+}
+
+.littleSupport {
+    background-color: orange;
+}
+
+.goodSupport{
+    background-color: #adff2f;
+}
+
+.aboutColumn {
+    width: 33%;
+    display: inline-table;
+}
+
+.topMessage {
+    padding-top: 20px;
+}
+
+#exceptionArea {
+    color: red;
+}
+
+#assertArea {
+    color: orange;
+}

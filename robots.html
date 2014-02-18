@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="description" content="Converts Groovy code to JavaScript"/>
+      <meta name="keywords" content="groovy, scripting language, javascript, groovy to javascript, framework"/>
+    <meta name="author" content="Jorge Franco">
+    <link rel="shortcut icon" href="img/favicon.png">
+
+    <title>Grooscript</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/grooscript.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <div id="headbar" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html">grooscript</a>
+        </div>
+        <div id="socialIcons" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a data-placement="bottom" title="Send Email" href="mailto:grooscript@gmail.com"><img src="img/gmail-48.png"/></a></li>
+            <li><a data-placement="bottom" title="Twitter" href="http://twitter.com/grooscript"><img src="img/twitter-48.png"/></a></li>
+            <li><a data-placement="bottom" title="Blog" href="http://grooscript.wordpress.com"><img src="img/wordpress-48.png"/></a></li>
+            <li><a data-placement="bottom" title="Github" href="http://github.com/chiquitinxx/grooscript"><img src="img/github-48.png"/></a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class='container'>
+        <p class="topMessage"></p>
+        <table class="hidden-phone topMessage">
+            <tr>
+                <td style="padding-right: 20px;">
+                    <div style="width:552px; height:402px; background-color: black;">
+                        <canvas style="padding: 1px;" width="550" height="400" id="visible-canvas">
+                            There is supposed to be an example drawing here, but it\'s not important.
+                        </canvas>
+                    </div>
+                </td>
+                <td>
+                    <div id="results"></div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+      <p class="text-center">@GrooScript 2014</p>
+
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/grooscript.js"></script>
+    <script src="js/RobotGame.js"></script>
+
+      <script>
+          $('#socialIcons a').hover(function(e) {
+              $(e.target).tooltip('show');
+          }, function(e) {
+              $(e.target).tooltip('hide');
+          });
+      </script>
+    <script>
+        var game;
+
+        function startGame() {
+
+            document.getElementById('visible-canvas').style.visibility='visible';
+
+            var robot1 = Robot('Robot1');
+            var robot2 = Robot('Robot2');
+            var robot3 = Robot('Robot3');
+            var robot4 = Robot('Robot4');
+            var robot5 = Robot('Robot5');
+            var stupidShoot = "if (this.getRadar().size()>0 && this.getTemperature()<60) { var target = this.getRadar().values().get(0); this.shoot(target.x,target.y);}";
+            robot5.actions = Function(stupidShoot);
+            robot1.actions = Function("if (this.getRadar().size() > 0 && (this.getTemperature() < 60)) {"+
+                    "var pos = this.getRadar().values() [ 0]; this.shoot(pos.x, pos.y); }; "+
+                    "this.data.numberShoots = ((this.data.numberShoots ? this.data.numberShoots : 0) + 1);"+
+                    "var a = gs.random().nextInt(4);"+
+                    "if (gs.equals(a, 0)) { this.move(this.north); };"+
+                    "if (gs.equals(a, 1)) { this.move(this.south); };"+
+                    "if (gs.equals(a, 2)) { this.move(this.east);  };"+
+                    "if (gs.equals(a, 3)) { this.move(this.west);  }; ");
+            robot2.actions = Function("this.move(this.south);"+stupidShoot);
+            robot3.actions = Function("this.move(this.east);"+stupidShoot);
+            robot4.actions = Function("this.move(this.west);"+stupidShoot);
+
+            game = RobotGame();
+            game.addRobotToGame(robot1);
+            game.addRobotToGame(robot2);
+            game.addRobotToGame(robot3);
+            game.addRobotToGame(robot4);
+            game.addRobotToGame(robot5);
+            game.maxSize.x = 550;
+            game.maxSize.y = 400;
+            game.sameTime = 4;
+            game.shootDistance = 150;
+
+            game.start()
+
+            gameLoop();
+        }
+
+        function gameLoop() {
+
+            var phase = 1;
+            game.processRadars()
+            game.processActions()
+            game.addRobotShoots()
+            game.processShoots(phase)
+            game.processHotRobots()
+            game.moveRobots();
+
+            drawRobots(phase++);
+
+            game.processUselessRobots()
+            game.processShoots(phase++)
+            game.processShoots(phase)
+            game.cleanTurn()
+
+            drawRobots(phase++)
+            setTimeout(gameLoop, 50);
+        }
+
+        function drawRobots(phase){
+
+            // Primero se recupera el objeto canvas a modificar
+            var canvas = document.getElementById('visible-canvas');
+
+            var buffer;
+
+            if (document.getElementById('not-visible')=='undefined' || document.getElementById('not-visible')==null) {
+                buffer = document.createElement('canvas');
+                buffer.id = 'not-visible';
+                buffer.width = canvas.width;
+                buffer.height = canvas.height;
+                buffer.style.visibility='hidden';
+                canvas.appendChild(buffer);
+            } else {
+                buffer = document.getElementById('not-visible');
+            }
+
+            var context = canvas.getContext('2d');
+            var buffer_context = buffer.getContext('2d');
+
+            buffer_context.fillStyle = "rgb(255,255,255)";
+            buffer_context.fillRect (0, 0, canvas.width, canvas.height);
+
+            game.players.each(function(robot) {
+                if (robot.rXActive) {
+                    buffer_context.fillStyle = robot.rXColor;
+                    buffer_context.fillRect (robot.rXPosition.x-2, robot.rXPosition.y-2, 5, 5);
+                };
+            });
+
+            buffer_context.fillStyle = "rgb(0,0,0)";
+            game.shoots.each(function(shoot) {
+                if (!shoot.finished) {
+                    var xx = shoot.origin.x + ((shoot.turns * 3) + phase)*(shoot.incx);
+                    var yy = shoot.origin.y +((shoot.turns * 3) + phase)*(shoot.incy);
+                    buffer_context.fillRect (xx-1, yy-1, 3, 3);
+                };
+            });
+
+            context.drawImage(buffer, 0, 0);
+            document.getElementById('results').innerHTML = game.toTable();
+        }
+
+        $(document).ready(function() {
+            startGame();
+        });
+    </script>
+  </body>
+</html>
