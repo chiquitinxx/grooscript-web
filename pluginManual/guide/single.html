@@ -1,0 +1,462 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+    <head>
+        <title>Grooscript Vertx Plugin 0.4</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <link rel="stylesheet" href="../css/main.css" type="text/css" media="screen, print" title="Style" charset="utf-8" />
+        <link rel="stylesheet" href="../css/pdf.css" type="text/css" media="print" title="PDF" charset="utf-8" />
+    <script type="text/javascript">
+function addJsClass(el) {
+    var classes = document.body.className.split(" ");
+    classes.push("js");
+    document.body.className = classes.join(" ");
+}
+    </script>
+    </head>
+
+    <body class="body" onload="addJsClass();">
+        <div id="navigation">
+            <ul>
+                <li>
+                    <div id="nav-summary" onmouseover="toggleNavSummary(false)" onmouseout="toggleNavSummary(true)">
+                        <a href="../guide/index.html" class="button">Table of contents</a>
+                        <div id="nav-summary-childs" style="display:none;">
+                            
+                            <div class="toc-item" style="margin-left:0"><a href="#introduction"><strong>1</strong><span>Introduction</span></a></div>
+                            
+                            <div class="toc-item" style="margin-left:0"><a href="#grooscript"><strong>2</strong><span>GrooScript</span></a></div>
+                            
+                            <div class="toc-item" style="margin-left:0"><a href="#conversionDaemon"><strong>3</strong><span>Conversion daemon</span></a></div>
+                            
+                            <div class="toc-item" style="margin-left:0"><a href="#groovyCode"><strong>4</strong><span>Use groovy code in gsp's</span></a></div>
+                            
+                            <div class="toc-item" style="margin-left:0"><a href="#vertx"><strong>5</strong><span>Vertx</span></a></div>
+                            
+                            <div class="toc-item" style="margin-left:0"><a href="#events"><strong>6</strong><span>Events</span></a></div>
+                            
+                            <div class="toc-item" style="margin-left:0"><a href="#templating"><strong>7</strong><span>Create templates</span></a></div>
+                            
+                            <div class="toc-item" style="margin-left:0"><a href="#domainClasses"><strong>8</strong><span>Use your domain classes</span></a></div>
+                            
+                            <div class="toc-item" style="margin-left:0"><a href="#testing"><strong>9</strong><span>PhantomJs tests</span></a></div>
+                            
+                            <div class="toc-item" style="margin-left:0"><a href="#example1"><strong>10</strong><span>Example using template and local events</span></a></div>
+                            
+                            <div class="toc-item" style="margin-left:0"><a href="#example2"><strong>11</strong><span>Example using vert.x to make a chat</span></a></div>
+                            
+                        </div>
+                    </div>
+                </li>
+                <li class="separator selected">
+                    <a id="ref-button" onclick="localToggle(); return false;" href="#">Quick Reference</a>
+                </li>
+            </ul>
+        </div>
+        <div id="header">
+            <div class="images clearfix">
+                
+                
+            </div>
+            <p>Use your groovy code in your gsps thanks to GrooScript.
+It converts the code to javascript and your groovy code will run in your browser.
+Also use Vert.x to use events between server and gsps.
+</p>
+        </div>
+
+
+        <table id="colset" border="0" cellpadding="0" cellspacing="0">
+            <tr>
+                <td id="col1">
+                    <div id="main" class="corner-all">
+
+                        <span id='toggle-col1' class="toggle">(<a href="#" onclick="localToggle(); return false;">Quick Reference</a>)</span>
+
+                        <div class="project">
+                            <h1>Grooscript Vertx Plugin - Reference Documentation</h1>
+                            <p><strong>Authors:</strong> Jorge Franco</p>
+                            <p><strong>Version:</strong> 0.4</p>
+                            
+                        </div>
+
+                        
+                        <div id="table-of-content">
+                            <h2>Table of Contents</h2>
+                            
+                            <div class="toc-item" style="margin-left:0px"><a href="#introduction"><strong>1</strong><span>Introduction</span></a></div>
+                            
+                            <div class="toc-item" style="margin-left:0px"><a href="#grooscript"><strong>2</strong><span>GrooScript</span></a></div>
+                            
+                            <div class="toc-item" style="margin-left:0px"><a href="#conversionDaemon"><strong>3</strong><span>Conversion daemon</span></a></div>
+                            
+                            <div class="toc-item" style="margin-left:0px"><a href="#groovyCode"><strong>4</strong><span>Use groovy code in gsp's</span></a></div>
+                            
+                            <div class="toc-item" style="margin-left:0px"><a href="#vertx"><strong>5</strong><span>Vertx</span></a></div>
+                            
+                            <div class="toc-item" style="margin-left:0px"><a href="#events"><strong>6</strong><span>Events</span></a></div>
+                            
+                            <div class="toc-item" style="margin-left:0px"><a href="#templating"><strong>7</strong><span>Create templates</span></a></div>
+                            
+                            <div class="toc-item" style="margin-left:0px"><a href="#domainClasses"><strong>8</strong><span>Use your domain classes</span></a></div>
+                            
+                            <div class="toc-item" style="margin-left:0px"><a href="#testing"><strong>9</strong><span>PhantomJs tests</span></a></div>
+                            
+                            <div class="toc-item" style="margin-left:0px"><a href="#example1"><strong>10</strong><span>Example using template and local events</span></a></div>
+                            
+                            <div class="toc-item" style="margin-left:0px"><a href="#example2"><strong>11</strong><span>Example using vert.x to make a chat</span></a></div>
+                            
+                            <div style="clear:both" ></div>
+                        </div>
+                        
+                        
+
+<h1 id="introduction">1 Introduction</h1>
+This plugin helps you generate javascript code for your pages, in Groovy.
+Will speed up your developing, working with the tools you know, like Spock, Codenarc, Gradle,&#8230;
+Also, use Vert.x for reloading pages and give you an event tool between server and browser.
+It has a little event module ready to work in your client.
+This plugin need resources plugin to run, use <code>&#60;r:layoutResources/&#62;</code> in your gsps with grooscript tags.<p class="paragraph"/><h2>Important</h2><p class="paragraph"/>Work with domain classes still experimental, don't use in production. Need Grails 2.3 to try it.<p class="paragraph"/>Grails 2.3 has changed test phases and phantomjs tests will not work in that version.<p class="paragraph"/>Lot of times you have to define jquery dependency in your gsp's with resources plugin. dependsOn didn't work as I expected.<p class="paragraph"/><h2>Requisites</h2><p class="paragraph"/>You need <strong class="bold">Java 1.7+</strong> to use Vert.x.<p class="paragraph"/>You need Grails 2.3 to use GrooScript 'customization' conversion option.<p class="paragraph"/><h2>what is new in 0.4</h2>
+<ul class="minus">
+<li>Starting support of domain classes.</li>
+<li>Do remote calls to server with your 'groovy' objects.</li>
+<li>Fix phantomjs tests in grails &#60; 2.3.</li>
+<li>Templating functions can have one parameter.</li>
+<li>DomainClass AST has come to plugin from grooscript core.</li>
+<li>Upgraded to grooscript 0.4.2</li>
+<li>Conversions are now cached and you need cache plugin.</li>
+<li>Lot of fixes.</li>
+</ul><p class="paragraph"/>
+
+
+<h1 id="grooscript">2 GrooScript</h1>
+This little framework is the engine of the plugin. It converts Groovy code to javascript.
+You don't need to know GrooScript, the plugin do the work for you. But you can
+take a look to the <a href="http://grooscript.org/" target="blank">site</a> to get more info. GrooScript compile the code,
+inspect the AST tree, and generate the javascript code.<p class="paragraph"/>Just remember you need <strong class="bold">grooscript.js</strong> to run generated code, in js dir, or  <em class="italic">grooscript</em>  resources module.<p class="paragraph"/>Also, there is grooscriptConverter bean, that you can inject in your grails artifacts:<p class="paragraph"/><div class="code"><pre>class MyController &#123;<p class="paragraph"/>    def grooscriptConverter<p class="paragraph"/>    def index() &#123;
+        def jsCode = grooscriptConverter.toJavascript('any groovy code')
+    &#125;
+&#125;</pre></div><p class="paragraph"/>All conversion done with bean or tags, use classPath 'src/groovy' by default.
+
+
+<h1 id="conversionDaemon">3 Conversion daemon</h1>
+You can activate a daemon that detect changes in groovy files and automatically convert the code to javascript.
+This daemon only works in development, and is all time running while you run your grails application.
+The first time it runs, convert all the files; and next iterations convert changed files, more or less each second.
+If you want to use daemon, need setup in Config.groovy:<p class="paragraph"/><div class="code"><pre>grooscript &#123;
+    daemon &#123;
+        //An array of files and/or folders
+        source = &#91;'src/groovy/MyFile.groovy'&#93;
+        //A folder where .js files will be saved
+        destination = 'web&#45;app/js'
+        //Optional conversion options
+        options = &#91;'classPath', '../otherGroovysrc'&#93;
+        //Optional <span class="java&#45;keyword">do</span> after each iteration
+        doAfter = &#123; list &#45;&#62;
+            <span class="java&#45;keyword">if</span> (list) &#123;
+                println <span class="java&#45;quote">"List of converted files $&#123;list&#125;"</span>
+            &#125;
+        &#125;
+    &#125;
+&#125;</pre></div><p class="paragraph"/>By default 'src/groovy' is added to the  <em class="italic">classPath</em>  in conversions.
+You can add to  <em class="italic">classPath</em>  option with other folders or jars, depends of the code you want to convert.
+The javascript files have the same name that your .groovy file, but with .js extension.
+The source list is done recursively, but no folders will be created in your destination folder,
+all files will be placed there.<p class="paragraph"/>If Vert.x is running, when daemon does a conversion, then reloadPage event sent. In this
+<a href="https://vimeo.com/59395085" target="blank">video</a> there is a demo of this feature without grails.<p class="paragraph"/>You can use this daemon to generate javascript files that you will use in your pages. Remember that you need
+<code>grooscript.js</code> to run your converted code, can use resources plugin in your Config.groovy:<p class="paragraph"/><div class="code"><pre>grails.resources.modules = &#123;
+        myModule &#123;
+            dependsOn('grooscript') // grooscript available from plugin
+            resource url:'/js/MyFile.js'
+            ..
+        &#125;
+        &#8230;
+    &#125;</pre></div>
+
+
+<h1 id="groovyCode">4 Use groovy code in gsp's</h1>
+You can put your Groovy code in gsp's using <a href="../ref/Tags/code.html" class="tags">code</a> tag. You can define a file or put Groovy code inside the tag.
+If you put Groovy code inside, then maybe Grails can try use it, for example if you put '${something}'.
+If your code use other sources of your application, then that dependency will be convented too.
+The dependency of <code>grooscript.js</code> is added with resources plugin. A little cleanup is done in generated code, if your code
+references something that don't find in the context, then is referencing directly, we hope will be available in js context.
+The generated javascript code is inserted in the page in a r.script tag.<p class="paragraph"/>Generated code is prepared to run with other generated code, not for be called from javascript. For example if you create a
+function that expects a groovy map, then you can have problems if a javascript object is passed. There is no problem with
+strings or numbers, but if you get a javascript array or object, then no groovy map and list functions. Also if you convert
+an object, and you want to create in your javascript code, <code>var item = new Item();</code> doesn't work, you have to do
+<code>var item = Item();</code>. All goes smooth if you do all in Groovy, for example converting a script like:<p class="paragraph"/><div class="code"><pre>&#60;grooscript:code&#62;
+    def sing = &#123; name &#45;&#62;
+        console.log 'Singing...' + name
+    &#125;<p class="paragraph"/>    def doSomething = &#123; mapOfClosures &#45;&#62;
+        mapOfClosures.each &#123; key, value &#45;&#62;
+            value(key)
+        &#125;
+    &#125;<p class="paragraph"/>    $(document).ready doSomething(&#91;groovy: sing, grails: sing, grooscript: sing&#93;)
+&#60;grooscript:code&#62;</pre></div><p class="paragraph"/>Also remember you can use <a href="../guide/single.html#conversionDaemon" class="guide">conversion daemon</a>, to generate your .js files from your groovy
+sources, and use in your gsps.<p class="paragraph"/>Not all Groovy is supported, in GrooScript <a href="http://grooscript.org/" target="blank">web</a> you can get more info. Enjoy!
+
+
+<h1 id="vertx">5 Vertx</h1>
+Plugin use <a href="http://vertx.io/." target="blank">Vert.x</a> 1.3.1, is optional. Vert.x is needed to reload pages,
+or send events between grails and your pages. Setup it in your Config.groovy:<p class="paragraph"/><div class="code"><pre>vertx &#123;
+    eventBus &#123;
+        port = 8085
+        //host = 'localhost'
+        //inboundPermitted = &#91;&#91;<span class="java&#45;quote">"address"</span>: 'myChannel'&#93;&#93;
+        //outboundPermitted
+    &#125;
+    listener &#123;
+        source = &#91;'web&#45;app/css/style.css'&#93;
+        afterChanges = &#123; list &#45;&#62;
+            <span class="java&#45;keyword">if</span> (list) &#123;
+                println 'Detected changes: ' + list
+            &#125;
+        &#125;
+    &#125;
+&#125;</pre></div><p class="paragraph"/><code>eventBus</code> the Vert.x bridge used to communicate events.<p class="paragraph"/><code>port</code> port used by Vert.x, sadly can't use same that your web server.<p class="paragraph"/><code>host</code> optional - by default localhost, in the url to connect Vert.x.<p class="paragraph"/><code>inboundPermitted</code> optional - you can define channels where js client can write, see Vert.x documentation.<p class="paragraph"/><code>outboundPermitted</code> optional - channels that can read the js clients. 'reloadPage channel' is always added by default.<p class="paragraph"/><code>listener</code> optional - you can define a listener, that detect file changes all the time.<p class="paragraph"/><code>source</code> list of files / folders to detect changes.<p class="paragraph"/><code>afterChanges</code> optional - you can define a closure that will executes after each detect iteration done.
+Param is a list with the absolute path of the files that have been changed.<p class="paragraph"/>The listener will run in background all the time. Only works in development.
+If detects any change, then send an event to eventbus, and you can automatically reload the gsp with the tag
+<code>&#60;grooscript:reloadPage/&#62;</code>. The reload is automatic, all the page is reloaded.
+Is very useful when you changing styles or test any javascript code in you browser.<p class="paragraph"/>You can use Vert.x client alone in your pages using <a href="../ref/Tags/initVertx.html" class="tags">initVertx</a> tag. Then you will have a javascript
+variable called <code>grooscriptEventBus</code> with the Vert.x js eventBus.
+
+
+<h1 id="events">6 Events</h1>
+There are two event engines that can be running in your page. Vert.x and internal event listener. Vert.x is used for
+communicate with the server, and the internal is used with templates or the model. You can listen events trigger, or
+launch the events. Both, Vert.x and client event has same methods:<p class="paragraph"/><div class="code"><pre>void sendMessage(<span class="java&#45;object">String</span> channel, Map data)
+void onEvent(<span class="java&#45;object">String</span> channel, Closure action)</pre></div><p class="paragraph"/>You can listen an event trigger with onEvent, on a channel. Closure receives a map with the data of the message.<p class="paragraph"/>You can launch an event on a channel with sendMessage.<p class="paragraph"/><h2>Vert.x Events, between server and pages.</h2><p class="paragraph"/>You have bean <code>eventBus</code> available in your grails artifacts<p class="paragraph"/><div class="code"><pre>eventBus.onEvent('myChannel', &#123; msg &#45;&#62; println <span class="java&#45;quote">"Message incoming: $msg"</span>&#125;)<p class="paragraph"/>eventBus.sendMessage('myChannel', &#91;message: 'hello world!'&#93;)</pre></div><p class="paragraph"/>In your gsp's, you have js variable <code>grooscriptEventBus</code>, but better use tags. You can listen on messages from the
+server, or when Vert.x client connection is done.<p class="paragraph"/><div class="code"><pre>&#60;grooscript:onVertxStarted&#62;
+    console.log 'Started!'
+&#60;/grooscript:onVertxStarted&#62;
+&#60;grooscript:onServerEvent name=<span class="java&#45;quote">"testingIncoming"</span>&#62;
+    $('p').text('New message! ' + message)
+&#60;/grooscript:onServerEvent&#62;</pre></div><p class="paragraph"/>You can launch events, in your groovy or js code, with:
+<div class="code"><pre>GrooscriptGrails.sendServerMessage('testing', message)</pre></div><p class="paragraph"/><h2>Client events, in your pages only.</h2><p class="paragraph"/>When you listen to a client event, or a template is listening events, then client event is activated in the page.
+You can listen an event with:<p class="paragraph"/><div class="code"><pre>&#60;grooscript:onEvent name='nameEvent'&#62;
+    console.log 'Message received:' + message
+&#60;/grooscript:onEvent&#62;</pre></div><p class="paragraph"/>And launch client events with:<p class="paragraph"/><div class="code"><pre>GrooscriptGrails.sendClientMessage('nameEvent', message)</pre></div>
+
+
+<h1 id="templating">7 Create templates</h1>
+You can create templates using <a href="../ref/Tags/template.html" class="tags">template</a> tag. A template is a piece of groovy code that will be
+executed inside a html builder. The template is rendered on the client, not in server. For example:<p class="paragraph"/><div class="code"><pre>&#60;grooscript:template&#62;
+    ul &#123;
+        5.times &#123; number &#45;&#62;
+            li <span class="java&#45;quote">"$&#123;number&#125; li item"</span>
+        &#125;
+    &#125;
+&#60;/grooscript:template&#62;</pre></div><p class="paragraph"/>The template is executed in the client, not in the server.
+You can put templates in separates files if you want to.
+You can define a jQuery selector with the elements that will be updated each time template renders.
+You can execute the template at start or when you want.
+The template can listen client events to renders again.<p class="paragraph"/>You can pass a parameter to template, variable 'data' is available inside the tag.<p class="paragraph"/><div class="code"><pre>&#60;div id=<span class="java&#45;quote">"list"</span>&#62;&#60;/div&#62;<p class="paragraph"/>&#60;grooscript:template renderOnReady=<span class="java&#45;quote">"<span class="java&#45;keyword">false</span>"</span> functionName=<span class="java&#45;quote">"refreshList"</span> itemSelector=<span class="java&#45;quote">"&#35;list"</span>&#62;
+    ul &#123;
+        data.each &#123; book &#45;&#62;
+            li &#123;
+                p 'Id: ' + book.id + ' Name: ' + book.title
+            &#125;
+        &#125;
+    &#125;
+&#60;/grooscript:template&#62;<p class="paragraph"/>&#60;grooscript:code&#62;
+    $(document).ready(&#123;
+        refreshList(&#91;&#91;id: 1, title:'Groovy in Action'&#93;, &#91;id: 2, title:'Grails in Action'&#93;&#93;)
+    &#125;)
+&#60;/grooscript:code&#62;</pre></div>
+
+
+<h1 id="domainClasses">8 Use your domain classes</h1>
+There are two tags for work with domain classes in the client side. At the moment only work in development, classes are
+converted to javascript when tags are processed. Js files are generated in web-app/js/domain.js, web-app/js/remoteDomain.js,
+web-app/js/domain/<strong class="bold"></strong> and web-app/js/remoteDomain/<strong class="bold"></strong>.<p class="paragraph"/>Let's take an example domain class in your grails domain directory:<p class="paragraph"/><div class="code"><pre><span class="java&#45;keyword">package</span> myPackage<p class="paragraph"/>class Book &#123;
+    <span class="java&#45;object">String</span> author
+    <span class="java&#45;object">String</span> title
+    <span class="java&#45;object">int</span> pages
+&#125;
+//belongsTo, hasMany,&#8230; will be ignored. Will convert properties defined up and methods.</pre></div><p class="paragraph"/><strong class="bold">First tag</strong> (model) allow you work with domain class in the browser, but without synchronization with the server.<p class="paragraph"/><div class="code"><pre>&#60;grooscript:model domainClass=<span class="java&#45;quote">"Book"</span>/&#62;
+&#60;grooscript:code&#62;
+    <span class="java&#45;keyword">import</span> myPackage.Book<p class="paragraph"/>    def book = <span class="java&#45;keyword">new</span> Book()
+    book.title = 'Cien años de soledad'
+    book.save()<p class="paragraph"/>    println Book.list()
+&#60;/grooscript:code&#62;</pre></div><p class="paragraph"/>Methods that you can use with this tag:
+<ul class="minus">
+<li>validate, clientValidations * still in development, to validate constraints</li>
+<li>hasErrors</li>
+<li>count</li>
+<li>list * without params</li>
+<li>get</li>
+<li>save * without params</li>
+<li>delete</li>
+</ul><p class="paragraph"/>also, can add listeners when a save or delete is done. Listener closure has a map parameter action:nameAction, item: item
+where nameAction is 'insert', 'update' or 'delete' and item is the domain class instance.<p class="paragraph"/><div class="code"><pre>&#60;grooscript:code&#62;
+    Book.changeListeners &#60;&#60; &#123; data &#45;&#62; println data &#125;
+&#60;/grooscript:code&#62;</pre></div><p class="paragraph"/><strong class="bold">Second tag</strong> (remoteModel) allow you work with domain class in the browser, but getting or changing data in the server.<p class="paragraph"/>You have to define security, to access your domain classes from the browsers, in your Config.groovy. A list of maps,
+each map is a domain class you want to access from outside. For each action, you can define a boolean or a closure, to
+allow or not that action from javascript.<p class="paragraph"/><div class="code"><pre>grooscript.model = &#91;
+        &#91;name: 'DomainItem', create: <span class="java&#45;keyword">true</span>, read: <span class="java&#45;keyword">true</span>, update: <span class="java&#45;keyword">true</span>, delete: &#123; &#45;&#62; <span class="java&#45;keyword">true</span>&#125;, list: <span class="java&#45;keyword">true</span>&#93;
+&#93;</pre></div><p class="paragraph"/><div class="code"><pre>&#60;grooscript:remoteModel domainClass=<span class="java&#45;quote">"myPackage.Book"</span>/&#62;<p class="paragraph"/>&#60;grooscript:code&#62;
+    <span class="java&#45;keyword">import</span> myPackage.Book<p class="paragraph"/>    def book = <span class="java&#45;keyword">new</span> Book(title: 'Groovy in Action')
+    book.save().then(&#123;
+        $('&#35;info').append('&#60;p&#62;Book saved ok!&#60;/p&#62;')
+        Plane.list().then(&#123; data &#45;&#62;
+            println 'List incoming '+data
+        &#125;, &#123; data &#45;&#62; println 'Error in list' &#125;)
+    &#125;, &#123; data &#45;&#62; println 'Error in save' &#125;)
+&#60;/grooscript:code&#62;</pre></div><p class="paragraph"/>You can do the following actions: list, get, save, delete. All this actions with this remote domain classes returns a
+class with this interface:<p class="paragraph"/><div class="code"><pre><span class="java&#45;keyword">package</span> org.grooscript.grails.plugin.promise<p class="paragraph"/><span class="java&#45;keyword">interface</span> GsPromise &#123;
+    def then(Closure success, Closure fail)
+&#125;</pre></div><p class="paragraph"/>As all actions are done in the server and are asynchronous, you have to define a closure to process success and a closure
+to process fails, last one is optional. If all goes smooth, success gets a map with properties of the new domain instance
+or a list of domain classes if you used list. If something failed, you get a list of fails.<p class="paragraph"/><strong class="bold">Still experimental, and only works with grails 2.3.x </strong>
+
+
+<h1 id="testing">9 PhantomJs tests</h1>
+The plugin adds a new testing phase, <code>phantomjs</code>, you can add new tests to <code>test/phantomjs</code>. Then you can do
+functional tests using PhantomJsTest annotation, that comes with GrooScript. That annotation runs a PhantomJs test,
+evaluating then code inside the method (converted jo javascript). You need <a href="http://phantomjs.org" target="blank">PhantomJs</a> installed
+in your system and setup path in your Config.groovy<p class="paragraph"/><div class="code"><pre>phantomjs.path = '/anyPath/phantomjs'</pre></div><p class="paragraph"/>This tests run better extending GroovyTestCase, and will run after test application is up.
+You have to put complete url of your test environment.<p class="paragraph"/><div class="code"><pre><span class="java&#45;keyword">import</span> org.grooscript.asts.PhantomJsTest<p class="paragraph"/>class PhantomJsTests <span class="java&#45;keyword">extends</span> GroovyTestCase &#123;<p class="paragraph"/>    @PhantomJsTest(url='http://localhost:8080/grooscript&#45;vertx/main/test')
+    void testDefaultController() &#123;
+        def title = $(<span class="java&#45;quote">"title"</span>)
+        assert title&#91;0&#93;.text=='Title Test',<span class="java&#45;quote">"Title is $&#123;title&#91;0&#93;.text&#125;"</span>
+    &#125;
+&#125;</pre></div><p class="paragraph"/>If you use in Spock, then annotate a private method, and then use from your Spock test.
+Spock <code>where:</code> clause not working.<p class="paragraph"/><strong class="bold">Grails 2.3 changed way to add tests phases and not working.</strong>
+
+
+<h1 id="example1">10 Example using template and local events</h1>
+Example using a template and local events. All executed in javascript, no calls to server.<p class="paragraph"/><div class="code"><pre>&#60;html&#62;
+&#60;head&#62;
+  &#60;title&#62;Title&#60;/title&#62;
+    &#60;r:layoutResources/&#62;
+&#60;/head&#62;
+&#60;body&#62;<p class="paragraph"/>    &#60;p&#62;Hello world!&#60;/p&#62;
+    &#60;button type=<span class="java&#45;quote">"button"</span> onclick=<span class="java&#45;quote">"doAction()"</span>&#62;Launch Event!&#60;/button&#62;
+    &#60;div id='items'&#62;&#60;/div&#62;
+&#60;grooscript:template listenEvents=<span class="java&#45;quote">"&#91;'redraw'&#93;"</span> renderOnReady=<span class="java&#45;quote">"<span class="java&#45;keyword">false</span>"</span> itemSelector=<span class="java&#45;quote">"&#35;items"</span>&#62;
+    ul &#123;
+        listItems.each &#123; item &#45;&#62;
+            ul item
+        &#125;
+    &#125;
+&#60;/grooscript:template&#62;
+&#60;grooscript:code&#62;
+    println 'Welcome to GrooScript!'<p class="paragraph"/>    def doAction = &#123;
+        GrooscriptGrails.sendClientMessage 'redraw', &#91;hello: 'Grooscript'&#93;
+    &#125;<p class="paragraph"/>    def listItems = &#91;'FirstItem'&#93;
+&#60;/grooscript:code&#62;<p class="paragraph"/>&#60;grooscript:onEvent name=<span class="java&#45;quote">"redraw"</span>&#62;
+    console.log 'Redrawing....' + message.toString()
+    listItems &#60;&#60; '<span class="java&#45;object">Number</span> ' + listItems.size()
+&#60;/grooscript:onEvent&#62;
+&#60;r:layoutResources/&#62;
+&#60;/body&#62;
+&#60;/html&#62;</pre></div>
+
+
+<h1 id="example2">11 Example using vert.x to make a chat</h1>
+How to create a chat with the plugin, without any javascript line of code :)<p class="paragraph"/>In Config.groovy:
+<div class="code"><pre>vertx &#123;
+    eventBus &#123;
+        port = 8085
+        //host = 'localhost'
+        inboundPermitted = &#91;&#91;<span class="java&#45;quote">"address"</span>: 'myMessage'&#93;&#93;
+        outboundPermitted = &#91;&#91;<span class="java&#45;quote">"address"</span>: 'chat'&#93;&#93;
+    &#125;
+&#125;</pre></div><p class="paragraph"/>In BootStrap.groovy
+<div class="code"><pre>def eventBus<p class="paragraph"/>    def init = &#123; servletContext &#45;&#62;
+        eventBus.onEvent('myMessage', &#123; message &#45;&#62;
+                println 'Message received: ' + message.body
+                eventBus.sendMessage('chat', message.body)
+        &#125;)
+    &#125;</pre></div><p class="paragraph"/>In gsp:
+<div class="code"><pre>&#60;html&#62;
+&#60;head&#62;
+  &#60;title&#62;Chat&#60;/title&#62;
+    &#60;r:require module=<span class="java&#45;quote">"jquery"</span>/&#62;
+    &#60;r:layoutResources/&#62;
+&#60;/head&#62;
+&#60;body&#62;
+&#60;div class=<span class="java&#45;quote">"myHead"</span>&#62;
+    &#60;p&#62;Your name:&#60;/p&#62;&#60;input type=<span class="java&#45;quote">"text"</span> id='name'/&#62;
+    &#60;p&#62;Your message:&#60;/p&#62;&#60;input type=<span class="java&#45;quote">"text"</span> id='message'/&#62;
+    &#60;button type=<span class="java&#45;quote">"button"</span> id='sendMessage' disabled=<span class="java&#45;quote">"disabled"</span> onclick=<span class="java&#45;quote">"sendMessage()"</span>&#62;Send message!&#60;/button&#62;
+&#60;/div&#62;
+&#60;div class=<span class="java&#45;quote">"messages"</span> id='messages'&#62;
+&#60;/div&#62;
+&#60;grooscript:code&#62;
+    def sendMessage() &#123;
+        def who = $('&#35;name').val() ?: 'Unknown'
+        GrooscriptGrails.sendServerMessage('myMessage',&#91;name: who, message: $('&#35;message').val()&#93;)
+    &#125;
+&#60;/grooscript:code&#62;
+&#60;grooscript:onVertxStarted&#62;
+    $('&#35;sendMessage').removeAttr(<span class="java&#45;quote">"disabled"</span>)
+    console.log 'Vert.x up!'
+&#60;/grooscript:onVertxStarted&#62;
+&#60;grooscript:onServerEvent name=<span class="java&#45;quote">"chat"</span>&#62;
+    def html = '&#60;p&#62;'+ <span class="java&#45;keyword">new</span> Date().toString() +' &#45; ' + message.name +' &#62; ' + message.message + '&#60;/p&#62;'
+    $('&#35;messages').prepend(html)
+&#60;/grooscript:onServerEvent&#62;
+&#60;r:layoutResources/&#62;
+&#60;/body&#62;
+&#60;/html&#62;</pre></div>
+
+                    </div>
+                </td>
+                <td id="col2">
+            <div class="local clearfix">
+                <div class="local-title">
+                    <a href="../guide/index.html" target="mainFrame">Quick Reference</a>
+                    <span class="toggle">(<a href="#" onclick="localToggle(); return false;">hide</a>)</span>
+                </div>
+                <div class="menu">
+                    
+                    <div class="menu-block"><h1 class="menu-title" onclick="toggleRef(this.parentNode.childNodes[1])">Tags</h1><div class="menu-sub">
+                        
+                        
+                        <div class="menu-item"><a href="../ref/Tags/code.html">code</a>
+                        </div>
+                        
+                        <div class="menu-item"><a href="../ref/Tags/initVertx.html">initVertx</a>
+                        </div>
+                        
+                        <div class="menu-item"><a href="../ref/Tags/model.html">model</a>
+                        </div>
+                        
+                        <div class="menu-item"><a href="../ref/Tags/onEvent.html">onEvent</a>
+                        </div>
+                        
+                        <div class="menu-item"><a href="../ref/Tags/onServerEvent.html">onServerEvent</a>
+                        </div>
+                        
+                        <div class="menu-item"><a href="../ref/Tags/onVertxStarted.html">onVertxStarted</a>
+                        </div>
+                        
+                        <div class="menu-item"><a href="../ref/Tags/reloadPage.html">reloadPage</a>
+                        </div>
+                        
+                        <div class="menu-item"><a href="../ref/Tags/remoteModel.html">remoteModel</a>
+                        </div>
+                        
+                        <div class="menu-item"><a href="../ref/Tags/template.html">template</a>
+                        </div>
+                        
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </td>
+            </tr>
+        </table>
+
+        <div id="footer">
+            
+            
+        </div>
+
+
+
+<script type="text/javascript" src="../js/docs.js"></script>
+
+    </body>
+</html>

@@ -1,0 +1,209 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+    <title>3 Conversion daemon 0.4</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" href="../css/main.css" type="text/css" media="screen, print" title="Style" charset="utf-8"/>
+    <link rel="stylesheet" href="../css/pdf.css" type="text/css" media="print" title="PDF" charset="utf-8"/>
+    <script type="text/javascript">
+function addJsClass() {
+    var classes = document.body.className.split(" ");
+    classes.push("js");
+    document.body.className = classes.join(" ");
+}
+    </script>
+</head>
+
+<body class="body" onload="addJsClass();">
+<div id="navigation">
+    <ul>
+        <li>
+            <div id="nav-summary" onmouseover="toggleNavSummary(false)" onmouseout="toggleNavSummary(true)">
+                <a href="../guide/index.html" class="button">Table of contents</a>
+
+                <div id="nav-summary-childs" style="display:none;">
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../guide/introduction.html"><strong>1</strong><span>Introduction</span></a>
+                    </div>
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../guide/grooscript.html"><strong>2</strong><span>GrooScript</span></a>
+                    </div>
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../guide/conversionDaemon.html"><strong>3</strong><span>Conversion daemon</span></a>
+                    </div>
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../guide/groovyCode.html"><strong>4</strong><span>Use groovy code in gsp's</span></a>
+                    </div>
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../guide/vertx.html"><strong>5</strong><span>Vertx</span></a>
+                    </div>
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../guide/events.html"><strong>6</strong><span>Events</span></a>
+                    </div>
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../guide/templating.html"><strong>7</strong><span>Create templates</span></a>
+                    </div>
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../guide/domainClasses.html"><strong>8</strong><span>Use your domain classes</span></a>
+                    </div>
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../guide/testing.html"><strong>9</strong><span>PhantomJs tests</span></a>
+                    </div>
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../guide/example1.html"><strong>10</strong><span>Example using template and local events</span></a>
+                    </div>
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../guide/example2.html"><strong>11</strong><span>Example using vert.x to make a chat</span></a>
+                    </div>
+                    
+                </div>
+            </div>
+        </li>
+        <li class="separator selected">
+            <a id="ref-button" onclick="localToggle(); return false;" href="#">Quick Reference</a>
+        </li>
+    </ul>
+</div>
+<div id="header">
+    <div class="images clearfix">
+        
+        
+    </div>
+    <p>Use your groovy code in your gsps thanks to GrooScript.
+It converts the code to javascript and your groovy code will run in your browser.
+Also use Vert.x to use events between server and gsps.
+</p>
+</div>
+
+
+<table id="colset" border="0" cellpadding="0" cellspacing="0">
+    <tr>
+        <td id="col1">
+            <div id="main" class="corner-all">
+
+                
+                    <div class="toc-item prev-left"><a href="../guide/grooscript.html">&lt;&lt; <strong>2</strong><span>GrooScript</span></a></div>
+                
+
+                <span id='toggle-col1' class="toggle">(<a href="#" onclick="localToggle(); return false;">Quick Reference</a>)</span>
+
+                
+                    <div class="toc-item next-right"><a href="../guide/groovyCode.html"><strong>4</strong><span>Use groovy code in gsp's</span> >></a></div>
+                
+
+
+                <div class="project">
+                    <h1>3 Conversion daemon - Reference Documentation</h1>
+
+                    <p><strong>Authors:</strong> Jorge Franco</p>
+
+                    <p><strong>Version:</strong> 0.4</p>
+
+                    
+                </div>
+
+                
+
+                
+
+<h1 id="conversionDaemon">3 Conversion daemon</h1>
+You can activate a daemon that detect changes in groovy files and automatically convert the code to javascript.
+This daemon only works in development, and is all time running while you run your grails application.
+The first time it runs, convert all the files; and next iterations convert changed files, more or less each second.
+If you want to use daemon, need setup in Config.groovy:<p class="paragraph"/><div class="code"><pre>grooscript &#123;
+    daemon &#123;
+        //An array of files and/or folders
+        source = &#91;'src/groovy/MyFile.groovy'&#93;
+        //A folder where .js files will be saved
+        destination = 'web&#45;app/js'
+        //Optional conversion options
+        options = &#91;'classPath', '../otherGroovysrc'&#93;
+        //Optional <span class="java&#45;keyword">do</span> after each iteration
+        doAfter = &#123; list &#45;&#62;
+            <span class="java&#45;keyword">if</span> (list) &#123;
+                println <span class="java&#45;quote">"List of converted files $&#123;list&#125;"</span>
+            &#125;
+        &#125;
+    &#125;
+&#125;</pre></div><p class="paragraph"/>By default 'src/groovy' is added to the  <em class="italic">classPath</em>  in conversions.
+You can add to  <em class="italic">classPath</em>  option with other folders or jars, depends of the code you want to convert.
+The javascript files have the same name that your .groovy file, but with .js extension.
+The source list is done recursively, but no folders will be created in your destination folder,
+all files will be placed there.<p class="paragraph"/>If Vert.x is running, when daemon does a conversion, then reloadPage event sent. In this
+<a href="https://vimeo.com/59395085" target="blank">video</a> there is a demo of this feature without grails.<p class="paragraph"/>You can use this daemon to generate javascript files that you will use in your pages. Remember that you need
+<code>grooscript.js</code> to run your converted code, can use resources plugin in your Config.groovy:<p class="paragraph"/><div class="code"><pre>grails.resources.modules = &#123;
+        myModule &#123;
+            dependsOn('grooscript') // grooscript available from plugin
+            resource url:'/js/MyFile.js'
+            ..
+        &#125;
+        &#8230;
+    &#125;</pre></div>
+
+
+                <div style="clear:both;margin-top:15px;"></div>
+                
+                    <div class="toc-item prev-left"><a href="../guide/grooscript.html">&lt;&lt; <strong>2</strong><span>GrooScript</span></a></div>
+                
+                    <div class="toc-item next-right"><a href="../guide/groovyCode.html"><strong>4</strong><span>Use groovy code in gsp's</span> >></a></div>
+                
+                <div style="clear:both"></div>
+            </div>
+        </td>
+        <td id="col2">
+            <div class="local clearfix">
+                <div class="local-title">
+                    <a href="../guide/index.html" target="mainFrame">Quick Reference</a>
+                    <span class="toggle">(<a href="#" onclick="localToggle(); return false;">hide</a>)</span>
+                </div>
+                <div class="menu">
+                    
+                    <div class="menu-block"><h1 class="menu-title" onclick="toggleRef(this.parentNode.childNodes[1])">Tags</h1><div class="menu-sub">
+                        
+                            
+                            <div class="menu-item"><a href="../ref/Tags/code.html">code</a>
+                            </div>
+                            
+                            <div class="menu-item"><a href="../ref/Tags/initVertx.html">initVertx</a>
+                            </div>
+                            
+                            <div class="menu-item"><a href="../ref/Tags/model.html">model</a>
+                            </div>
+                            
+                            <div class="menu-item"><a href="../ref/Tags/onEvent.html">onEvent</a>
+                            </div>
+                            
+                            <div class="menu-item"><a href="../ref/Tags/onServerEvent.html">onServerEvent</a>
+                            </div>
+                            
+                            <div class="menu-item"><a href="../ref/Tags/onVertxStarted.html">onVertxStarted</a>
+                            </div>
+                            
+                            <div class="menu-item"><a href="../ref/Tags/reloadPage.html">reloadPage</a>
+                            </div>
+                            
+                            <div class="menu-item"><a href="../ref/Tags/remoteModel.html">remoteModel</a>
+                            </div>
+                            
+                            <div class="menu-item"><a href="../ref/Tags/template.html">template</a>
+                            </div>
+                            
+                            </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+
+<div id="footer">
+    
+    
+</div>
+
+<script type="text/javascript" src="../js/docs.js"></script>
+
+</body>
+</html>

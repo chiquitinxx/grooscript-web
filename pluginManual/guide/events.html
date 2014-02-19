@@ -1,0 +1,191 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+    <title>6 Events 0.4</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" href="../css/main.css" type="text/css" media="screen, print" title="Style" charset="utf-8"/>
+    <link rel="stylesheet" href="../css/pdf.css" type="text/css" media="print" title="PDF" charset="utf-8"/>
+    <script type="text/javascript">
+function addJsClass() {
+    var classes = document.body.className.split(" ");
+    classes.push("js");
+    document.body.className = classes.join(" ");
+}
+    </script>
+</head>
+
+<body class="body" onload="addJsClass();">
+<div id="navigation">
+    <ul>
+        <li>
+            <div id="nav-summary" onmouseover="toggleNavSummary(false)" onmouseout="toggleNavSummary(true)">
+                <a href="../guide/index.html" class="button">Table of contents</a>
+
+                <div id="nav-summary-childs" style="display:none;">
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../guide/introduction.html"><strong>1</strong><span>Introduction</span></a>
+                    </div>
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../guide/grooscript.html"><strong>2</strong><span>GrooScript</span></a>
+                    </div>
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../guide/conversionDaemon.html"><strong>3</strong><span>Conversion daemon</span></a>
+                    </div>
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../guide/groovyCode.html"><strong>4</strong><span>Use groovy code in gsp's</span></a>
+                    </div>
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../guide/vertx.html"><strong>5</strong><span>Vertx</span></a>
+                    </div>
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../guide/events.html"><strong>6</strong><span>Events</span></a>
+                    </div>
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../guide/templating.html"><strong>7</strong><span>Create templates</span></a>
+                    </div>
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../guide/domainClasses.html"><strong>8</strong><span>Use your domain classes</span></a>
+                    </div>
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../guide/testing.html"><strong>9</strong><span>PhantomJs tests</span></a>
+                    </div>
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../guide/example1.html"><strong>10</strong><span>Example using template and local events</span></a>
+                    </div>
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../guide/example2.html"><strong>11</strong><span>Example using vert.x to make a chat</span></a>
+                    </div>
+                    
+                </div>
+            </div>
+        </li>
+        <li class="separator selected">
+            <a id="ref-button" onclick="localToggle(); return false;" href="#">Quick Reference</a>
+        </li>
+    </ul>
+</div>
+<div id="header">
+    <div class="images clearfix">
+        
+        
+    </div>
+    <p>Use your groovy code in your gsps thanks to GrooScript.
+It converts the code to javascript and your groovy code will run in your browser.
+Also use Vert.x to use events between server and gsps.
+</p>
+</div>
+
+
+<table id="colset" border="0" cellpadding="0" cellspacing="0">
+    <tr>
+        <td id="col1">
+            <div id="main" class="corner-all">
+
+                
+                    <div class="toc-item prev-left"><a href="../guide/vertx.html">&lt;&lt; <strong>5</strong><span>Vertx</span></a></div>
+                
+
+                <span id='toggle-col1' class="toggle">(<a href="#" onclick="localToggle(); return false;">Quick Reference</a>)</span>
+
+                
+                    <div class="toc-item next-right"><a href="../guide/templating.html"><strong>7</strong><span>Create templates</span> >></a></div>
+                
+
+
+                <div class="project">
+                    <h1>6 Events - Reference Documentation</h1>
+
+                    <p><strong>Authors:</strong> Jorge Franco</p>
+
+                    <p><strong>Version:</strong> 0.4</p>
+
+                    
+                </div>
+
+                
+
+                
+
+<h1 id="events">6 Events</h1>
+There are two event engines that can be running in your page. Vert.x and internal event listener. Vert.x is used for
+communicate with the server, and the internal is used with templates or the model. You can listen events trigger, or
+launch the events. Both, Vert.x and client event has same methods:<p class="paragraph"/><div class="code"><pre>void sendMessage(<span class="java&#45;object">String</span> channel, Map data)
+void onEvent(<span class="java&#45;object">String</span> channel, Closure action)</pre></div><p class="paragraph"/>You can listen an event trigger with onEvent, on a channel. Closure receives a map with the data of the message.<p class="paragraph"/>You can launch an event on a channel with sendMessage.<p class="paragraph"/><h2>Vert.x Events, between server and pages.</h2><p class="paragraph"/>You have bean <code>eventBus</code> available in your grails artifacts<p class="paragraph"/><div class="code"><pre>eventBus.onEvent('myChannel', &#123; msg &#45;&#62; println <span class="java&#45;quote">"Message incoming: $msg"</span>&#125;)<p class="paragraph"/>eventBus.sendMessage('myChannel', &#91;message: 'hello world!'&#93;)</pre></div><p class="paragraph"/>In your gsp's, you have js variable <code>grooscriptEventBus</code>, but better use tags. You can listen on messages from the
+server, or when Vert.x client connection is done.<p class="paragraph"/><div class="code"><pre>&#60;grooscript:onVertxStarted&#62;
+    console.log 'Started!'
+&#60;/grooscript:onVertxStarted&#62;
+&#60;grooscript:onServerEvent name=<span class="java&#45;quote">"testingIncoming"</span>&#62;
+    $('p').text('New message! ' + message)
+&#60;/grooscript:onServerEvent&#62;</pre></div><p class="paragraph"/>You can launch events, in your groovy or js code, with:
+<div class="code"><pre>GrooscriptGrails.sendServerMessage('testing', message)</pre></div><p class="paragraph"/><h2>Client events, in your pages only.</h2><p class="paragraph"/>When you listen to a client event, or a template is listening events, then client event is activated in the page.
+You can listen an event with:<p class="paragraph"/><div class="code"><pre>&#60;grooscript:onEvent name='nameEvent'&#62;
+    console.log 'Message received:' + message
+&#60;/grooscript:onEvent&#62;</pre></div><p class="paragraph"/>And launch client events with:<p class="paragraph"/><div class="code"><pre>GrooscriptGrails.sendClientMessage('nameEvent', message)</pre></div>
+
+
+                <div style="clear:both;margin-top:15px;"></div>
+                
+                    <div class="toc-item prev-left"><a href="../guide/vertx.html">&lt;&lt; <strong>5</strong><span>Vertx</span></a></div>
+                
+                    <div class="toc-item next-right"><a href="../guide/templating.html"><strong>7</strong><span>Create templates</span> >></a></div>
+                
+                <div style="clear:both"></div>
+            </div>
+        </td>
+        <td id="col2">
+            <div class="local clearfix">
+                <div class="local-title">
+                    <a href="../guide/index.html" target="mainFrame">Quick Reference</a>
+                    <span class="toggle">(<a href="#" onclick="localToggle(); return false;">hide</a>)</span>
+                </div>
+                <div class="menu">
+                    
+                    <div class="menu-block"><h1 class="menu-title" onclick="toggleRef(this.parentNode.childNodes[1])">Tags</h1><div class="menu-sub">
+                        
+                            
+                            <div class="menu-item"><a href="../ref/Tags/code.html">code</a>
+                            </div>
+                            
+                            <div class="menu-item"><a href="../ref/Tags/initVertx.html">initVertx</a>
+                            </div>
+                            
+                            <div class="menu-item"><a href="../ref/Tags/model.html">model</a>
+                            </div>
+                            
+                            <div class="menu-item"><a href="../ref/Tags/onEvent.html">onEvent</a>
+                            </div>
+                            
+                            <div class="menu-item"><a href="../ref/Tags/onServerEvent.html">onServerEvent</a>
+                            </div>
+                            
+                            <div class="menu-item"><a href="../ref/Tags/onVertxStarted.html">onVertxStarted</a>
+                            </div>
+                            
+                            <div class="menu-item"><a href="../ref/Tags/reloadPage.html">reloadPage</a>
+                            </div>
+                            
+                            <div class="menu-item"><a href="../ref/Tags/remoteModel.html">remoteModel</a>
+                            </div>
+                            
+                            <div class="menu-item"><a href="../ref/Tags/template.html">template</a>
+                            </div>
+                            
+                            </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+
+<div id="footer">
+    
+    
+</div>
+
+<script type="text/javascript" src="../js/docs.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+    <title>Grooscript Vertx Plugin 0.4</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" href="../../css/main.css" type="text/css" media="screen, print" title="Style" charset="utf-8"/>
+    <link rel="stylesheet" href="../../css/pdf.css" type="text/css" media="print" title="PDF" charset="utf-8"/>
+    <script type="text/javascript">
+function addJsClass(el) {
+    var classes = document.body.className.split(" ");
+    classes.push("js");
+    document.body.className = classes.join(" ");
+}
+    </script>
+</head>
+
+<body class="body" onload="addJsClass();">
+
+<div id="navigation">
+    <ul>
+        <li>
+            <div id="nav-summary" onmouseover="toggleNavSummary(false)" onmouseout="toggleNavSummary(true)">
+                <a href="../../guide/index.html" class="button">Table of contents</a>
+
+                <div id="nav-summary-childs">
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../../guide/introduction.html"><strong>1</strong><span>Introduction</span></a>
+                    </div>
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../../guide/grooscript.html"><strong>2</strong><span>GrooScript</span></a>
+                    </div>
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../../guide/conversionDaemon.html"><strong>3</strong><span>Conversion daemon</span></a>
+                    </div>
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../../guide/groovyCode.html"><strong>4</strong><span>Use groovy code in gsp's</span></a>
+                    </div>
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../../guide/vertx.html"><strong>5</strong><span>Vertx</span></a>
+                    </div>
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../../guide/events.html"><strong>6</strong><span>Events</span></a>
+                    </div>
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../../guide/templating.html"><strong>7</strong><span>Create templates</span></a>
+                    </div>
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../../guide/domainClasses.html"><strong>8</strong><span>Use your domain classes</span></a>
+                    </div>
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../../guide/testing.html"><strong>9</strong><span>PhantomJs tests</span></a>
+                    </div>
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../../guide/example1.html"><strong>10</strong><span>Example using template and local events</span></a>
+                    </div>
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../../guide/example2.html"><strong>11</strong><span>Example using vert.x to make a chat</span></a>
+                    </div>
+                    
+                </div>
+            </div>
+        </li>
+        <li class="separator selected">
+            <a id="ref-button" onclick="localToggle(); return false;" href="#">Quick Reference</a>
+        </li>
+    </ul>
+</div>
+<div id="header">
+    <div class="images clearfix">
+        
+        
+    </div>
+    <p>Use your groovy code in your gsps thanks to GrooScript.
+It converts the code to javascript and your groovy code will run in your browser.
+Also use Vert.x to use events between server and gsps.
+</p>
+</div>
+
+
+<table id="colset" border="0" cellpadding="0" cellspacing="0">
+    <tr>
+        <td id="col1">
+            <div id="main" class="reference corner-all">
+
+                <span id='toggle-col1' class="toggle">(<a href="#" onclick="localToggle(); return false;">Quick Reference</a>)</span>
+
+                <h1>initVertx</h1><p class="paragraph"/>Init Vert.x eventbus in your page if Vert.x in the server is running.<p class="paragraph"/><div class="code"><pre>&#60;grooscript:initVertx/&#62;</pre></div>
+
+            </div>
+        </td>
+        <td id="col2">
+            <div class="local clearfix">
+                <div class="local-title">
+                    <a href="../../guide/index.html" target="mainFrame">Quick Reference</a>
+                    <span class="toggle">(<a href="#" onclick="localToggle(); return false;">hide</a>)</span>
+                </div>
+                <div class="menu">
+                    
+                    <div class="menu-block">
+                        <h1 class="menu-title" onclick="toggleRef(nextElement(this))">Tags</h1>
+                        <div class="menu-sub selected">
+                            
+                            
+                            <div class="menu-item"><a href="../../ref/Tags/code.html">code</a>
+                            </div>
+                            
+                            <div class="menu-item"><a href="../../ref/Tags/initVertx.html">initVertx</a>
+                            </div>
+                            
+                            <div class="menu-item"><a href="../../ref/Tags/model.html">model</a>
+                            </div>
+                            
+                            <div class="menu-item"><a href="../../ref/Tags/onEvent.html">onEvent</a>
+                            </div>
+                            
+                            <div class="menu-item"><a href="../../ref/Tags/onServerEvent.html">onServerEvent</a>
+                            </div>
+                            
+                            <div class="menu-item"><a href="../../ref/Tags/onVertxStarted.html">onVertxStarted</a>
+                            </div>
+                            
+                            <div class="menu-item"><a href="../../ref/Tags/reloadPage.html">reloadPage</a>
+                            </div>
+                            
+                            <div class="menu-item"><a href="../../ref/Tags/remoteModel.html">remoteModel</a>
+                            </div>
+                            
+                            <div class="menu-item"><a href="../../ref/Tags/template.html">template</a>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+
+<div id="footer">
+    
+    
+</div>
+
+
+<script type="text/javascript" src="../../js/docs.js"></script>
+
+</body>
+</html>

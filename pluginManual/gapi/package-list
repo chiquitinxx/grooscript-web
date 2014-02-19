@@ -1,0 +1,10 @@
+DefaultPackage
+grooscript.vertx
+org.grooscript.domain
+org.grooscript.grails
+org.grooscript.grails.plugin
+org.grooscript.grails.plugin.domain
+org.grooscript.grails.plugin.promise
+org.grooscript.grails.plugin.remote
+org.grooscript.grails.plugin.test
+org.grooscript.grails.util
