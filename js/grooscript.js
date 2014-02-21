@@ -75,10 +75,10 @@
         //The with function, with is a reserved word in JavaScript
         withz : function(closure) { closure.apply(this,closure.arguments); },
         getProperties : function() {
-            var result = gs.list([]), ob;
+            var result = gs.map(), ob;
             for (ob in this) {
                 if (typeof this[ob] !== "function" && ob != 'clazz') {
-                    result.add(ob);
+                    result.add(ob, this[ob]);
                 }
             }
             return result;
@@ -485,6 +485,41 @@
             return null;
         };
 
+        this.dropWhile = function(closure) {
+            var result = gs.map(), ob;
+            for (ob in this) {
+                if (!isMapProperty(ob)) {
+                    var entry = {key: ob, value: this[ob]};
+
+                    var f = arguments[0];
+                    if (f.length==1) {
+                        if (!closure(entry)) {
+                            result.add(entry.key, entry.value);
+                        }
+                    }
+                    if (f.length==2) {
+                        if (!closure(entry.key, entry.value)) {
+                            result.add(entry.key, entry.value);
+                        }
+                    }
+                }
+            }
+            return result;
+        };
+
+        this.drop = function(number) {
+            var result = gs.map(), ob, count = 0;
+            for (ob in this) {
+                if (!isMapProperty(ob)) {
+                    count ++;
+                    if (count > number) {
+                        result.add(ob, this[ob])
+                    }
+                }
+            }
+            return result;
+        };
+
         this.findAll = function(closure) {
             var result = gs.map(), ob;
             for (ob in this) {
@@ -703,7 +738,7 @@
     };
 
     Array.prototype.add = function(element) {
-        this[this.length]=element;
+        this[this.length] = element;
         return this;
     };
 
@@ -880,13 +915,21 @@
     Array.prototype.dropWhile = function(closure) {
         var result = gs.list([]);
         var i,j=0, insert = false;
-        for (i=0;i<this.length;i++) {
+        for (i = 0; i < this.length; i++) {
             if (!closure(this[i])) {
                 insert=true;
             }
             if (insert) {
                 result[j++] = this[i];
             }
+        }
+        return result;
+    };
+
+    Array.prototype.drop = function(number) {
+        var result = gs.list([]);
+        for (i = number; i < this.length; i++) {
+            result[result.length] = this[i];
         }
         return result;
     };
@@ -1201,7 +1244,7 @@
 
     Array.prototype.flatten = function() {
         var result = gs.list([]);
-        gs.flatten(result,this);
+        gs.flatten(result, this);
 
         return result;
     };
@@ -1215,7 +1258,7 @@
         while (step * times < this.length) {
             var items = gs.list([]);
             var pos = step * times;
-            while (pos<this.length && items.size()<number) {
+            while (pos < this.length && items.size() < number) {
                 items.add(this[pos++]);
             }
             result.add(items);
@@ -1223,6 +1266,10 @@
         }
         return result;
     };
+
+    Array.prototype.putAt = function(position, value) {
+        this[position] = value;
+    }
 
     /////////////////////////////////////////////////////////////////
     //list - [] from groovy
@@ -1556,6 +1603,11 @@
         return Math.pow(this,number);
     };
 
+    Number.prototype.byteValue = Number.prototype.doubleValue = Number.prototype.shortValue =
+        Number.prototype.floatValue = Number.prototype.longValue = function() {
+        return this;
+    }
+
     /////////////////////////////////////////////////////////////////
     //String functions
     /////////////////////////////////////////////////////////////////
@@ -1759,6 +1811,18 @@
             }
         } else {
             return value1.equals(value2);
+        }
+    };
+
+    gs.is = function(value1, value2) {
+        if (value1 != null && hasFunc(value1, 'is')) {
+            var count, params = gs.list([value2]);
+            for (count = 2; count < arguments.length; count++) {
+                params.add(arguments[count]);
+            }
+            return gs.mc(value1, 'is', params);
+        } else {
+            return value1 == value2;
         }
     };
 
@@ -2068,7 +2132,7 @@
             if (methodName.startsWith('get') || methodName.startsWith('set')) {
                 var varName = methodName.charAt(3).toLowerCase() + methodName.slice(4);
                 var properties = item.getProperties();
-                if (properties.contains(varName)) {
+                if (properties.containsKey(varName)) {
                     if (methodName.startsWith('get')) {
                         return gs.gp(item, varName);
                     } else {
