@@ -1,16 +1,12 @@
-<html>
 
-    <head>
-        <title>grooscript-vertx Documentation</title>
-    </head>
+File main = new File('.')
+main.eachFileRecurse { File file ->
+    if (file.name.endsWith('.html')) {
+        if (file.text.trim().endsWith('</html>') && !file.absolutePath.contains('pluginManual/gapi') &&
+            !file.text.contains('UA-37511810-1')) {
 
-    <body>
-        <a href="api/index.html">Java API docs</a><br />
-        <a href="gapi/index.html">Groovy API docs</a><br />
-		<a href="guide/index.html">Manual (Page per chapter)</a><br />
-		<a href="guide/single.html">Manual (Single page)</a><br />
-    </body>
-
+            println 'Yes:'+file.absolutePath
+            /*file.text = file.text.replaceFirst('</html>','''
     <script>
         //Google Analytics info
         var _gaq = _gaq || [];
@@ -22,4 +18,9 @@
             ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
             var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
         })();
-    </script></html>
+    </script></html>''') */
+        } else {
+            println 'No:'+file.absolutePath
+        }
+    }
+}
