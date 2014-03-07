@@ -86,7 +86,7 @@
             import org.grooscript.GrooScript
 
             //Convert a fragment code
-            def String jsResult = GrooScript.convert("println 'Hello!'")
+            String jsResult = GrooScript.convert("println 'Hello!'")
 
             //Convert some file or folder, generate .js files with same name.
             GrooScript.convert('path/to/file/or/folder','path/to/destination/folder')
