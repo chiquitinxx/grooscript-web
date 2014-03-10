@@ -113,10 +113,10 @@
             //Fourth parameter is an optional closure that will executes each time all read and converted. Optional.
             //The closure receives a list with absolutePath of files modified
             //Last parameter set recursion option, by default is false. If set to true, also folders will be converted.
-            GrooScript.startConversionDaemon(sources, destination, options, { list -> list.each { println 'Converted file -> '+it}}, true)
+            def daemon = GrooScript.startConversionDaemon(sources, destination, options, { list -> list.each { println 'Converted file -> '+it}}, true)
 
-            //For stop the daemon GrooScript.stopConversionDaemon()
-            //Only can be 1 daemon active. startDaemon close any active daemon before starts new one.
+            //For stop the daemon
+            daemon.stop()
         </pre>
         <p><h4>PhantomJsTest</h4> You can annotate your methods to do a <a href="http://phantomjs.org">PhantomJs</a> test.
         This AST convert your method code to a script that launch a PhantomJs test and check results.
