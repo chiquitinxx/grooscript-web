@@ -141,3 +141,10 @@ canvas {
 #assertArea {
     color: orange;
 }
+
+.listDownloads {
+    font-weight: 600;
+    font-size: 18px;
+    list-style-type: none;
+    padding: 20px;
+}

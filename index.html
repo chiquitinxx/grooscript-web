@@ -66,7 +66,7 @@
                 <br/>
             </div>
             <div class="col-md-6">
-                <h4 class="current">Current version: 0.4.5</h4>
+                <h4 class="current">Current version: 0.5</h4>
                 <img class="img-responsive" src="img/convert.png"/>
                 <p class="openSource">
                     <strong>GrooScript</strong> is an open source project, with only one developer at the moment.
@@ -112,28 +112,33 @@
             <div id="onlineConversions" class="feature col-sm-4 col-xs-12 col-md-3">
                 <h4>Conversions</h4><p>Try <a href="http://frameworks-groovygs.rhcloud.com/conversion">online</a> conversions of groovy code to javascript code. Javascript code is executed and evaluated in the server.</p>
             </div>
+            <div id="downloads" class="feature col-sm-4 col-xs-12 col-md-3">
+                <h4>Downloads</h4><p><a href="downloads.html">Download</a> jar or .js files.</p>
+            </div>
         </div>
     </div><!-- /.container -->
 
     <div class="container news">
         <h4>News</h4>
         <dl class="dl-horizontal">
+            <dt class="releaseDate">2014 May 7th</dt>
+            <dd>New Version 0.5 is out. Traits supported!</dd>
             <dt class="releaseDate">2014 April 25th</dt>
-            <dd>Can do online conversions again. With next release snapshot, supporting static traits.</dd>
+            <dd>Can do online conversions again.</dd>
             <dt class="releaseDate">2014 April 8th</dt>
             <dd>Gradle plugin 0.2.1</dd>
             <dt class="releaseDate">2014 April 5th</dt>
-            <dd>New version 0.4.5 is out!</dd>
+            <dd>Version 0.4.5</dd>
             <dt class="releaseDate">2014 March 30th</dt>
             <dd>grooscript presentation <a href="http://www.slideshare.net/JorgeFrancoLeza/grooscript-greach">slides</a> at <a href="http://greach.es">Greach</a> 2014.</dd>
             <dt class="releaseDate">2014 March 29th</dt>
             <dd><a href="http://twitter.com/jfrancoleza">@jfrancoleza</a> will talk about <a href="http://twitter.com/grooscript">@grooscript</a> in Cophenhague, <a href="http://gr8conf.eu/">GR8Conf Europe</a> 2014 June 2-4</dd>
             <dt class="releaseDate">2014 February 22th</dt>
-            <dd>New version of Gradle plugin 0.2. Now can create an static web project using require.js from scratch.</dd>
+            <dd>Version of Gradle plugin 0.2. Now can create an static web project using require.js from scratch.</dd>
             <dt class="releaseDate">2014 February 22th</dt>
-            <dd>New version 0.4.4</dd>
+            <dd>Version 0.4.4</dd>
             <dt class="releaseDate">2014 February 3th</dt>
-            <dd>New version 0.4.3.</dd>
+            <dd>Version 0.4.3.</dd>
             <dt class="releaseDate">2014 January 14th</dt>
             <dd>New look in this web :)</dd>
             <dt class="releaseDate">2014 January 09th</dt>
@@ -147,13 +152,43 @@
         <h4>Coming next releases</h4>
         <ul>
             <li>
-                <p>Add utils to work with jquery.</p>
+                <p>Update this site info with all the changes and add more documentation.</p>
             </li>
+            <li>
+                <p>Update gradle and grails plugins.</p>
+            </li>
+            <li>
+                <p>More and more Groovy sugar support.</p>
+            </li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <h4>What's new in 0.5</h4>
+        <ul>
             <li>
                 <p>Traits support.</p>
             </li>
             <li>
-                <p>More and more Groovy sugar support.</p>
+                <p>Builder renamed to HtmlBuilder, and improved speed. Added Binder to bind object properties and methods to DOM inputs or events.</p>
+            </li>
+            <li>
+                <p>PropertyMissing supported.</p>
+            </li>
+            <li>
+                <p>Removed kimbo.js from PhantomJs tests, now using jQuery 2.</p>
+            </li>
+            <li>
+                <p>Added interface and implementation to work with jQuery.</p>
+            </li>
+            <li>
+                <p>Now project tests run with Node.js also.</p>
+            </li>
+            <li>
+                <p>More js files inside the jar, grooscript-binder.js, grooscript.min.js and grooscript-all.js.</p>
+            </li>
+            <li>
+                <p>Speed improvements and fixes.</p>
             </li>
         </ul>
     </div>
@@ -172,9 +207,6 @@
             </li>
             <li>
                 <p>Starting support to @Delegate.</p>
-            </li>
-            <li>
-                <p>Fixes.</p>
             </li>
         </ul>
     </div>
