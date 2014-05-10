@@ -78,7 +78,7 @@
             Groovy strength in the browser, not create a full conversion. I'm looking for use groovy code and tools in the client,
             wanna use Spock tests in the server and in the browser.</p>
 
-        <p>So, for converting your groovy code, you need grooscript.jar. You can get from mavenCentral
+        <p>So, for converting your groovy code, you need <a href='jars/grooscript-0.5.jar'>grooscript.jar</a>. You can get from mavenCentral
             (org.grooscript:grooscript:0.5) in your project's dependencies. Remember need grooscript.js, inside the jar or get
             <a href='js/grooscript.js'>here</a>.</p>
         <p>Let's see code for conversion:</p>
@@ -199,7 +199,7 @@
         <p><h4>Conversion options</h4></p>
         <ul>
             <li><b>classPath</b> (default null): set classPath for conversions. GrooScript compiles your code before convert it. Maybe some times you want to define your own classpath as src/groovy. Then class needed for compilation can be found. You can pass a String or a List.</li>
-            <li><b>convertDependencies</b> (default false): setting to true will convert dependencies (imports).</li>
+            <li><b>convertDependencies</b> (default true): setting to false will not convert dependencies (imports) in the result js file.</li>
             <li><b>customization</b> (default null): customizer builder closure. <a href="http://docs.codehaus.org/display/GROOVY/Advanced+compiler+configuration">More info</a></li>
             <li><b>mainContextScope</b> (default null): add name of function or variables that are availables in main scope. Then, grooscript will not try get them from incorrect scope.</li>
             <li><b>initialText</b> (default null): add any text at begin of each converted js file.</li>
@@ -234,6 +234,11 @@
         <p>You can join all js files in a directory in one file.</p>
         <pre class='brush:groovy;'>
             GrooScript.joinFiles(SOURCE_DIR, DESTINATION_FILE)
+        </pre>
+        <p><h4>Join list of files</h4></p>
+        <p>You can join any number of js files to a destination file. With this function you control order of the result file.</p>
+        <pre class='brush:groovy;'>
+            GrooScript.joinListOfFiles(SOURCE_FILE1, SOURCE_FILE2, ...., DESTINATION_FILE)
         </pre>
     </div>
     <div class="tab-pane fade" id="support">
@@ -282,13 +287,13 @@
         <td>Java</td>
         <td>Types</td>
         <td class="badSupport"></td>
-        <td>Support only in some basic java types as String, ArrayList, HashMap, ...</td>
+        <td>Support only in some basic java types as String, ArrayList, HashMap, Date, ...</td>
     </tr>
     <tr>
         <td>Java</td>
         <td>Objects</td>
         <td class="littleSupport"></td>
-        <td>Can't define two functions with same name. Constructors can't have same number of parameters.</td>
+        <td>Can't define two functions with same name. Constructors can't have same number of parameters. Support class names and instanceOf.</td>
     </tr>
     <tr>
         <td>Java</td>
@@ -312,7 +317,7 @@
         <td>Objects</td>
         <td>Compare</td>
         <td class="littleSupport"></td>
-        <td>Function equals used in some cases.</td>
+        <td>Function equals used in some cases. Is function available.</td>
     </tr>
     <tr>
         <td>Objects</td>
@@ -330,7 +335,7 @@
         <td>Objects</td>
         <td>Default constructor</td>
         <td class="goodSupport"></td>
-        <td>Objects, without a 1 parameter constructor, have a default constructor with a map parameter.</td>
+        <td>Objects, without a 1 parameter constructor, have a default constructor with a groovy map or javascript object parameter.</td>
     </tr>
     <tr>
         <td>Objects</td>
@@ -342,7 +347,7 @@
         <td>Strings</td>
         <td>GStrings</td>
         <td class="goodSupport"></td>
-        <td>Supporting ''', "$ { }" and some functions.</td>
+        <td>Supporting ''', """, "$ { }" and some functions.</td>
     </tr>
     <tr>
         <td>Regular Expressions</td>
@@ -354,7 +359,7 @@
         <td>Collections</td>
         <td>Groovy Lists</td>
         <td class="goodSupport"></td>
-        <td>Supporting some functions.</td>
+        <td>Supporting lot of groovy list functions, added to javascript Array prototype.</td>
     </tr>
     <tr>
         <td>Collections</td>
@@ -366,7 +371,7 @@
         <td>Collections</td>
         <td>Groovy Maps</td>
         <td class="goodSupport"></td>
-        <td>Supporting some functions.</td>
+        <td>Supporting lot of map functions.</td>
     </tr>
     <tr>
         <td>Keywords</td>
@@ -432,7 +437,7 @@
         <td>Groovy</td>
         <td>Control Structures</td>
         <td class="littleSupport"></td>
-        <td>Basic support, can't assing variables inside 'switch' statement. Haven't tried 'break', 'continue', all 'for' options.</td>
+        <td>Basic support, can't assign variables inside 'switch' statement. Haven't tried 'break', 'continue', all 'for' options.</td>
     </tr>
     <tr>
         <td>Closures</td>
@@ -443,14 +448,14 @@
     <tr>
         <td>Closures</td>
         <td>Object Methods</td>
-        <td class="badSupport"></td>
-        <td>Not atm.</td>
+        <td class="littleSupport"></td>
+        <td>Support call, curry, rcurry, ncurry, leftShift.</td>
     </tr>
     <tr>
         <td>Closures</td>
         <td>Extras</td>
         <td class="littleSupport"></td>
-        <td>Just added a little support to delegate in closures.</td>
+        <td>Support set delegate in closures.</td>
     </tr>
     <tr>
         <td>Operators</td>
@@ -474,7 +479,7 @@
         <td>GroovyBeans</td>
         <td>Advanced</td>
         <td class="goodSupport"></td>
-        <td>Supporting getProperty, setProperty, methodMissing. Added invokeMethod but don't intercept calls.</td>
+        <td>Supporting getProperty, setProperty, methodMissing, propertyMissing. Added invokeMethod but don't intercept calls.</td>
     </tr>
     <tr>
         <td>MOP</td>
@@ -492,8 +497,14 @@
     <tr>
         <td>AST</td>
         <td></td>
-        <td class="badSupport"></td>
-        <td>Ignoring any annotation except GrooScript @GsNative and @GsNotConvert. Also support @Mixin and @Category. Annotations in semantic phase, will be converted, is same phase that GrooScript use.</td>
+        <td class="littleSupport"></td>
+        <td>Support to @Mixin, @Category and @Delegate. Annotations in semantic phase, will be converted, is same phase that GrooScript use.</td>
+    </tr>
+    <tr>
+        <td>Traits</td>
+        <td></td>
+        <td class="goodSupport"></td>
+        <td>In compile and runtime. Don't support SAM coercion, super</td>
     </tr>
     </tbody>
     </table>

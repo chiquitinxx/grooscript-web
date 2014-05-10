@@ -23,7 +23,7 @@
       <script src="js/shBrushJScript.js"></script>
       <script src="js/shBrushGroovy.js"></script>
       <script src="js/shAutoloader.js"></script>
-      <script src="js/shCore.min.js"></script>
+      <script src="js/shCore.js"></script>
 
       <script>
           SyntaxHighlighter.defaults['light'] = true;
@@ -67,7 +67,8 @@
     <p class="centerText">Here you can see some examples of Groovy code converted successfully. Javascript code is below.</p>
     <div>
         <ul id="myTab" class="nav nav-pills">
-            <li class="active"><a href="#0_2_2" data-toggle="tab">0_2_2</a></li>
+            <li class="active"><a href="#traits" data-toggle="tab">Traits</a></li>
+            <li><a href="#0_2_2" data-toggle="tab">0_2_2</a></li>
             <li><a href="#MysticTable" data-toggle="tab">MysticTable</a></li>
             <li><a href="#ExpandoTree" data-toggle="tab">ExpandoTree</a></li>
             <li><a href="#Random" data-toggle="tab">Random</a></li>
@@ -78,13 +79,62 @@
     </div>
 
     <div id="myCode" class="tab-content">
-    <div class="tab-pane fade in active" id="0_2_2">
-    <pre class='brush:groovy;'>package advanced
+    <div class="tab-pane fade in active" id="traits">
+    <pre class='brush:groovy;'>
+trait RandomAbility {
+    def methodMissing(String name, args) {
+        if (name.startsWith('random')) {
+            def number = name.substring(6) as int
+            new Random().nextInt(number)
+        } else {
+            throw new RuntimeException()
+        }
+    }
+}
 
-/**
- * User: jorgefrancoleza
- * Date: 22/02/13
- */
+class MyNumbers implements RandomAbility {
+}
+
+def myNumbers = new MyNumbers()
+
+100.times {
+    assert myNumbers.random10() < 10
+}
+    </pre>
+    <h4>JavaScript code</h4>
+    <pre class='brush: js;'>
+function MyNumbers() {
+  var gSobject = gs.inherit(gs.baseClass,'MyNumbers');
+  gSobject.clazz = { name: 'web.MyNumbers', simpleName: 'MyNumbers'};
+  gSobject.clazz.superclass = { name: 'java.lang.Object', simpleName: 'Object'};
+  gSobject.clazz.interfaces = [{ name: 'web.RandomAbility', simpleName: 'RandomAbility'}, ];
+  gSobject.methodMissing = function(x1,x2) { return RandomAbility.methodMissing(gSobject,x1,x2); }
+  if (arguments.length == 1) {gs.passMapToObject(arguments[0],gSobject);};
+
+  return gSobject;
+};
+RandomAbility = function() {};
+RandomAbility.gSaT = function(target) {
+  target.methodMissing = function(x0, x1, x2) { return RandomAbility.methodMissing(target, x0, x1, x2); };
+};
+RandomAbility.methodMissing = function($self, name, args) {
+  if (gs.mc(name,"startsWith",["random"])) {
+    var number = gs.mc(name,"substring",[6]);
+    return gs.mc(gs.random(),"nextInt",[number]);
+  } else {
+    throw "Exception";
+  };
+}
+
+
+var myNumbers = MyNumbers();
+(100).times(function(it) {
+  gs.assert(gs.mc(myNumbers,"random10",[]) < 10, null);
+});
+    </pre>
+    </div>
+    <div class="tab-pane fade" id="0_2_2">
+    <pre class='brush:groovy;'>package advanced
 
 class Tests {
     def 'failTest'() {
@@ -184,7 +234,7 @@ name.metaClass.mixin Components
 assert name.salute() == "Hello Groovy!"
 
 
-</pre><h5>JavaScript code</h5><pre class='brush: js;'>function Tests() {
+</pre><h4>JavaScript code</h4><pre class='brush: js;'>function Tests() {
   var gSobject = gs.inherit(gs.baseClass,'Tests');
   gSobject.clazz = { name: 'advanced.Tests', simpleName: 'Tests'};
   gSobject.clazz.superclass = { name: 'java.lang.Object', simpleName: 'Object'};
@@ -299,9 +349,6 @@ gs.assert(gs.equals(gs.mc(name,"salute",gs.list([])), "Hello Groovy!"), null);
 </pre></div><div class="tab-pane fade" id="MysticTable">
 <pre class='brush:groovy;'>package advanced
 
-/**
- * JFL 17/09/12
- */
 class Mystic {
 
     def items = []
@@ -363,7 +410,7 @@ mysticTable.with {
 assert mysticTable.items.size() == 11
 assert mysticTable.items[10].value == 'Eleven'
 assert mysticTable.items[10].date &gt; mysticTable.items[0].date
-assert mysticTable.items[8].date &lt; mysticTable.items[10].date</pre><h5>JavaScript code</h5><pre class='brush: js;'>function Mystic() {
+assert mysticTable.items[8].date &lt; mysticTable.items[10].date</pre><h4>JavaScript code</h4><pre class='brush: js;'>function Mystic() {
   var gSobject = gs.inherit(gs.baseClass,'Mystic');
   gSobject.clazz = { name: 'advanced.Mystic', simpleName: 'Mystic'};
   gSobject.clazz.superclass = { name: 'java.lang.Object', simpleName: 'Object'};
@@ -417,9 +464,7 @@ gs.assert(gs.equals(gs.gp(gs.gp(mysticTable,"items") [ 10],"value"), "Eleven"), 
 gs.assert(gs.gp(gs.gp(mysticTable,"items") [ 10],"date") &gt; gs.gp(gs.gp(mysticTable,"items") [ 0],"date"), null);
 gs.assert(gs.gp(gs.gp(mysticTable,"items") [ 8],"date") &lt; gs.gp(gs.gp(mysticTable,"items") [ 10],"date"), null);
 </pre></div><div class="tab-pane fade" id="ExpandoTree">
-<pre class='brush:groovy;'>/**
- * JFL 13/09/12
- */
+<pre class='brush:groovy;'>
 class GTree {
 
     def root
@@ -493,7 +538,7 @@ def treeNumbers = new GTree()
 treeNumbers.add(5).add(7).add(3).add(9).add(2).add(8).add(6).add(4).add(1).add(10)
 
 assert treeNumbers.toString() == '1 - 2 - 3 - 4 - 5 - 6 - 7 - 8 - 9 - 10'
-</pre><h5>JavaScript code</h5><pre class='brush: js;'>function GTree() {
+</pre><h4>JavaScript code</h4><pre class='brush: js;'>function GTree() {
   var gSobject = gs.inherit(gs.baseClass,'GTree');
   gSobject.clazz = { name: 'GTree', simpleName: 'GTree'};
   gSobject.clazz.superclass = { name: 'java.lang.Object', simpleName: 'Object'};
@@ -567,9 +612,6 @@ gs.assert(gs.equals(gs.mc(treeNumbers,"toString",gs.list([])), "1 - 2 - 3 - 4 - 
 </pre></div><div class="tab-pane fade" id="Random">
 <pre class='brush:groovy;'>package advanced
 
-/**
- * JFL 28/10/12
- */
 final MAX = 5
 
 def randomNumber
@@ -603,7 +645,7 @@ println (result.heads&gt;result.tails?'Next bid on TAILS':(result.heads==result.
 println " h:&#36;&#123;result.heads} t:&#36;&#123;result.tails}"
 
 def r = new Random().nextInt(4)
-assert r&gt;=0 && r&lt;4</pre><h5>JavaScript code</h5><pre class='brush: js;'>var MAX = 5;
+assert r&gt;=0 && r&lt;4</pre><h4>JavaScript code</h4><pre class='brush: js;'>var MAX = 5;
 var randomNumber = null;
 var surprise = false;
 var values = gs.map();
@@ -632,10 +674,6 @@ var r = gs.mc(gs.random(),"nextInt",gs.list([4]));
 gs.assert((r &gt;= 0) && (r &lt; 4), null);
 </pre></div><div class="tab-pane fade" id="MethodMissing">
 <pre class='brush:groovy;'>package advanced
-
-/**
- * JFL 22/12/12
- */
 
 class Missing {
 
@@ -683,7 +721,7 @@ expandoMissing.metaClass.methodMissing = { String name,args -&gt;
 }
 
 expandoMissing.doSomething()
-assert count == 1</pre><h5>JavaScript code</h5><pre class='brush: js;'>function Missing() {
+assert count == 1</pre><h4>JavaScript code</h4><pre class='brush: js;'>function Missing() {
   var gSobject = gs.inherit(gs.baseClass,'Missing');
   gSobject.clazz = { name: 'advanced.Missing', simpleName: 'Missing'};
   gSobject.clazz.superclass = { name: 'java.lang.Object', simpleName: 'Object'};
@@ -728,10 +766,6 @@ gs.assert(gs.equals(count, 1), null);
 </pre></div><div class="tab-pane fade" id="SortingLists">
 <pre class='brush:groovy;'>package advanced
 
-/**
- * JFL 10/11/12
- */
-
 def list = [1,3,7,4,9,2,5]
 //False don't modify original list
 assert list.sort(false) == [1,2,3,4,5,7,9]
@@ -751,7 +785,7 @@ def sorted = orig.sort(false) { it.toUpperCase() }
 
 assert orig == ["hello","hi","Hey"]
 
-assert sorted == ["hello","Hey","hi"]</pre><h5>JavaScript code</h5><pre class='brush: js;'>var list = gs.list([1 , 3 , 7 , 4 , 9 , 2 , 5]);
+assert sorted == ["hello","Hey","hi"]</pre><h4>JavaScript code</h4><pre class='brush: js;'>var list = gs.list([1 , 3 , 7 , 4 , 9 , 2 , 5]);
 gs.assert(gs.equals(gs.mc(list,"sort",gs.list([false])), gs.list([1 , 2 , 3 , 4 , 5 , 7 , 9])), null);
 gs.assert(gs.equals(list, gs.list([1 , 3 , 7 , 4 , 9 , 2 , 5])), null);
 gs.assert(gs.equals(gs.mc(list,"sort",gs.list([])), gs.list([1 , 2 , 3 , 4 , 5 , 7 , 9])), null);
@@ -770,10 +804,6 @@ gs.assert(gs.equals(orig, gs.list(["hello" , "hi" , "Hey"])), null);
 gs.assert(gs.equals(sorted, gs.list(["hello" , "Hey" , "hi"])), null);
 </pre></div><div class="tab-pane fade" id="Strings">
 <pre class='brush:groovy;'>package advanced
-
-/**
- * JFL 22/12/12
- */
 
 v1 = 'alpha'; v2 = 'omega'
 // this can done with explicit swapping via a temp variable
@@ -878,7 +908,7 @@ multiGString.eachLine { line, count -&gt;
     if (count == 3) {
         assert line == 'Clojure'
     }
-}</pre><h5>JavaScript code</h5><pre class='brush: js;'>v1 = "alpha";
+}</pre><h4>JavaScript code</h4><pre class='brush: js;'>v1 = "alpha";
 v2 = "omega";
 swap = function(it) {
   temp = v1;
