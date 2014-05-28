@@ -1,4 +1,4 @@
-//Grooscript Version 0.5 Apache 2 License
+//Grooscript Version 0.5.1 Apache 2 License
 (function() {
     var gs = function(obj) {
         if (obj instanceof gs) return obj;
@@ -2197,8 +2197,12 @@
         }
     };
 
+    function exFn(we, mn, it, val) {
+        return we[mn].apply(it, joinParameters(it, val));
+    }
+
     //Control all method calls
-    gs.mc = function(item, methodName, values) {
+    gs.mc = function(item, methodName, values, objectVar) {
 
         if (gs.consoleInfo && console) {
             console.log('[INFO] gs.mc (' + item + ').' + methodName + ' params:' + values);
@@ -2218,18 +2222,30 @@
             }
         }
 
+        if (objectVar) {
+            try {
+                //First, try to execute function in object
+                return gs.mc(objectVar, methodName, values);
+            } catch(e) {}
+        }
+
         if (!hasFunc(item, methodName)) {
 
             if (methodName.startsWith('get') || methodName.startsWith('set')) {
                 var varName = methodName.charAt(3).toLowerCase() + methodName.slice(4);
-                var properties = item.getProperties();
-                if (properties.containsKey(varName)) {
+                if (item[varName] !== undefined && !hasFunc(item, varName)) {
                     if (methodName.startsWith('get')) {
                         return gs.gp(item, varName);
                     } else {
                         return gs.sp(item, varName, values[0]);
                     }
+                }
+            }
 
+            if (methodName.startsWith('is')) {
+                var varName = methodName.charAt(2).toLowerCase() + methodName.slice(3);
+                if (item[varName] !== undefined && !hasFunc(item, varName)) {
+                    return gs.gp(item, varName);
                 }
             }
 
@@ -2242,7 +2258,7 @@
                 if (categories.length > 0) {
                     whereExecutes = categorySearching(methodName);
                     if (whereExecutes !== null) {
-                        return whereExecutes[methodName].apply(item, joinParameters(item, values));
+                        return exFn(whereExecutes, methodName, item, values);
                     }
                 }
 
@@ -2252,7 +2268,7 @@
                     if (annotatedCategories[ob] == item.clazz.simpleName) {
                         var categoryItem = gs.myCategories[ob]();
                         if (categoryItem[methodName] && typeof categoryItem[methodName] === "function") {
-                            return categoryItem[methodName].apply(item, joinParameters(item, values));
+                            return exFn(categoryItem, methodName, item, values);
                         }
                     }
                 }
@@ -2261,7 +2277,7 @@
                 if (mixins.length > 0) {
                     whereExecutes = mixinSearching(item, methodName);
                     if (whereExecutes !== null) {
-                        return whereExecutes[methodName].apply(item, joinParameters(item, values));
+                        return exFn(whereExecutes, methodName, item, values);
                     }
                 }
 
@@ -2269,7 +2285,7 @@
                 if (mixinsObjects.length > 0) {
                     whereExecutes = mixinObjectsSearching(item, methodName);
                     if (whereExecutes !== null) {
-                        return whereExecutes[methodName].apply(item, joinParameters(item, values));
+                        return exFn(whereExecutes, methodName, item, values);
                     }
                 }
                 //Lets check mc in @Delegate
@@ -2281,7 +2297,7 @@
                             var prop = addDelegate[i];
                             var target = item[prop][methodName];
                             if (target !== undefined) {
-                                return item[prop][methodName].apply(item, joinParameters(item, values));
+                                return exFn(item[prop], methodName, item, values);
                             }
                         }
                     }
@@ -2766,7 +2782,7 @@ function HtmlBuilder() {
       }
       return gs.mc(gSobject,"tagSolver",[name, ars]);
     });
-    return gs.mc(this,"invokeMethod",[name, args]);
+    return gs.mc(this,"invokeMethod",[name, args], gSobject);
   }
   gSobject['HtmlBuilder0'] = function(it) {
     gSobject.html = "";
@@ -2878,17 +2894,21 @@ function GQueryImpl() {
             url: url,
             dataType: 'text'
         }).done(function(newData) {
-            onSuccess(gs.toGroovy(jQuery.parseJSON(newData), objectResult));
+            if (onSuccess) {
+                onSuccess(gs.toGroovy(jQuery.parseJSON(newData), objectResult));
+            }
         })
         .fail(function(error) {
-            onFailure(error);
+            if (onFailure) {
+                onFailure(error);
+            }
         });
   }
   gSobject.onReady = function(func) {
     $(document).ready(func);
   }
   gSobject.html = function(selector, text) {
-    $(selector).text(text);
+    $(selector).html(text);
   }
   if (arguments.length == 1) {gs.passMapToObject(arguments[0],gSobject);};
   
