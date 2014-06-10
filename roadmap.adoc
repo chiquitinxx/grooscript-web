@@ -1,0 +1,43 @@
+= Roadmap http://grooscript.org[grooscript]
+:author: Jorge Franco
+:email: grooscript@gmail.com
+
+The project started August 2012. Roadmap updated June 2014.
+
+Final name of the project is *grooscript* or *Grooscript*.
+
+=== Next major release 0.6
+
+- September / October 2014.
+- Improve groovy support.
+- Convert .java files.
+- List of supported groovy / java types.
+- Remove jQuery dependencies in binder, use manual DOM manipulation.
+- Fixes.
+
+=== 1.0 Release
+
+Depends of Groovy 3 release date. If Groovy 3 comes in first months of 2015 then release of grooscript 1.0 will be later. If Groovy 3 comes later in 2015 then grooscript 1.0 release will be first months of 2015.
+
+You can expect very good support on Groovy language. Almost all the things you love in groovy-core will be translated to javascript. A closed list of Java types availables. Some limitations on inheritance support, in special the use of 'super' keyword.
+
+Javascript converted code 'easy' to follow, tested on Node.js and modern browsers. Friendly javascript code, that you can use directly from javascript. JQuery dependency will be removed, with a little helper code using direct DOM manipulation.
+
+=== Grooscript Vert.x Grails plugin
+
+- Deprecated.
+- If someone is using it and needs something please contact me.
+
+=== New Grooscript Grails plugin
+
+- New plugin first version July.
+- Remove Vert.x and resources plugin from Grooscript Vert.x plugin.
+- Use assets pipeline plugin, also requires Grails 2.4.
+- No events between server and the client at first version.
+
+=== Gradle plugin
+
+- As soon as Gradle 2 GA up, new version of the gradle plugin coming.
+- Improve init static web project, to create a grooscript web project from scratch.
+
+As usual, you can contact me if you need something, ask questions or give me feedback.
