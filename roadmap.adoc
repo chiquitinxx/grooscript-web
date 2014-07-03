@@ -47,3 +47,7 @@ you can use directly from javascript.
 - Improve init static web project, to create a grooscript web project from scratch.
 
 As usual, you can contact me if you need something, ask questions or give me feedback.
+
+++++
+include::analytics.info[]
+++++

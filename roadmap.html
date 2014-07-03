@@ -470,11 +470,23 @@ you can use directly from javascript.</p>
 <div class="paragraph">
 <p>As usual, you can contact me if you need something, ask questions or give me feedback.</p>
 </div>
+<script>
+    //Google Analytics info
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-37511810-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+</script>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2014-06-10 20:39:17 CEST
+Last updated 2014-07-03 22:36:25 CEST
 </div>
 </div>
 </body>
