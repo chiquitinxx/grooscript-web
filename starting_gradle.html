@@ -451,13 +451,29 @@ converting code to javascript. After install gradle, just create a new folder an
 <div class="sect2">
 <h3 id="_creating_project">Creating project</h3>
 <div class="paragraph">
-<p>Create a <code>build.gradle</code> file with the grooscript plugin data and gradle 2.0 wrapper. Is important you use gradle 2,
-because grooscript works with groovy 2.0+. You can use older gradle versions, but gradle 1.x uses groovy 1.8, and
-you can have problems converting code to javascript.</p>
+<p>Create a <code>build.gradle</code> file with the grooscript plugin data and gradle 2.0 wrapper.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code class="groovy language-groovy"><span class="tok-n">buildscript</span> <span class="tok-o">{</span>
+    <span class="tok-n">repositories</span> <span class="tok-o">{</span>
+        <span class="tok-n">mavenCentral</span><span class="tok-o">()</span>
+    <span class="tok-o">}</span>
+    <span class="tok-n">dependencies</span> <span class="tok-o">{</span>
+        <span class="tok-n">classpath</span> <span class="tok-s1">&#39;org.grooscript:grooscript-gradle-plugin:0.4&#39;</span>
+    <span class="tok-o">}</span>
+<span class="tok-o">}</span>
+
+<span class="tok-n">apply</span> <span class="tok-nl">plugin:</span> <span class="tok-s1">&#39;grooscript&#39;</span>
+
+<span class="tok-n">task</span> <span class="tok-nf">wrapper</span><span class="tok-o">(</span><span class="tok-nl">type:</span> <span class="tok-n">Wrapper</span><span class="tok-o">)</span> <span class="tok-o">{</span>
+    <span class="tok-n">gradleVersion</span> <span class="tok-o">=</span> <span class="tok-s1">&#39;2.0&#39;</span>
+<span class="tok-o">}</span>
+</code></pre>
+</div>
 </div>
 <div class="paragraph">
-<p>Install gradle if you don&#8217;t have it installed in your machine. Run <code>&gt; gradle wrapper</code> to create gradlew executable.
-Run <code>&gt; ./gradlew task</code> to see grooscript tasks.</p>
+<p>Run <code>&gt; gradle wrapper</code> to create gradlew executable. Run <code>&gt; ./gradlew task</code> to see grooscript tasks.</p>
 </div>
 <div class="paragraph">
 <p>Let&#8217;s start with <strong>initStaticWeb</strong> task to create a html static project. Run <code>&gt; ./gradlew initStaticWeb</code> and the
@@ -482,14 +498,14 @@ plugin will create the following files.</p>
 <div class="paragraph">
 <p>Now, let&#8217;s open index.html in your browser, for example running <code>&gt; open src/main/webapp/index.html</code> open my Google
 Chrome. You must see an input text with label <em>Name:</em> and a button <em>Say hello!</em>. If you put your name and
-press button nothing happens, in javascript console you can see the error, a file called <code>Presenter.js</code> not
+press button nothing happens. In javascript console you can see the error, a file called <code>Presenter.js</code> not
 found in <code>src/main/webapp/js/app</code>.</p>
 </div>
 <div class="paragraph">
 <p>I introduced this error to show you that you have to convert your groovy code to javascript each time you
 change your groovy files. We will see later that you can run a daemon to automatically convert your code when
 a file change is detected. But for now, it&#8217;s important that you understand that your groovy code isn&#8217;t running
-in your browser, the javascript converted code is. For convert your groovy code to javasscript,
+in your browser, the javascript converted code is. For <strong>convert</strong> your groovy code to javascript,
 run <code>&gt; ./gradlew convert</code> and a new javascipt file is generated, the missing file in the browser error.</p>
 </div>
 <div class="listingblock">
@@ -498,16 +514,16 @@ run <code>&gt; ./gradlew convert</code> and a new javascipt file is generated, t
     └── main
         └── webapp
             └── js
-                ├── app
-                │   └── Presenter.js</code></pre>
+                └── app
+                    └── Presenter.js</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>Now, go the browser, reload the page, put your name and press <em>Say hello!</em>. The text <code><em>Hello your_name!</em></code> will
 be append to the page. So, nice, all is working, and the code that is running in your browser, is Groovy code.
 The file <code>Presenter.groovy</code> is a groovy file, that has been converted to javascript <code>Presenter.js</code> with grooscript.
-I have tested the groovy class with a spock test and I have used my favorite groovy IDE. This is one of the
-reasons to use grooscript, you use the tools you know to create code that runs in your browser.</p>
+You can test the groovy class with a spock and use your favorite groovy IDE. This is one of the
+reasons to use grooscript, <strong>you use the tools you know to create groovy code that runs in your browser</strong>.</p>
 </div>
 </div>
 <div class="sect2">
@@ -581,21 +597,185 @@ you press the button, method <code>presenter.buttonClick()</code> is executed.</
 </table>
 </div>
 <div class="paragraph">
-<p>Is very important, all code that you convert to javascript, using grooscript, it needs grooscript.js
-lib. grooscript.js is included in grooscript-all.js, is the library that resolves the runtime of your
+<p>Is very important, all code that you convert to javascript, using grooscript, it needs <strong>grooscript.js</strong>
+lib. grooscript.js is included in <strong>grooscript-all.js</strong>, is the library that resolves the runtime of your
 javascript code. If you take a look at <code>Presenter.js</code> you will see some functions that starts with <code>gs.xxx</code>.
 For example if you call a method, maybe the method doesn&#8217;t exist, groovy is a dynamic language, and maybe at
 runtime that method exists or not, or maybe there is a <em>methodMissing</em> call. grooscript.js resolves method
-calls, access to properties, java / groovy types,&#8230; so remember included it to run your javascript generated code.</p>
+calls, access to properties, java / groovy types,&#8230; If you use grooscript generated code in other pages or
+environments, remember include any of this libraries.</p>
 </div>
 <div class="paragraph">
 <p>Now, you can start to modify Presenter.groovy, much better if you create a Spock test for it. When you make a
 change, remember that you have to generate the javascript code with <code>&gt; ./gradlew convert</code>. So in a typical
 grooscript workflow, you are working with your groovy code, and see the results in your browser, no class
 loading issues, just reload the page with the changes in your javascript generated files. But is boring run
-convert all the time, much better if you run <code>&gt; ./gradlew daemon</code>. This daemon blocks execution of gradle,
+convert all the time, much better if you run <code>&gt; ./gradlew daemon</code>. This <strong>daemon</strong> blocks execution of gradle,
 and will listen changes in your groovy files. Each time a groovy file changes, groovy code will be converted
 to javascript. Until you break gradle with ^C.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_conversion_options">Conversion options</h3>
+<div class="paragraph">
+<p>Is very important understand grooscript conversion options. In this example some options are used, the gradle plugin
+has some default conversion options. What files have to be converted? Where .js files are saved?&#8230;</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">source</dt>
+<dd>
+<p>Files or folders with files to be converted. If you put a folder, all groovy files inside will be converted. For example: <code>[<em>'src/grooscript</em>', <em>'MyGroovyFile.groovy</em>']</code></p>
+</dd>
+<dt class="hdlist1">destination</dt>
+<dd>
+<p>The folder where javascript files are generated, the folder must exists, and no folders inside will be created. For example: <code><em>'web-app/js</em>'</code></p>
+</dd>
+<dt class="hdlist1">classPath</dt>
+<dd>
+<p>List of folders or jar&#8217;s to find dependencies. Before groovy code is converted to javascript, that code have to be successfully compiled. For example: <code>[<em>'src/groovy</em>']</code></p>
+</dd>
+<dt class="hdlist1">convertDependencies</dt>
+<dd>
+<p>the javascript converted file, by default will not included code of dependencies. If you set this option to true, the javascript converted file will have converted code of classes used in your original converted file. The files will be bigger, but you don&#8217;t have to worry about add that dependencies. For example: <code>true</code></p>
+</dd>
+<dt class="hdlist1">customization</dt>
+<dd>
+<p>to each file to be converted, will be applied a groovy <a href="http://docs.codehaus.org/display/GROOVY/Advanced+compiler+configuration">customization</a>. For example you can for example type check all the groovy classes to be converted with <code>{ &#8594; ast(TypeChecked)}</code></p>
+</dd>
+<dt class="hdlist1">initialText</dt>
+<dd>
+<p>you can add test at the beginning of your converted javascript file. You can add comments or javascript code. For example: <code><em>'//This code has been generated with grooscript</em>'</code></p>
+</dd>
+<dt class="hdlist1">finalText</dt>
+<dd>
+<p>like initialText, but at the end of the converted file. For example: <code><em>'MyClass().init();</em>'</code></p>
+</dd>
+<dt class="hdlist1">recursive</dt>
+<dd>
+<p>if you specify a folder with the <strong>source</strong> conversion option, by default will not convert files inside folders. To convert recursive, just set to <code>true</code></p>
+</dd>
+<dt class="hdlist1">mainContextScope</dt>
+<dd>
+<p>you can help the converted, specifying functions and variables that will be availables in the main context of the javascript environment. For example: <code>[<em>'$</em>', <em>'window</em>',<em>'myFunction</em>']</code></p>
+</dd>
+<dt class="hdlist1">includeJsLib</dt>
+<dd>
+<p>you can add a grooscript js lib at the beginning of the converted file. For example you can add grooscript.js to the result, and then you don&#8217;t have to worry about include that dependency in javascript <code><em>''grooscript</em>''</code></p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>The default conversion options of the grooscript gradle plugin are:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>source = ['src/main/groovy']
+destination = 'src/main/webapp/js/app'
+classPath = ['src/main/groovy']
+convertDependencies = false</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can change, or set new options in your <strong>build.gradle</strong>, for example with this new options:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code class="groovy language-groovy"><span class="tok-n">grooscript</span> <span class="tok-o">{</span>
+    <span class="tok-n">source</span> <span class="tok-o">=</span> <span class="tok-o">[</span><span class="tok-s1">&#39;src/main/groovy/presenters&#39;</span><span class="tok-o">]</span>
+    <span class="tok-n">destination</span> <span class="tok-o">=</span> <span class="tok-s1">&#39;js&#39;</span>
+    <span class="tok-n">classPath</span> <span class="tok-o">=</span> <span class="tok-o">[</span><span class="tok-s1">&#39;src/groovy&#39;</span><span class="tok-o">]</span>
+    <span class="tok-n">convertDependencies</span> <span class="tok-o">=</span> <span class="tok-kc">true</span>
+    <span class="tok-n">mainContextScope</span> <span class="tok-o">=</span> <span class="tok-o">[</span><span class="tok-s1">&#39;$&#39;</span><span class="tok-o">,</span> <span class="tok-s1">&#39;window&#39;</span><span class="tok-o">,</span> <span class="tok-s1">&#39;Handlebars&#39;</span><span class="tok-o">]</span>
+    <span class="tok-n">initialText</span> <span class="tok-o">=</span> <span class="tok-s1">&#39;//Grooscript converted file&#39;</span>
+<span class="tok-o">}</span>
+</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_javascript_code_in_your_groovy_code">Javascript code in your groovy code</h3>
+<div class="paragraph">
+<p>If you are reading this, and you have started to play with grooscript, maybe you have thought about put javascript
+code in your groovy code. Imagine you want to use a javascript library, and you want to init it, but in the init
+method of your groovy class that will be converted to javascript. For example, in this class, initDrawScene is a
+javascript function to initialize a canvas scene with a draw method:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code class="groovy language-groovy"><span class="tok-kd">class</span> <span class="tok-nc">Draw</span> <span class="tok-o">{</span>
+    <span class="tok-kt">def</span> <span class="tok-n">points</span>
+    <span class="tok-kt">def</span> <span class="tok-n">scene</span>
+    <span class="tok-kt">def</span> <span class="tok-nf">init</span><span class="tok-o">()</span> <span class="tok-o">{</span>
+        <span class="tok-n">points</span> <span class="tok-o">=</span> <span class="tok-o">[</span><span class="tok-mi">3</span><span class="tok-o">,</span> <span class="tok-mi">4</span><span class="tok-o">,</span> <span class="tok-mi">45</span><span class="tok-o">,</span> <span class="tok-mi">65</span><span class="tok-o">]</span>
+        <span class="tok-n">initDrawScene</span><span class="tok-o">()</span>
+        <span class="tok-n">drawPoints</span><span class="tok-o">()</span>
+    <span class="tok-o">}</span>
+    <span class="tok-kt">def</span> <span class="tok-nf">drawPoints</span><span class="tok-o">()</span> <span class="tok-o">{</span>
+        <span class="tok-n">points</span><span class="tok-o">.</span><span class="tok-na">each</span> <span class="tok-o">{</span>
+            <span class="tok-n">scene</span><span class="tok-o">.</span><span class="tok-na">draw</span> <span class="tok-n">it</span>
+        <span class="tok-o">}</span>
+    <span class="tok-o">}</span>
+<span class="tok-o">}</span>
+</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>With grooscript you can put javascript code in a groovy method using @GsNative annotation.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code class="groovy language-groovy"><span class="tok-kn">import</span> <span class="tok-nn">org.grooscript.asts.GsNative</span>
+
+<span class="tok-kd">class</span> <span class="tok-nc">Draw</span> <span class="tok-o">{</span>
+    <span class="tok-o">...</span>
+    <span class="tok-nd">@GsNative</span>
+    <span class="tok-kt">def</span> <span class="tok-nf">initDrawScene</span><span class="tok-o">()</span> <span class="tok-o">{</span><span class="tok-cm">/*</span>
+<span class="tok-cm">        //This is just javascript code that will be used in your javascript converted method</span>
+<span class="tok-cm">        this.scene = canvas.init({x: 400, y: 200});</span>
+<span class="tok-cm">    */</span><span class="tok-o">}</span>
+    <span class="tok-o">...</span>
+<span class="tok-o">}</span>
+</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You have to add grooscript dependency to your project in your <strong>build.gradle</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code class="groovy language-groovy"><span class="tok-n">repositories</span> <span class="tok-o">{</span>
+    <span class="tok-n">mavenCentral</span><span class="tok-o">()</span>
+<span class="tok-o">}</span>
+
+<span class="tok-n">dependencies</span> <span class="tok-o">{</span>
+    <span class="tok-n">compile</span> <span class="tok-s1">&#39;org.grooscript:grooscript:0.5.1&#39;</span>
+<span class="tok-o">}</span>
+</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_conclusion">Conclusion</h3>
+<div class="paragraph">
+<p>I have shown a good way to play with grooscript. It&#8217;s time you start to play with it. Just code in groovy
+and see the results in your browser. You know conversion options and some grooscript tips. There are more tips, more
+helper classes in grooscript-all.js as the html builder or the jquery bean.</p>
+</div>
+<div class="paragraph">
+<p>This is just a introduction to grooscript, more things to discover as the grails plugin or the Node.js support. Grooscript is
+just a tool that allow you create javascript code from your groovy code. You don&#8217;t have to repeat code in your server
+side and client side, you can just convert it, for example for your validations or your pogo''s.</p>
+</div>
+<div class="paragraph">
+<p>You can see an example of a <a href="http://projects.spring.io/spring-boot/">spring boot</a> application using grooscript deployed in
+<a href="http://frameworks-groovygs.rhcloud.com/">the cloud</a>, the source code is in <a href="https://github.com/chiquitinxx/springboot-rest-demo">github</a>.</p>
+</div>
+<div class="paragraph">
+<p>Please, if you have comments, suggestions, problems,&#8230; don&#8217;t hesitate to contact me at <a href="mailto:grooscript@gmail.com">grooscript@gmail.com</a>, or open
+an issue or feature in <a href="http://github.com/chiquitinxx/grooscript/issues?state=open">Github</a>. This is an open source project and your feedback is more than welcome
+to improve it. More guides come in the future, also can find more documentation in <a href="http://grooscript.org">grooscript</a>
+site.</p>
 </div>
 <script>
     //Google Analytics info
@@ -613,7 +793,7 @@ to javascript. Until you break gradle with ^C.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2014-07-03 22:50:32 CEST
+Last updated 2014-07-05 19:32:51 CEST
 </div>
 </div>
 </body>
