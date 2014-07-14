@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="generator" content="Asciidoctor 0.1.4">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Getting started with grooscript and gradle</title>
+<title>Creating a REST application</title>
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
 article, aside, details, figcaption, figure, footer, header, hgroup, main, nav, section, summary { display: block; }
@@ -427,355 +427,328 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 </head>
 <body class="article">
 <div id="header">
-<h1>Getting started with <a href="http://grooscript.org">grooscript</a> and gradle</h1>
+<h1>Creating a REST application</h1>
 <span id="author" class="author">Jorge Franco</span><br>
-<span id="email" class="email"><a href="mailto:grooscript@gmail.com">grooscript@gmail.com</a></span><br>
+<span id="revnumber">version 0.5</span>
 </div>
 <div id="content">
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>With grooscript, you can convert your groovy code to javascript. We will use <a href="http://www.gradle.org">gradle</a> to
-create a static web project, with html file and some .js files. Application logic done in groovy, and run in the
-browser because groovy code is converted to javascript.</p>
+<p>Let&#8217;s use grails support on <a href="http://grails.org/doc/latest/guide/webServices.html#REST">REST</a> to offer a domain class
+and consume from a gsp using <a href="http://github.com/chiquitinxx/grails-grooscript">grooscript grails plugin</a>. You can use
+groovy code in your gsp&#8217;s with grooscript tags. You can take a look at the source code of this demo in
+<a href="http://github.com/chiquitinxx/grails-rest-demo">Github</a></p>
 </div>
 <div class="paragraph">
-<p>Let&#8217;s use <a href="https://github.com/chiquitinxx/grooscript-gradle-plugin">grooscript gradle plugin</a> to play with
-grooscript. Install <a href="http://www.gradle.org">gradle</a> if you don&#8217;t have it installed in your machine. You can use
-<a href="http://gvmtool.net">Gvm</a> to install gradle 2.0. Is important you use gradle 2, because grooscript works with
-groovy 2.0+. You can use older gradle versions, but gradle 1.x uses groovy 1.8, and you can have problems
-converting code to javascript. After install gradle, just create a new folder and move to it.</p>
+<p>You need grails 2.4+ installed in your system. Create a new project with
+<code>&gt; grails create-app rest-demo</code> and move to created folder.</p>
 </div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_creating_project">Creating project</h3>
 <div class="paragraph">
-<p>Create a <code>build.gradle</code> file with the grooscript plugin data and gradle 2.0 wrapper.</p>
+<p>To install the grooscript grails plugin add to your <code>BuildConfig.groovy</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code class="groovy language-groovy"><span class="tok-n">buildscript</span> <span class="tok-o">{</span>
-    <span class="tok-n">repositories</span> <span class="tok-o">{</span>
-        <span class="tok-n">mavenCentral</span><span class="tok-o">()</span>
-    <span class="tok-o">}</span>
-    <span class="tok-n">dependencies</span> <span class="tok-o">{</span>
-        <span class="tok-n">classpath</span> <span class="tok-s1">&#39;org.grooscript:grooscript-gradle-plugin:0.4&#39;</span>
-    <span class="tok-o">}</span>
+<pre class="pygments highlight"><code class="groovy language-groovy"><span class="tok-n">plugins</span> <span class="tok-o">{</span>
+    <span class="tok-o">...</span>
+    <span class="tok-n">compile</span> <span class="tok-s1">&#39;:grooscript:0.5&#39;</span>
+    <span class="tok-o">...</span>
 <span class="tok-o">}</span>
+</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_starting">Starting</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Now let&#8217;s create a rest domain class, for example in <code>grails-app/domain/rest/Book.groovy</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code class="groovy language-groovy"><span class="tok-kn">package</span> <span class="tok-n">rest</span>
 
-<span class="tok-n">apply</span> <span class="tok-nl">plugin:</span> <span class="tok-s1">&#39;grooscript&#39;</span>
+<span class="tok-kn">import</span> <span class="tok-nn">grails.rest.Resource</span>
 
-<span class="tok-n">task</span> <span class="tok-nf">wrapper</span><span class="tok-o">(</span><span class="tok-nl">type:</span> <span class="tok-n">Wrapper</span><span class="tok-o">)</span> <span class="tok-o">{</span>
-    <span class="tok-n">gradleVersion</span> <span class="tok-o">=</span> <span class="tok-s1">&#39;2.0&#39;</span>
+<span class="tok-nd">@Resource</span><span class="tok-o">(</span><span class="tok-n">uri</span><span class="tok-o">=</span><span class="tok-s1">&#39;/books&#39;</span><span class="tok-o">)</span>
+<span class="tok-kd">class</span> <span class="tok-nc">Book</span> <span class="tok-o">{</span>
+
+    <span class="tok-n">String</span> <span class="tok-n">title</span>
+    <span class="tok-n">String</span> <span class="tok-n">author</span>
+
+    <span class="tok-kd">static</span> <span class="tok-n">constraints</span> <span class="tok-o">=</span> <span class="tok-o">{</span>
+        <span class="tok-n">author</span> <span class="tok-nl">nullable:</span> <span class="tok-kc">true</span>
+    <span class="tok-o">}</span>
 <span class="tok-o">}</span>
 </code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Run <code>&gt; gradle wrapper</code> to create gradlew executable. Run <code>&gt; ./gradlew task</code> to see grooscript tasks.</p>
-</div>
-<div class="paragraph">
-<p>Let&#8217;s start with <strong>initStaticWeb</strong> task to create a html static project. Run <code>&gt; ./gradlew initStaticWeb</code> and the
-plugin will create the following files.</p>
+<p>Now let&#8217;s add some books in <code>BootStrap.groovy</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code class="shell language-shell">├── build.gradle
-└── src
-    └── main
-        ├── groovy
-        │   └── Presenter.groovy
-        └── webapp
-            ├── index.html
-            └── js
-                ├── app
-                └── lib
-                    ├── grooscript-all.js
-                    └── jquery.min.js</code></pre>
+<pre class="pygments highlight"><code class="groovy language-groovy"><span class="tok-kn">import</span> <span class="tok-nn">rest.Book</span>
+
+<span class="tok-kd">class</span> <span class="tok-nc">BootStrap</span> <span class="tok-o">{</span>
+
+    <span class="tok-kt">def</span> <span class="tok-n">init</span> <span class="tok-o">=</span> <span class="tok-o">{</span> <span class="tok-n">servletContext</span> <span class="tok-o">-&gt;</span>
+        <span class="tok-k">new</span> <span class="tok-nf">Book</span><span class="tok-o">(</span><span class="tok-nl">title:</span> <span class="tok-s1">&#39;First Book&#39;</span><span class="tok-o">).</span><span class="tok-na">save</span><span class="tok-o">()</span>
+        <span class="tok-k">new</span> <span class="tok-nf">Book</span><span class="tok-o">(</span><span class="tok-nl">title:</span> <span class="tok-s1">&#39;Second Book&#39;</span><span class="tok-o">,</span> <span class="tok-nl">author:</span> <span class="tok-s1">&#39;some author&#39;</span><span class="tok-o">).</span><span class="tok-na">save</span><span class="tok-o">()</span>
+    <span class="tok-o">}</span>
+    <span class="tok-kt">def</span> <span class="tok-n">destroy</span> <span class="tok-o">=</span> <span class="tok-o">{</span>
+    <span class="tok-o">}</span>
+<span class="tok-o">}</span>
+</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Now, let&#8217;s open index.html in your browser, for example running <code>&gt; open src/main/webapp/index.html</code> open my Google
-Chrome. You must see an input text with label <em>Name:</em> and a button <em>Say hello!</em>. If you put your name and
-press button nothing happens. In javascript console you can see the error, a file called <code>Presenter.js</code> not
-found in <code>src/main/webapp/js/app</code>.</p>
-</div>
-<div class="paragraph">
-<p>I introduced this error to show you that you have to convert your groovy code to javascript each time you
-change your groovy files. We will see later that you can run a daemon to automatically convert your code when
-a file change is detected. But for now, it&#8217;s important that you understand that your groovy code isn&#8217;t running
-in your browser, the javascript converted code is. For <strong>convert</strong> your groovy code to javascript,
-run <code>&gt; ./gradlew convert</code> and a new javascipt file is generated, the missing file in the browser error.</p>
+<p>And finally let&#8217;s see that books in the browser, changing <code>grails-app/views/index.gsp</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code class="shell language-shell">└── src
-    └── main
-        └── webapp
-            └── js
-                └── app
-                    └── Presenter.js</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Now, go the browser, reload the page, put your name and press <em>Say hello!</em>. The text <code><em>Hello your_name!</em></code> will
-be append to the page. So, nice, all is working, and the code that is running in your browser, is Groovy code.
-The file <code>Presenter.groovy</code> is a groovy file, that has been converted to javascript <code>Presenter.js</code> with grooscript.
-You can test the groovy class with a spock and use your favorite groovy IDE. This is one of the
-reasons to use grooscript, <strong>you use the tools you know to create groovy code that runs in your browser</strong>.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_playing">Playing</h3>
-<div class="paragraph">
-<p>Now, let&#8217;s take a look to <code>index.html</code> code.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code class="html language-html"><span class="tok-nt">&lt;html&gt;</span>
+<pre class="pygments highlight"><code class="html language-html"><span class="tok-cp">&lt;!DOCTYPE html&gt;</span>
+<span class="tok-nt">&lt;html&gt;</span>
 <span class="tok-nt">&lt;head&gt;</span>
-    <span class="tok-nt">&lt;title&gt;</span>Initial static web page<span class="tok-nt">&lt;/title&gt;</span>
-    <span class="tok-nt">&lt;script </span><span class="tok-na">type=</span><span class="tok-s">&quot;text/javascript&quot;</span> <span class="tok-na">src=</span><span class="tok-s">&quot;js/lib/jquery.min.js&quot;</span><span class="tok-nt">&gt;&lt;/script&gt;</span> <i class="conum" data-value="1"></i><b>(1)</b>
-    <span class="tok-nt">&lt;script </span><span class="tok-na">type=</span><span class="tok-s">&quot;text/javascript&quot;</span> <span class="tok-na">src=</span><span class="tok-s">&quot;js/lib/grooscript-all.js&quot;</span><span class="tok-nt">&gt;&lt;/script&gt;</span> <i class="conum" data-value="2"></i><b>(2)</b>
-    <span class="tok-nt">&lt;script </span><span class="tok-na">type=</span><span class="tok-s">&quot;text/javascript&quot;</span> <span class="tok-na">src=</span><span class="tok-s">&quot;js/app/Presenter.js&quot;</span><span class="tok-nt">&gt;&lt;/script&gt;</span> <i class="conum" data-value="3"></i><b>(3)</b>
+    <span class="tok-nt">&lt;title&gt;</span>Rest grooscript demo<span class="tok-nt">&lt;/title&gt;</span>
 <span class="tok-nt">&lt;/head&gt;</span>
 <span class="tok-nt">&lt;body&gt;</span>
-    <span class="tok-nt">&lt;p&gt;</span>Name:<span class="tok-nt">&lt;input</span> <span class="tok-na">type=</span><span class="tok-s">&quot;text&quot;</span> <span class="tok-na">id=</span><span class="tok-s">&quot;name&quot;</span><span class="tok-nt">/&gt;&lt;/p&gt;</span> <i class="conum" data-value="4"></i><b>(4)</b>
-    <span class="tok-nt">&lt;input</span> <span class="tok-na">type=</span><span class="tok-s">&quot;button&quot;</span> <span class="tok-na">id=</span><span class="tok-s">&quot;button&quot;</span> <span class="tok-na">value=</span><span class="tok-s">&quot;Say hello!&quot;</span><span class="tok-nt">/&gt;</span> <i class="conum" data-value="5"></i><b>(5)</b>
-    <span class="tok-nt">&lt;div</span> <span class="tok-na">id=</span><span class="tok-s">&quot;salutes&quot;</span><span class="tok-nt">/&gt;</span> <i class="conum" data-value="6"></i><b>(6)</b>
-    <span class="tok-nt">&lt;script </span><span class="tok-na">type=</span><span class="tok-s">&quot;text/javascript&quot;</span><span class="tok-nt">&gt;</span>
-        <span class="tok-nx">presenter</span> <span class="tok-o">=</span> <span class="tok-nx">Presenter</span><span class="tok-p">();</span> <i class="conum" data-value="7"></i><b>(7)</b>
-        <span class="tok-kd">var</span> <span class="tok-nx">binder</span> <span class="tok-o">=</span> <span class="tok-nx">Binder</span><span class="tok-p">();</span> <i class="conum" data-value="8"></i><b>(8)</b>
-        <span class="tok-nx">$</span><span class="tok-p">(</span><span class="tok-nb">document</span><span class="tok-p">).</span><span class="tok-nx">ready</span><span class="tok-p">(</span><span class="tok-kd">function</span><span class="tok-p">()</span> <span class="tok-p">{</span>
-            <span class="tok-nx">binder</span><span class="tok-p">.</span><span class="tok-nx">call</span><span class="tok-p">(</span><span class="tok-nx">presenter</span><span class="tok-p">);</span> <i class="conum" data-value="9"></i><b>(9)</b>
-            <span class="tok-nx">console</span><span class="tok-p">.</span><span class="tok-nx">log</span><span class="tok-p">(</span><span class="tok-s1">&#39;All binds done.&#39;</span><span class="tok-p">);</span>
-        <span class="tok-p">});</span>
-    <span class="tok-nt">&lt;/script&gt;</span>
-<span class="tok-nt">&lt;/body&gt;</span></code></pre>
+    <span class="tok-nt">&lt;h2&gt;</span>List of books<span class="tok-nt">&lt;/h2&gt;</span>
+    <span class="tok-nt">&lt;g:each</span> <span class="tok-na">in=</span><span class="tok-s">&quot;${rest.Book.list()}&quot;</span> <span class="tok-na">var=</span><span class="tok-s">&quot;book&quot;</span><span class="tok-nt">&gt;</span>
+        <span class="tok-nt">&lt;p&gt;</span>Title: ${book.title} - Author: ${book.author?:&#39;unknown&#39;}<span class="tok-nt">&lt;/p&gt;</span>
+    <span class="tok-nt">&lt;/g:each&gt;</span>
+<span class="tok-nt">&lt;/body&gt;</span>
+<span class="tok-nt">&lt;/html&gt;</span>
+</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Ok, now we have our application ready. Run the app <code>&gt; grails run-app</code> and check that all is correct in your
+browser at <code><a href="http://localhost:8080/rest-demo">http://localhost:8080/rest-demo</a></code>. You must see the two book added in the bootstrap.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_grooscript_list">Grooscript list</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Now let&#8217;s add grooscript grails support for rest domain classes. Then, we can work with our domain classes
+from the client, and save data in our server just saving our classes in the client side. First let&#8217;s change our
+view, and get the list of books from the client side.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code class="html language-html"><span class="tok-cp">&lt;!DOCTYPE html&gt;</span>
+<span class="tok-nt">&lt;html&gt;</span>
+<span class="tok-nt">&lt;head&gt;</span>
+    <span class="tok-nt">&lt;title&gt;</span>Rest grooscript demo<span class="tok-nt">&lt;/title&gt;</span>
+    <span class="tok-nt">&lt;asset:javascript</span> <span class="tok-na">src=</span><span class="tok-s">&quot;jquery.js&quot;</span><span class="tok-nt">/&gt;</span> <i class="conum" data-value="1"></i><b>(1)</b>
+    <span class="tok-nt">&lt;asset:javascript</span> <span class="tok-na">src=</span><span class="tok-s">&quot;grooscript-grails.js&quot;</span><span class="tok-nt">/&gt;</span> <i class="conum" data-value="2"></i><b>(2)</b>
+<span class="tok-nt">&lt;/head&gt;</span>
+<span class="tok-nt">&lt;body&gt;</span>
+    <span class="tok-nt">&lt;grooscript:remoteModel</span> <span class="tok-na">domainClass=</span><span class="tok-s">&quot;Book&quot;</span><span class="tok-nt">/&gt;</span> <i class="conum" data-value="3"></i><b>(3)</b>
+    <span class="tok-nt">&lt;h2&gt;</span>List of books<span class="tok-nt">&lt;/h2&gt;</span>
+    <span class="tok-nt">&lt;div</span> <span class="tok-na">id=</span><span class="tok-s">&quot;bookList&quot;</span><span class="tok-nt">/&gt;</span>
+
+    <span class="tok-nt">&lt;grooscript:code&gt;</span> <i class="conum" data-value="4"></i><b>(4)</b>
+        import rest.Book
+
+        def drawBooks = { <i class="conum" data-value="5"></i><b>(5)</b>
+            Book.list().then { list -&gt; <i class="conum" data-value="6"></i><b>(6)</b>
+                $(&#39;#bookList&#39;).html &#39;&#39;
+                list.each {
+                    $(&#39;#bookList&#39;).append(&#39;<span class="tok-nt">&lt;p&gt;</span>Title: &#39;+it.title+&#39; - Author: &#39;+ (it.author?: &#39;unknown&#39;) +&#39;<span class="tok-nt">&lt;/p&gt;</span>&#39;) <i class="conum" data-value="7"></i><b>(7)</b>
+                }
+            }
+        }
+
+        $(document).ready {
+            drawBooks() <i class="conum" data-value="8"></i><b>(8)</b>
+        }
+    <span class="tok-nt">&lt;/grooscript:code&gt;</span>
+
+    <span class="tok-nt">&lt;asset:deferredScripts/&gt;</span> <i class="conum" data-value="9"></i><b>(9)</b>
+<span class="tok-nt">&lt;/body&gt;</span>
+<span class="tok-nt">&lt;/html&gt;</span></code></pre>
 </div>
 </div>
 <div class="colist arabic">
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Grooscript itself doesn&#8217;t requires jquery, but some of the tools in grooscript-all.js does.</td>
+<td>Need import jQuery to work with grooscript tags.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>This js contains grooscript core and some tools to work with the DOM.</td>
+<td>grooscript-grails.js is also needed, because contains grooscript.js and some helper utilities.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>This is the converted javascript code generated from Presenter.groovy.</td>
+<td>With this tag we can now use Book domain class in the client.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>The input text with id <em>name</em>.</td>
+<td>With this tag you can write groovy code that will be converted to javascript and will run in your browser.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="5"></i><b>5</b></td>
-<td>The button with id <em>button</em>.</td>
+<td>Define function to draw a list of books using jQuery.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="6"></i><b>6</b></td>
-<td>The div where all salutes are added.</td>
+<td>You can call domain methods as <strong>list</strong>, and you get a promise, with a <strong>then</strong> method that will run if all is ok.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="7"></i><b>7</b></td>
-<td>Creation of the class, to create a class generated with grooscript, don&#8217;t use <em>new</em>.</td>
+<td>Add books to the DOM.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="8"></i><b>8</b></td>
-<td>Init the binder, a tool that comes in grooscript-all.</td>
+<td>Run <strong>drawBooks</strong> when the page is ready in tle client.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="9"></i><b>9</b></td>
-<td>Associate the binder with the presenter. Now <em>name</em> input is binded to <code>presenter.name</code> property. And when
-you press the button, method <code>presenter.buttonClick()</code> is executed.</td>
+<td>You have to add asset pipeline deferredScripts to process grooscript tags.</td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>Is very important, all code that you convert to javascript, using grooscript, it needs <strong>grooscript.js</strong>
-lib. grooscript.js is included in <strong>grooscript-all.js</strong>, is the library that resolves the runtime of your
-javascript code. If you take a look at <code>Presenter.js</code> you will see some functions that starts with <code>gs.xxx</code>.
-For example if you call a method, maybe the method doesn&#8217;t exist, groovy is a dynamic language, and maybe at
-runtime that method exists or not, or maybe there is a <em>methodMissing</em> call. grooscript.js resolves method
-calls, access to properties, java / groovy types,&#8230; If you use grooscript generated code in other pages or
-environments, remember include any of this libraries.</p>
+<p>The difference between old code and the new code is that now, the <strong>render of the books is done in the client</strong>. This
+is the bigger change when you use grooscript tags. You are creating groovy code that is converted to
+javascript, and is running in the client side. The server now has less work to do. The conversion process is slower,
+but only is done 1 time in production, because it uses cache plugin.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>When you insert groovy code in grooscript tags, don&#8217;t use ${}, because grails will try to process that code in the gsp.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
-<p>Now, you can start to modify Presenter.groovy, much better if you create a Spock test for it. When you make a
-change, remember that you have to generate the javascript code with <code>&gt; ./gradlew convert</code>. So in a typical
-grooscript workflow, you are working with your groovy code, and see the results in your browser, no class
-loading issues, just reload the page with the changes in your javascript generated files. But is boring run
-convert all the time, much better if you run <code>&gt; ./gradlew daemon</code>. This <strong>daemon</strong> blocks execution of gradle,
-and will listen changes in your groovy files. Each time a groovy file changes, groovy code will be converted
-to javascript. Until you break gradle with ^C.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_conversion_options">Conversion options</h3>
-<div class="paragraph">
-<p>Is very important understand grooscript conversion options. In this example some options are used, the gradle plugin
-has some default conversion options. What files have to be converted? Where .js files are saved?&#8230;</p>
-</div>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">source</dt>
-<dd>
-<p>Files or folders with files to be converted. If you put a folder, all groovy files inside will be converted. For example: <code>[<em>'src/grooscript</em>', <em>'MyGroovyFile.groovy</em>']</code></p>
-</dd>
-<dt class="hdlist1">destination</dt>
-<dd>
-<p>The folder where javascript files are generated, the folder must exists, and no folders inside will be created. For example: <code><em>'web-app/js</em>'</code></p>
-</dd>
-<dt class="hdlist1">classPath</dt>
-<dd>
-<p>List of folders or jar&#8217;s to find dependencies. Before groovy code is converted to javascript, that code have to be successfully compiled. For example: <code>[<em>'src/groovy</em>']</code></p>
-</dd>
-<dt class="hdlist1">convertDependencies</dt>
-<dd>
-<p>the javascript converted file, by default will not included code of dependencies. If you set this option to true, the javascript converted file will have converted code of classes used in your original converted file. The files will be bigger, but you don&#8217;t have to worry about add that dependencies. For example: <code>true</code></p>
-</dd>
-<dt class="hdlist1">customization</dt>
-<dd>
-<p>to each file to be converted, will be applied a groovy <a href="http://docs.codehaus.org/display/GROOVY/Advanced+compiler+configuration">customization</a>. For example you can for example type check all the groovy classes to be converted with <code>{ &#8594; ast(TypeChecked)}</code></p>
-</dd>
-<dt class="hdlist1">initialText</dt>
-<dd>
-<p>you can add test at the beginning of your converted javascript file. You can add comments or javascript code. For example: <code><em>'//This code has been generated with grooscript</em>'</code></p>
-</dd>
-<dt class="hdlist1">finalText</dt>
-<dd>
-<p>like initialText, but at the end of the converted file. For example: <code><em>'MyClass().init();</em>'</code></p>
-</dd>
-<dt class="hdlist1">recursive</dt>
-<dd>
-<p>if you specify a folder with the <strong>source</strong> conversion option, by default will not convert files inside folders. To convert recursive, just set to <code>true</code></p>
-</dd>
-<dt class="hdlist1">mainContextScope</dt>
-<dd>
-<p>you can help the converted, specifying functions and variables that will be availables in the main context of the javascript environment. For example: <code>[<em>'$</em>', <em>'window</em>',<em>'myFunction</em>']</code></p>
-</dd>
-<dt class="hdlist1">includeJsLib</dt>
-<dd>
-<p>you can add a grooscript js lib at the beginning of the converted file. For example you can add grooscript.js to the result, and then you don&#8217;t have to worry about include that dependency in javascript <code><em>''grooscript</em>''</code></p>
-</dd>
-</dl>
-</div>
-<div class="paragraph">
-<p>The default conversion options of the grooscript gradle plugin are:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>source = ['src/main/groovy']
-destination = 'src/main/webapp/js/app'
-classPath = ['src/main/groovy']
-convertDependencies = false</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>You can change, or set new options in your <strong>build.gradle</strong>, for example with this new options:</p>
+<p>The actions available with your rest domain class are: <strong>get(id)</strong>, <strong>save()</strong> to create or update, <strong>list()</strong> to retrieve
+a list of objects, and <strong>delete()</strong>. You can use them as you use in your controller or services, but grooscript will
+return a promise of the result, because in the client an ajax call is done. The interface of the promise is the
+following, and fail closure is optional:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code class="groovy language-groovy"><span class="tok-n">grooscript</span> <span class="tok-o">{</span>
-    <span class="tok-n">source</span> <span class="tok-o">=</span> <span class="tok-o">[</span><span class="tok-s1">&#39;src/main/groovy/presenters&#39;</span><span class="tok-o">]</span>
-    <span class="tok-n">destination</span> <span class="tok-o">=</span> <span class="tok-s1">&#39;js&#39;</span>
-    <span class="tok-n">classPath</span> <span class="tok-o">=</span> <span class="tok-o">[</span><span class="tok-s1">&#39;src/groovy&#39;</span><span class="tok-o">]</span>
-    <span class="tok-n">convertDependencies</span> <span class="tok-o">=</span> <span class="tok-kc">true</span>
-    <span class="tok-n">mainContextScope</span> <span class="tok-o">=</span> <span class="tok-o">[</span><span class="tok-s1">&#39;$&#39;</span><span class="tok-o">,</span> <span class="tok-s1">&#39;window&#39;</span><span class="tok-o">,</span> <span class="tok-s1">&#39;Handlebars&#39;</span><span class="tok-o">]</span>
-    <span class="tok-n">initialText</span> <span class="tok-o">=</span> <span class="tok-s1">&#39;//Grooscript converted file&#39;</span>
+<pre class="pygments highlight"><code class="groovy language-groovy"><span class="tok-kd">interface</span> <span class="tok-nc">GsPromise</span> <span class="tok-o">{</span>
+    <span class="tok-kt">def</span> <span class="tok-nf">then</span><span class="tok-o">(</span><span class="tok-n">Closure</span> <span class="tok-n">success</span><span class="tok-o">,</span> <span class="tok-n">Closure</span> <span class="tok-n">fail</span><span class="tok-o">)</span>
 <span class="tok-o">}</span>
 </code></pre>
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_javascript_code_in_your_groovy_code">Javascript code in your groovy code</h3>
+</div>
+<div class="sect1">
+<h2 id="_add_books">Add books</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>If you are reading this, and you have started to play with grooscript, maybe you have thought about put javascript
-code in your groovy code. Imagine you want to use a javascript library, and you want to init it, but in the init
-method of your groovy class that will be converted to javascript. For example, in this class, initDrawScene is a
-javascript function to initialize a canvas scene with a draw method:</p>
+<p>I don&#8217;t wanna make this demo too long, and explain all grooscript and plugin stuff, but let&#8217;s add more
+functionality to this demo. Let&#8217;s add more books from the client. First let&#8217;s add inputs and the button:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code class="groovy language-groovy"><span class="tok-kd">class</span> <span class="tok-nc">Draw</span> <span class="tok-o">{</span>
-    <span class="tok-kt">def</span> <span class="tok-n">points</span>
-    <span class="tok-kt">def</span> <span class="tok-n">scene</span>
-    <span class="tok-kt">def</span> <span class="tok-nf">init</span><span class="tok-o">()</span> <span class="tok-o">{</span>
-        <span class="tok-n">points</span> <span class="tok-o">=</span> <span class="tok-o">[</span><span class="tok-mi">3</span><span class="tok-o">,</span> <span class="tok-mi">4</span><span class="tok-o">,</span> <span class="tok-mi">45</span><span class="tok-o">,</span> <span class="tok-mi">65</span><span class="tok-o">]</span>
-        <span class="tok-n">initDrawScene</span><span class="tok-o">()</span>
-        <span class="tok-n">drawPoints</span><span class="tok-o">()</span>
-    <span class="tok-o">}</span>
-    <span class="tok-kt">def</span> <span class="tok-nf">drawPoints</span><span class="tok-o">()</span> <span class="tok-o">{</span>
-        <span class="tok-n">points</span><span class="tok-o">.</span><span class="tok-na">each</span> <span class="tok-o">{</span>
-            <span class="tok-n">scene</span><span class="tok-o">.</span><span class="tok-na">draw</span> <span class="tok-n">it</span>
+<pre class="pygments highlight"><code class="html language-html"><span class="tok-nt">&lt;h3&gt;</span>Add a new book<span class="tok-nt">&lt;/h3&gt;</span>
+<span class="tok-nt">&lt;p&gt;</span>Title: <span class="tok-nt">&lt;input</span> <span class="tok-na">type=</span><span class="tok-s">&quot;text&quot;</span> <span class="tok-na">id=</span><span class="tok-s">&quot;title&quot;</span><span class="tok-nt">&gt;&lt;/p&gt;</span>
+<span class="tok-nt">&lt;p&gt;</span>Author: <span class="tok-nt">&lt;input</span> <span class="tok-na">type=</span><span class="tok-s">&quot;text&quot;</span> <span class="tok-na">id=</span><span class="tok-s">&quot;author&quot;</span><span class="tok-nt">&gt;&lt;/p&gt;</span>
+<span class="tok-nt">&lt;button</span> <span class="tok-na">type=</span><span class="tok-s">&quot;button&quot;</span> <span class="tok-na">onclick=</span><span class="tok-s">&quot;addBook()&quot;</span><span class="tok-nt">&gt;</span>Add book<span class="tok-nt">&lt;/button&gt;</span>
+</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now let&#8217;s add the function to save the book in server database and add to list:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code class="groovy language-groovy"><span class="tok-kn">import</span> <span class="tok-nn">rest.Book</span>
+
+<span class="tok-kt">def</span> <span class="tok-n">drawBooks</span> <span class="tok-o">=</span> <span class="tok-o">{</span>
+    <span class="tok-n">Book</span><span class="tok-o">.</span><span class="tok-na">list</span><span class="tok-o">().</span><span class="tok-na">then</span> <span class="tok-o">{</span> <span class="tok-n">list</span> <span class="tok-o">-&gt;</span>
+        <span class="tok-n">$</span><span class="tok-o">(</span><span class="tok-s1">&#39;#bookList&#39;</span><span class="tok-o">).</span><span class="tok-na">html</span> <span class="tok-s1">&#39;&#39;</span>
+        <span class="tok-n">list</span><span class="tok-o">.</span><span class="tok-na">each</span> <span class="tok-o">{</span>
+            <span class="tok-n">appendBookToList</span><span class="tok-o">(</span><span class="tok-n">it</span><span class="tok-o">)</span>
         <span class="tok-o">}</span>
     <span class="tok-o">}</span>
 <span class="tok-o">}</span>
-</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>With grooscript you can put javascript code in a groovy method using @GsNative annotation.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code class="groovy language-groovy"><span class="tok-kn">import</span> <span class="tok-nn">org.grooscript.asts.GsNative</span>
 
-<span class="tok-kd">class</span> <span class="tok-nc">Draw</span> <span class="tok-o">{</span>
-    <span class="tok-o">...</span>
-    <span class="tok-nd">@GsNative</span>
-    <span class="tok-kt">def</span> <span class="tok-nf">initDrawScene</span><span class="tok-o">()</span> <span class="tok-o">{</span><span class="tok-cm">/*</span>
-<span class="tok-cm">        //This is just javascript code that will be used in your javascript converted method</span>
-<span class="tok-cm">        this.scene = canvas.init({x: 400, y: 200});</span>
-<span class="tok-cm">    */</span><span class="tok-o">}</span>
-    <span class="tok-o">...</span>
-<span class="tok-o">}</span>
-</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>You have to add grooscript dependency to your project in your <strong>build.gradle</strong>:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code class="groovy language-groovy"><span class="tok-n">repositories</span> <span class="tok-o">{</span>
-    <span class="tok-n">mavenCentral</span><span class="tok-o">()</span>
+<span class="tok-kt">def</span> <span class="tok-n">appendBookToList</span> <span class="tok-o">=</span> <span class="tok-o">{</span> <span class="tok-n">book</span> <span class="tok-o">-&gt;</span>
+    <span class="tok-n">$</span><span class="tok-o">(</span><span class="tok-s1">&#39;#bookList&#39;</span><span class="tok-o">).</span><span class="tok-na">append</span><span class="tok-o">(</span><span class="tok-s1">&#39;&lt;p&gt;Title: &#39;</span><span class="tok-o">+</span><span class="tok-n">book</span><span class="tok-o">.</span><span class="tok-na">title</span><span class="tok-o">+</span><span class="tok-s1">&#39; - Author: &#39;</span><span class="tok-o">+</span> <span class="tok-o">(</span><span class="tok-n">book</span><span class="tok-o">.</span><span class="tok-na">author</span><span class="tok-o">?:</span> <span class="tok-s1">&#39;unknown&#39;</span><span class="tok-o">)</span> <span class="tok-o">+</span><span class="tok-s1">&#39;&lt;/p&gt;&#39;</span><span class="tok-o">)</span>
 <span class="tok-o">}</span>
 
-<span class="tok-n">dependencies</span> <span class="tok-o">{</span>
-    <span class="tok-n">compile</span> <span class="tok-s1">&#39;org.grooscript:grooscript:0.5.2&#39;</span>
+<span class="tok-kt">def</span> <span class="tok-n">addBook</span> <span class="tok-o">=</span> <span class="tok-o">{</span>
+    <span class="tok-kt">def</span> <span class="tok-n">title</span> <span class="tok-o">=</span> <span class="tok-n">$</span><span class="tok-o">(</span><span class="tok-s1">&#39;#title&#39;</span><span class="tok-o">).</span><span class="tok-na">val</span><span class="tok-o">()</span>
+    <span class="tok-kt">def</span> <span class="tok-n">author</span> <span class="tok-o">=</span> <span class="tok-n">$</span><span class="tok-o">(</span><span class="tok-s1">&#39;#author&#39;</span><span class="tok-o">).</span><span class="tok-na">val</span><span class="tok-o">()</span>
+    <span class="tok-k">new</span> <span class="tok-nf">Book</span><span class="tok-o">(</span><span class="tok-nl">title:</span> <span class="tok-n">title</span><span class="tok-o">,</span> <span class="tok-nl">author:</span> <span class="tok-n">author</span><span class="tok-o">).</span><span class="tok-na">save</span><span class="tok-o">().</span><span class="tok-na">then</span> <span class="tok-o">{</span>
+        <span class="tok-n">appendBookToList</span><span class="tok-o">(</span><span class="tok-n">it</span><span class="tok-o">)</span>
+    <span class="tok-o">}</span>
+<span class="tok-o">}</span>
+
+<span class="tok-n">$</span><span class="tok-o">(</span><span class="tok-n">document</span><span class="tok-o">).</span><span class="tok-na">ready</span> <span class="tok-o">{</span>
+    <span class="tok-n">drawBooks</span><span class="tok-o">()</span>
 <span class="tok-o">}</span>
 </code></pre>
 </div>
 </div>
-</div>
-<div class="sect2">
-<h3 id="_conclusion">Conclusion</h3>
 <div class="paragraph">
-<p>I have shown a good way to play with grooscript. It&#8217;s time you start to play with it. Just code in groovy
-and see the results in your browser. You know conversion options and some grooscript tips. There are more tips, more
-helper classes in grooscript-all.js as the html builder or the jquery bean.</p>
+<p>If you reload the page, now you can add books to the list, and books are saved in your database. You can check
+that the book is added with the url of the list of books <code><a href="http://localhost:8080/rest-demo/books">http://localhost:8080/rest-demo/books</a></code>.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>You can use javascript objects in your groovy code as <em>$</em> or <em>console</em>. <strong>println</strong> do a console.log().</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_conclusion">Conclusion</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can use your domain classes in the client, and even better do it in groovy. You don&#8217;t have to repeat code
+between the server and the client, you can use domain properties and methods in the browser and the client. You
+reduce the code to maintain, and reduce the work of the server.</p>
 </div>
 <div class="paragraph">
-<p>This is just a introduction to grooscript, more things to discover as the grails plugin or the Node.js support. Grooscript is
-just a tool that allow you create javascript code from your groovy code. You don&#8217;t have to repeat code in your server
-side and client side, you can just convert it, for example for your validations or your pogo''s.</p>
+<p>Also, you are working in groovy, and just reloading the page you see the results, you don&#8217;t have to care on
+class loading problems, and you will see conversion errors on grails console.</p>
 </div>
 <div class="paragraph">
-<p>You can see an example of a <a href="http://projects.spring.io/spring-boot/">spring boot</a> application using grooscript deployed in
-<a href="http://frameworks-groovygs.rhcloud.com/">the cloud</a>, the source code is in <a href="https://github.com/chiquitinxx/springboot-rest-demo">github</a>.</p>
+<p>You can continue exploring grooscript grails plugin support of rest domain classes:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Update or delete books.</p>
+</li>
+<li>
+<p>What happens on validation errors in the server.</p>
+</li>
+<li>
+<p>Grails issues deleting or getting <em>list()</em> with parameters.</p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
-<p>Please, if you have comments, suggestions, problems,&#8230; don&#8217;t hesitate to contact me at <a href="mailto:grooscript@gmail.com">grooscript@gmail.com</a>, or open
-an issue or feature in <a href="http://github.com/chiquitinxx/grooscript/issues?state=open">Github</a>. This is an open source project and your feedback is more than welcome
-to improve it. More guides come in the future, also can find more documentation in <a href="http://grooscript.org">grooscript</a>
-site.</p>
+<p>If you missing something, or need more features, add to <a href="http://github.com/chiquitinxx/grails-grooscript/issues">Github</a></p>
 </div>
 <script>
     //Google Analytics info
@@ -791,9 +764,11 @@ site.</p>
 </script>
 </div>
 </div>
+</div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2014-07-15 00:28:07 CEST
+Version 0.5<br>
+Last updated 2014-07-15 00:29:14 CEST
 </div>
 </div>
 </body>

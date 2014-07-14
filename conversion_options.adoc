@@ -1,0 +1,10 @@
+source:: Files or folders with files to be converted. If you put a folder, all groovy files inside will be converted. For example: +[''src/grooscript'', ''MyGroovyFile.groovy'']+
+destination:: The folder where javascript files are generated, the folder must exists, and no folders inside will be created. For example: +''web-app/js''+
+classPath:: List of folders or jar's to find dependencies. Before groovy code is converted to javascript, that code have to be successfully compiled. For example: +[''src/groovy'']+
+convertDependencies:: the javascript converted file, by default will not included code of dependencies. If you set this option to true, the javascript converted file will have converted code of classes used in your original converted file. The files will be bigger, but you don't have to worry about add that dependencies. For example: +true+
+customization:: to each file to be converted, will be applied a groovy http://docs.codehaus.org/display/GROOVY/Advanced+compiler+configuration[customization]. For example you can for example type check all the groovy classes to be converted with +{ -> ast(TypeChecked)}+
+initialText:: you can add test at the beginning of your converted javascript file. You can add comments or javascript code. For example: +''//This code has been generated with grooscript''+
+finalText:: like initialText, but at the end of the converted file. For example: +''MyClass().init();''+
+recursive:: if you specify a folder with the *source* conversion option, by default will not convert files inside folders. To convert recursive, just set to +true+
+mainContextScope:: you can help the converted, specifying functions and variables that will be availables in the main context of the javascript environment. For example: +[''$'', ''window'',''myFunction'']+
+includeJsLib:: you can add a grooscript js lib at the beginning of the converted file. For example you can add grooscript.js to the result, and then you don't have to worry about include that dependency in javascript +'''grooscript'''+
