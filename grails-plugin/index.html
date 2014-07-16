@@ -447,13 +447,17 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <ul class="sectlevel2">
 <li><a href="#_spring_bean">Spring bean</a></li>
 <li><a href="#_conversion_daemon">Conversion daemon</a></li>
+<li><a href="#_conversion_options">Conversion options</a></li>
 </ul>
 </li>
+<li><a href="#_helpers">Grails helpers</a></li>
 <li><a href="#_tags">Tags</a></li>
 <li>
 <ul class="sectlevel2">
 <li><a href="#_groovyCode">&lt;grooscript:code&gt;</a></li>
+<li><a href="#_onEvent">&lt;grooscript:onEvent&gt;</a></li>
 <li><a href="#_templates">&lt;grooscript:template&gt;</a></li>
+<li><a href="#_domain">&lt;grooscript:model&gt;</a></li>
 <li><a href="#_remoteDomain">&lt;grooscript:remoteModel&gt;</a></li>
 </ul>
 </li>
@@ -484,8 +488,34 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 convert groovy classes, scripts, or pieces of groovy code in your gsp&#8217;s. Also, you can use your domain classes
 in your browser, bind inputs to groovy objects, create html code with a groovy builder, &#8230;</p>
 </div>
+<div class="paragraph">
+<p>So, your <strong>groovy code running in your browser</strong>, sound good!</p>
+</div>
 <div class="sect2">
 <h3 id="_important">Important</h3>
+<div class="paragraph">
+<p>This plugin deprecate old grooscript vert.x <a href="http://grails.org/plugin/grooscript-vertx">plugin</a>. So, use this one from Grails 2.4.
+You can see in action in this <a href="rest-demo.html">guide</a>.</p>
+</div>
+<div class="paragraph">
+<p>I want to say thank you to @graemerocher, @marioggar and @burtbeckwith for helping at some point with this plugin. Also thanks
+for feedback at @gr8conf. I have to learn a lot about Grails, any help is always welcome.</p>
+</div>
+<div class="paragraph">
+<p>I have a lot of ideas to improve this plugin, as manage events between the server and the client using websockets, add groovy files
+to your gsp&#8217;s and convert them, compile static your templates, improve phantomJs tests or domain classes options,&#8230; but I don&#8217;t know if people use or
+is interested in this plugin. So, if you want or need something, just <strong>open the issue or improvement</strong> in
+<a href="https://github.com/chiquitinxx/grails-grooscript/issues">Github</a> or <a href="mailto:grooscript@gmail.com">grooscript@gmail.com</a></p>
+</div>
+<div class="paragraph">
+<p>I have created this documentation with <a href="http://asciidoctor.org/">asciidoctor</a>!</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_requisites">Requisites</h3>
+<div class="paragraph">
+<p>It requires Grails 2.4+, assets pipeline and cache plugin.</p>
+</div>
 <div class="ulist">
 <ul>
 <li>
@@ -501,12 +531,6 @@ in your browser, bind inputs to groovy objects, create html code with a groovy b
 <p>Work with domain classes still experimental, don&#8217;t use in production.</p>
 </li>
 </ul>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_requisites">Requisites</h3>
-<div class="paragraph">
-<p>It requires Grails 2.4+, assets pipeline and cache plugin.</p>
 </div>
 </div>
 <div class="sect2">
@@ -571,15 +595,22 @@ inspect the AST tree, and generate the javascript code.</p>
 <h3 id="_conversion_daemon">Conversion daemon</h3>
 <div class="paragraph">
 <p>You can activate the conversion daemon to convert groovy files to javascript while your application is up
-in development. Each time you change observed groovy files, javascript file will be converted. To activate
+in <strong>development</strong>. Each time you change observed groovy files, javascript file will be converted. To activate
 this daemon have to configure in your <code>Config.groovy</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code class="groovy language-groovy"><span class="tok-n">grooscript</span> <span class="tok-o">{</span>
     <span class="tok-n">daemon</span> <span class="tok-o">{</span>
-        <span class="tok-n">source</span> <span class="tok-o">=</span> <span class="tok-o">[</span><span class="tok-s1">&#39;src/groovy&#39;</span><span class="tok-o">]</span> <i class="conum" data-value="1"></i><b>(1)</b>
-        <span class="tok-n">destination</span> <span class="tok-o">=</span> <span class="tok-s1">&#39;web-app/js&#39;</span> <i class="conum" data-value="2"></i><b>(2)</b>
+        <span class="tok-n">source</span> <span class="tok-o">=</span> <span class="tok-o">[</span><span class="tok-s1">&#39;src/groovy/MyScript.groovy&#39;</span><span class="tok-o">]</span> <i class="conum" data-value="1"></i><b>(1)</b>
+        <span class="tok-n">destination</span> <span class="tok-o">=</span> <span class="tok-s1">&#39;grails-app/assets/javascripts/app&#39;</span> <i class="conum" data-value="2"></i><b>(2)</b>
+        <span class="tok-n">conversionOptions</span> <span class="tok-o">{</span> <i class="conum" data-value="3"></i><b>(3)</b>
+            <span class="tok-n">initialText</span> <span class="tok-o">=</span> <span class="tok-s1">&#39;//Converted file&#39;</span>
+        <span class="tok-o">}</span>
+        <span class="tok-n">doAfter</span> <span class="tok-o">=</span> <span class="tok-o">{</span> <span class="tok-n">list</span> <span class="tok-o">-&gt;</span> <i class="conum" data-value="4"></i><b>(4)</b>
+            <span class="tok-k">if</span> <span class="tok-o">(</span><span class="tok-n">list</span><span class="tok-o">)</span>
+                <span class="tok-n">println</span> <span class="tok-s2">&quot;************ Converted files: ${list}&quot;</span>
+        <span class="tok-o">}</span>
     <span class="tok-o">}</span>
 <span class="tok-o">}</span></code></pre>
 </div>
@@ -594,8 +625,113 @@ this daemon have to configure in your <code>Config.groovy</code>:</p>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
 <td>Destination folder of the javascript files.</td>
 </tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Can configure any grooscript conversion option</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>doAfter is a closure that receive the list of file names that changed and have been converted to javascript.</td>
+</tr>
 </table>
 </div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>doAfter is executed 2 times each second, and the list usually is empty. AnyFile.groovy is converted to AnyFile.js</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_conversion_options">Conversion options</h3>
+<div class="paragraph">
+<p>Is very important understand grooscript conversion options.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">source</dt>
+<dd>
+<p>Files or folders with files to be converted. If you put a folder, all groovy files inside will be converted. For example: <code>[<em>'src/grooscript</em>', <em>'MyGroovyFile.groovy</em>']</code></p>
+</dd>
+<dt class="hdlist1">destination</dt>
+<dd>
+<p>The folder where javascript files are generated, the folder must exists, and no folders inside will be created. For example: <code><em>'web-app/js</em>'</code></p>
+</dd>
+<dt class="hdlist1">classPath</dt>
+<dd>
+<p>List of folders or jar&#8217;s to find dependencies. Before groovy code is converted to javascript, that code have to be successfully compiled. For example: <code>[<em>'src/groovy</em>']</code></p>
+</dd>
+<dt class="hdlist1">convertDependencies</dt>
+<dd>
+<p>the javascript converted file, by default will not included code of dependencies. If you set this option to true, the javascript converted file will have converted code of classes used in your original converted file. The files will be bigger, but you don&#8217;t have to worry about add that dependencies. For example: <code>true</code></p>
+</dd>
+<dt class="hdlist1">customization</dt>
+<dd>
+<p>to each file to be converted, will be applied a groovy <a href="http://docs.codehaus.org/display/GROOVY/Advanced+compiler+configuration">customization</a>. For example you can for example type check all the groovy classes to be converted with <code>{ &#8594; ast(TypeChecked)}</code></p>
+</dd>
+<dt class="hdlist1">initialText</dt>
+<dd>
+<p>you can add test at the beginning of your converted javascript file. You can add comments or javascript code. For example: <code><em>'//This code has been generated with grooscript</em>'</code></p>
+</dd>
+<dt class="hdlist1">finalText</dt>
+<dd>
+<p>like initialText, but at the end of the converted file. For example: <code><em>'MyClass().init();</em>'</code></p>
+</dd>
+<dt class="hdlist1">recursive</dt>
+<dd>
+<p>if you specify a folder with the <strong>source</strong> conversion option, by default will not convert files inside folders. To convert recursive, just set to <code>true</code></p>
+</dd>
+<dt class="hdlist1">mainContextScope</dt>
+<dd>
+<p>you can help the converted, specifying functions and variables that will be availables in the main context of the javascript environment. For example: <code>[<em>'$</em>', <em>'window</em>',<em>'myFunction</em>']</code></p>
+</dd>
+<dt class="hdlist1">includeJsLib</dt>
+<dd>
+<p>you can add a grooscript js lib at the beginning of the converted file. For example you can add grooscript.js to the result, and then you don&#8217;t have to worry about include that dependency in javascript <code><em>''grooscript</em>''</code></p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_helpers">Grails helpers</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Grooscript and this plugin offer some helpers to work with html, javascript or grails from your groovy code.</p>
+</div>
+<div class="paragraph">
+<p>You can use GrooscriptGrails class from your groovy code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code class="groovy language-groovy"><span class="tok-kn">package</span> <span class="tok-n">org</span><span class="tok-o">.</span><span class="tok-na">grooscript</span><span class="tok-o">.</span><span class="tok-na">grails</span><span class="tok-o">.</span><span class="tok-na">util</span>
+
+<span class="tok-kd">class</span> <span class="tok-nc">GrooscriptGrails</span> <span class="tok-o">{</span>
+    <span class="tok-kd">static</span> <span class="tok-nf">sendClientMessage</span><span class="tok-o">(</span><span class="tok-n">String</span> <span class="tok-n">channel</span><span class="tok-o">,</span> <span class="tok-n">message</span><span class="tok-o">)</span> <i class="conum" data-value="1"></i><b>(1)</b>
+    <span class="tok-kd">static</span> <span class="tok-nf">doRemoteCall</span><span class="tok-o">(</span><span class="tok-n">String</span> <span class="tok-n">controller</span><span class="tok-o">,</span> <span class="tok-n">String</span> <span class="tok-n">action</span><span class="tok-o">,</span> <span class="tok-n">Map</span> <span class="tok-n">params</span><span class="tok-o">,</span> <span class="tok-n">Closure</span> <span class="tok-n">onSuccess</span><span class="tok-o">,</span> <span class="tok-n">Closure</span> <span class="tok-n">onFailure</span><span class="tok-o">)</span> <i class="conum" data-value="2"></i><b>(2)</b>
+<span class="tok-o">}</span></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Send a message to event listeners</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Do a remote ajax call</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -633,7 +769,52 @@ an object, and you want to create in your javascript code, <em>var item = new It
     <span class="tok-o">}</span>
 
     <span class="tok-n">$</span><span class="tok-o">(</span><span class="tok-n">document</span><span class="tok-o">).</span><span class="tok-na">ready</span> <span class="tok-n">doSomething</span><span class="tok-o">([</span><span class="tok-nl">groovy:</span> <span class="tok-n">sing</span><span class="tok-o">,</span> <span class="tok-nl">grails:</span> <span class="tok-n">sing</span><span class="tok-o">,</span> <span class="tok-nl">grooscript:</span> <span class="tok-n">sing</span><span class="tok-o">])</span>
-<span class="tok-o">&lt;</span><span class="tok-nl">grooscript:</span><span class="tok-n">code</span><span class="tok-o">&gt;</span>
+<span class="tok-o">&lt;/</span><span class="tok-nl">grooscript:</span><span class="tok-n">code</span><span class="tok-o">&gt;</span>
+</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_onEvent">&lt;grooscript:onEvent&gt;</h3>
+<div class="paragraph">
+<p>You can react to events launched in the client. In your gsp, there is a variable called <strong>gsEvents</strong> that implements this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code class="groovy language-groovy"><span class="tok-kd">interface</span> <span class="tok-nc">EventHandler</span> <span class="tok-o">{</span>
+    <span class="tok-kt">void</span> <span class="tok-nf">sendMessage</span><span class="tok-o">(</span><span class="tok-n">String</span> <span class="tok-n">channel</span><span class="tok-o">,</span> <span class="tok-n">Map</span> <span class="tok-n">data</span><span class="tok-o">)</span>
+    <span class="tok-kt">void</span> <span class="tok-nf">onEvent</span><span class="tok-o">(</span><span class="tok-n">String</span> <span class="tok-n">channel</span><span class="tok-o">,</span> <span class="tok-n">Closure</span> <span class="tok-n">action</span><span class="tok-o">)</span>
+    <span class="tok-kt">void</span> <span class="tok-nf">close</span><span class="tok-o">()</span>
+<span class="tok-o">}</span>
+</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Can react or launch events at any point, using <strong>gsEvents</strong> variable:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code class="html language-html"><span class="tok-nt">&lt;grooscript:code&gt;</span>
+    $(document).ready {
+        def eventData = &#39;Application started.&#39;
+        gsEvents.sendMessage(&#39;newEvent&#39;, eventData)
+        gsEvents.onEvent(&#39;delete&#39;, { book -&gt;
+            $(&#39;#deleteEvent&#39;).html &#39;Deleted &#39; + book.title
+        })
+    }
+<span class="tok-nt">&lt;/grooscript:code&gt;</span>
+</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Also can use <em>grooscript:onEvent</em> to react to any event launched. Param <strong>name</strong> of the event is mandatory.
+A variable called <em>event</em> is available inside with the data of the event.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code class="html language-html"><span class="tok-nt">&lt;grooscript:onEvent</span> <span class="tok-na">name=</span><span class="tok-s">&quot;myCustomEvent&quot;</span><span class="tok-nt">&gt;</span>
+    console.log event
+<span class="tok-nt">&lt;/grooscript:onEvent&gt;</span>
 </code></pre>
 </div>
 </div>
@@ -664,20 +845,25 @@ some html builders, this is a simple one, that is available inside grooscript js
 <dl>
 <dt class="hdlist1">onLoad</dt>
 <dd>
-<p>By default is true, so the function runs on document ready, and then you html code appears.</p>
+<p>by default is true, so the function runs on document ready, and then you html code appears.</p>
 </dd>
 <dt class="hdlist1">functionName</dt>
 <dd>
-<p>By default a random name is used. But you can define name of the function and use it.</p>
+<p>by default a random name is used. But you can define name of the function and use it.</p>
 </dd>
 <dt class="hdlist1">itemSelector</dt>
 <dd>
 <p>jquery selector of the dom object where html code will be injected.</p>
 </dd>
+<dt class="hdlist1">onEvent</dt>
+<dd>
+<p>to execute the function when event or events are launched.</p>
+</dd>
 </dl>
 </div>
 <div class="paragraph">
-<p>You can combine grooscript tags to create dynamic applications in the client side using <strong>groovy</strong>.</p>
+<p>You can combine grooscript tags to create dynamic applications in the client side using <strong>groovy</strong>. The variable <strong>data</strong>
+is available inside the template tag, that is the param used in the template function call.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -703,9 +889,106 @@ some html builders, this is a simple one, that is available inside grooscript js
 </div>
 </div>
 <div class="sect2">
+<h3 id="_domain">&lt;grooscript:model&gt;</h3>
+<div class="paragraph">
+<p>With this tag you can use your domain classes in the browser / client. Just use the domain classes properties and methods,
+but data will not be saved in the server. You have like a database in your browser.</p>
+</div>
+<div class="paragraph">
+<p><strong>This tag is still experimental, don&#8217;t use in production.</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code class="groovy language-groovy"><span class="tok-kn">package</span> <span class="tok-n">test</span>
+
+<span class="tok-kd">class</span> <span class="tok-nc">Actor</span> <span class="tok-o">{</span>
+
+    <span class="tok-n">String</span> <span class="tok-n">name</span>
+    <span class="tok-n">Date</span> <span class="tok-n">birth</span>
+    <span class="tok-kt">int</span> <span class="tok-n">oscars</span> <span class="tok-o">=</span> <span class="tok-mi">0</span>
+
+    <span class="tok-kd">static</span> <span class="tok-n">constraints</span> <span class="tok-o">=</span> <span class="tok-o">{</span>
+        <span class="tok-n">name</span> <span class="tok-nl">blank:</span> <span class="tok-kc">false</span>
+    <span class="tok-o">}</span>
+
+    <span class="tok-kt">boolean</span> <span class="tok-nf">goodActor</span><span class="tok-o">()</span> <span class="tok-o">{</span>
+        <span class="tok-n">oscars</span> <span class="tok-o">&gt;</span> <span class="tok-mi">0</span>
+    <span class="tok-o">}</span>
+<span class="tok-o">}</span>
+</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Activate use in your gsp&#8217;s with:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code class="html language-html"><span class="tok-nt">&lt;grooscript:model</span> <span class="tok-na">domainClass=</span><span class="tok-s">&quot;Actor&quot;</span><span class="tok-nt">/&gt;</span>
+</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the <em>domainClass</em> you have to put the name of the domain class. The code of the domain
+class is converted to javascript, and you can use properties and methods in the client. Methods injected to the
+domain class are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Actor.list()</p>
+</li>
+<li>
+<p>actor.save()</p>
+</li>
+<li>
+<p>Actor.get(id)</p>
+</li>
+<li>
+<p>actor.validate() - only constraint <em>blank</em> is implemented</p>
+</li>
+<li>
+<p>actor.hasErrors()</p>
+</li>
+<li>
+<p>actor.errors() - gets a map of validation errors</p>
+</li>
+<li>
+<p>Actor.count()</p>
+</li>
+<li>
+<p>actor.delete()</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s see in action, if you execute it, only first actor will be added to actor list.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code class="html language-html"><span class="tok-nt">&lt;grooscript:code&gt;</span>
+    import test.Actor
+
+    def actors = [[name: &#39;Good Actor&#39;, oscars: 2], [name: &#39;Not so good actor&#39;, oscars: 0], [name: &#39;&#39;, oscars: 35]]
+
+    actors.each {
+        def actor = new Actor(it)
+        if (actor.validate() <span class="tok-err">&amp;&amp;</span> actor.goodActor()) {
+            actor.save()
+        }
+    }
+
+    Actor.list().each {
+        $(&#39;#actorList&#39;).append &#39;<span class="tok-nt">&lt;li&gt;</span>&#39;+it.name+&#39;<span class="tok-nt">&lt;/li&gt;</span>&#39;
+    }
+<span class="tok-nt">&lt;/grooscript:code&gt;</span>
+</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
 <h3 id="_remoteDomain">&lt;grooscript:remoteModel&gt;</h3>
 <div class="paragraph">
-<p>With this tag you can use your domain classes in the browser / client. The domain class in available in
+<p>With this tag you can use your domain classes in the browser / client. The domain class is available in
 your groovy code and actions on that domain will be performed asynchronous in your server. You have to annotate
 your domain class as a REST resource with <code>@Resource(uri=<em>/anyUrl</em>)</code>. The access to
 the data is controlled by grails, you can use <a href="http://grails.org/plugin/spring-security-rest">spring secure rest plugin</a>
@@ -788,6 +1071,21 @@ You need <a href="http://phantomjs.org">PhantomJs</a> installed in your system a
 <p>If you use in Spock, then annotate a private method, and then use from your Spock test.
 Spock <em>where:</em> clause not working well with phantom test annotation.</p>
 </div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>For each @PhantomJsTest, a browser is open. If you need create a lot or complex tests, better use
+<a href="http://www.gebish.org/">Geb</a> that has amazing grails <a href="http://grails.org/plugin/geb">plugin</a>.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
 <script>
     //Google Analytics info
     var _gaq = _gaq || [];
@@ -806,7 +1104,7 @@ Spock <em>where:</em> clause not working well with phantom test annotation.</p>
 <div id="footer">
 <div id="footer-text">
 Version 0.5<br>
-Last updated 2014-07-15 00:29:04 CEST
+Last updated 2014-07-16 23:08:47 CEST
 </div>
 </div>
 </body>

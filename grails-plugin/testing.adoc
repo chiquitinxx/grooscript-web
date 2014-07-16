@@ -31,3 +31,9 @@ class MyPhantomTests extends GroovyTestCase {
 
 If you use in Spock, then annotate a private method, and then use from your Spock test.
 Spock _where:_ clause not working well with phantom test annotation.
+
+[TIP]
+--
+For each @PhantomJsTest, a browser is open. If you need create a lot or complex tests, better use
+http://www.gebish.org/[Geb] that has amazing grails http://grails.org/plugin/geb[plugin].
+--

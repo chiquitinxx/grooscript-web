@@ -29,6 +29,6 @@ _var item = Item();_. All goes smooth if you do all in Groovy, for example conve
     }
 
     $(document).ready doSomething([groovy: sing, grails: sing, grooscript: sing])
-<grooscript:code>
+</grooscript:code>
 --
 

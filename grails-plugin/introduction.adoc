@@ -6,16 +6,31 @@ This plugin convert your groovy code to javascript, allowing to use your groovy 
 convert groovy classes, scripts, or pieces of groovy code in your gsp's. Also, you can use your domain classes
 in your browser, bind inputs to groovy objects, create html code with a groovy builder, ...
 
+So, your *groovy code running in your browser*, sound good!
+
 == Important
+
+This plugin deprecate old grooscript vert.x http://grails.org/plugin/grooscript-vertx[plugin]. So, use this one from Grails 2.4.
+You can see in action in this link:rest-demo.html[guide].
+
+I want to say thank you to @graemerocher, @marioggar and @burtbeckwith for helping at some point with this plugin. Also thanks
+for feedback at @gr8conf. I have to learn a lot about Grails, any help is always welcome.
+
+I have a lot of ideas to improve this plugin, as manage events between the server and the client using websockets, add groovy files
+to your gsp's and convert them, compile static your templates, improve phantomJs tests or domain classes options,... but I don't know if people use or
+is interested in this plugin. So, if you want or need something, just *open the issue or improvement* in
+https://github.com/chiquitinxx/grails-grooscript/issues[Github] or grooscript@gmail.com
+
+I have created this documentation with http://asciidoctor.org/[asciidoctor]!
+
+== Requisites
+
+It requires Grails 2.4+, assets pipeline and cache plugin.
 
 - Use _<asset:deferredScripts/>_ in your gsp's with grooscript tags.
 - You have to import +grosscript-grails.js+ when you use grooscript.
 - Plugin use __jquery__, so remember add that dependency.
 - Work with domain classes still experimental, don't use in production.
-
-== Requisites
-
-It requires Grails 2.4+, assets pipeline and cache plugin.
 
 == What is new in {plugin-version}
 

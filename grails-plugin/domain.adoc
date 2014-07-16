@@ -1,0 +1,73 @@
+
+[[_domain]]
+== <grooscript:model>
+
+With this tag you can use your domain classes in the browser / client. Just use the domain classes properties and methods,
+but data will not be saved in the server. You have like a database in your browser.
+
+*This tag is still experimental, don't use in production.*
+
+[source,groovy]
+--
+package test
+
+class Actor {
+
+    String name
+    Date birth
+    int oscars = 0
+
+    static constraints = {
+        name blank: false
+    }
+
+    boolean goodActor() {
+        oscars > 0
+    }
+}
+--
+
+Activate use in your gsp's with:
+
+[source,html]
+--
+<grooscript:model domainClass="Actor"/>
+--
+
+In the _domainClass_ you have to put the name of the domain class. The code of the domain
+class is converted to javascript, and you can use properties and methods in the client. Methods injected to the
+domain class are:
+
+- Actor.list()
+- actor.save()
+- Actor.get(id)
+- actor.validate() - only constraint _blank_ is implemented
+- actor.hasErrors()
+- actor.errors() - gets a map of validation errors
+- Actor.count()
+- actor.delete()
+
+Let's see in action, if you execute it, only first actor will be added to actor list.
+
+[source,html]
+--
+<grooscript:code>
+    import test.Actor
+
+    def actors = [[name: 'Good Actor', oscars: 2], [name: 'Not so good actor', oscars: 0], [name: '', oscars: 35]]
+
+    actors.each {
+        def actor = new Actor(it)
+        if (actor.validate() && actor.goodActor()) {
+            actor.save()
+        }
+    }
+
+    Actor.list().each {
+        $('#actorList').append '<li>'+it.name+'</li>'
+    }
+</grooscript:code>
+--
+
+
+
