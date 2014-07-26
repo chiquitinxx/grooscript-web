@@ -429,7 +429,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <div id="header">
 <h1>Grooscript Grails Plugin</h1>
 <span id="author" class="author">Jorge Franco</span><br>
-<span id="revnumber">version 0.5</span>
+<span id="revnumber">version 0.6</span>
 <br><span id="revremark">Grails plugin to convert groovy code to javascript in your grails application</span>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -439,6 +439,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <ul class="sectlevel2">
 <li><a href="#_important">Important</a></li>
 <li><a href="#_requisites">Requisites</a></li>
+<li><a href="#_what_is_new_in_0_6">What is new in 0.6</a></li>
 <li><a href="#_what_is_new_in_0_5">What is new in 0.5</a></li>
 </ul>
 </li>
@@ -457,6 +458,8 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <li><a href="#_groovyCode">&lt;grooscript:code&gt;</a></li>
 <li><a href="#_onEvent">&lt;grooscript:onEvent&gt;</a></li>
 <li><a href="#_templates">&lt;grooscript:template&gt;</a></li>
+<li><a href="#__grooscript_initspringwebsocket">&lt;grooscript:initSpringWebsocket&gt;</a></li>
+<li><a href="#__grooscript_onserverevent">&lt;grooscript:onServerEvent&gt;</a></li>
 <li><a href="#_domain">&lt;grooscript:model&gt;</a></li>
 <li><a href="#_remoteDomain">&lt;grooscript:remoteModel&gt;</a></li>
 </ul>
@@ -529,6 +532,17 @@ is interested in this plugin. So, if you want or need something, just <strong>op
 </li>
 <li>
 <p>Work with domain classes still experimental, don&#8217;t use in production.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_what_is_new_in_0_6">What is new in 0.6</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Use <a href="http://grails.org/plugin/spring-websocket">spring websocket plugin</a> to send data to the browsers and process in groovy.
+<a href="websocket-support.html">+info</a></p>
 </li>
 </ul>
 </div>
@@ -889,6 +903,65 @@ is available inside the template tag, that is the param used in the template fun
 </div>
 </div>
 <div class="sect2">
+<h3 id="__grooscript_initspringwebsocket">&lt;grooscript:initSpringWebsocket&gt;</h3>
+<div class="paragraph">
+<p>Websocket support explained <a href="websocket-support.html">here</a></p>
+</div>
+<div class="paragraph">
+<p>If you want to use websockets support, with <a href="http://grails.org/plugin/spring-websocket">spring websocket plugin</a>,
+then you have to activate it in your <code>Config.groovy</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code class="groovy language-groovy"><span class="tok-n">grooscript</span> <span class="tok-o">{</span>
+    <span class="tok-n">websockets</span> <span class="tok-o">=</span> <span class="tok-s1">&#39;springWebsocketPlugin&#39;</span>
+<span class="tok-o">}</span>
+</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then, in your gsp, you have to init with:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code class="html language-html"><span class="tok-nt">&lt;grooscript:initSpringWebsocket/&gt;</span>
+
+<span class="tok-c">&lt;!-- or --&gt;</span>
+
+<span class="tok-nt">&lt;grooscript:initSpringWebsocket&gt;</span>
+    println &#39;Websocket is up!&#39;
+<span class="tok-nt">&lt;/grooscript:initSpringWebsocket&gt;</span>
+</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can put groovy code inside the tag, and that code will run in your browser after websocket connection done.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="__grooscript_onserverevent">&lt;grooscript:onServerEvent&gt;</h3>
+<div class="paragraph">
+<p>You can react to websocket events from the server:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code class="html language-html"><span class="tok-nt">&lt;grooscript:onServerEvent</span> <span class="tok-na">path=</span><span class="tok-s">&quot;/topic/hello&quot;</span><span class="tok-nt">&gt;</span>
+    $(&quot;#helloDiv&quot;).append &#39;<span class="tok-nt">&lt;p&gt;</span>&#39;+data+&#39;<span class="tok-nt">&lt;/p&gt;</span>&#39;
+<span class="tok-nt">&lt;/grooscript:onServerEvent&gt;</span>
+
+<span class="tok-nt">&lt;grooscript:onServerEvent</span> <span class="tok-na">path=</span><span class="tok-s">&quot;/topic/books&quot;</span> <span class="tok-na">type=</span><span class="tok-s">&quot;Book&quot;</span><span class="tok-nt">&gt;</span>
+    data.each { book -&gt;
+        $(&quot;#helloDiv&quot;).append &#39;<span class="tok-nt">&lt;p&gt;</span>&#39;+book.coolFormat()+&#39;<span class="tok-nt">&lt;/p&gt;</span>&#39;
+    }
+<span class="tok-nt">&lt;/grooscript:onServerEvent&gt;</span>
+</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><em>type</em> is optional parameter with the type name of the <em>data</em> that come from the server.</p>
+</div>
+</div>
+<div class="sect2">
 <h3 id="_domain">&lt;grooscript:model&gt;</h3>
 <div class="paragraph">
 <p>With this tag you can use your domain classes in the browser / client. Just use the domain classes properties and methods,
@@ -1103,8 +1176,8 @@ Spock <em>where:</em> clause not working well with phantom test annotation.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.5<br>
-Last updated 2014-07-16 23:08:47 CEST
+Version 0.6<br>
+Last updated 2014-07-26 12:38:53 CEST
 </div>
 </div>
 </body>

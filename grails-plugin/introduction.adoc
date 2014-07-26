@@ -34,6 +34,11 @@ It requires Grails 2.4+, assets pipeline and cache plugin.
 
 == What is new in {plugin-version}
 
+- Use http://grails.org/plugin/spring-websocket[spring websocket plugin] to send data to the browsers and process in groovy.
+link:websocket-support.html[+info]
+
+== What is new in 0.5
+
 - Convert groovy code to javascript in your gsp's.
 - Convert groovy files to javascript with conversion daemon.
 - Use your domain classes in your browser.
