@@ -1,0 +1,95 @@
+= PhantomJS tests with Groovy
+:author: Jorge Franco
+:gs-version: 0.5.2
+:email: grooscript@gmail.com
+:source-highlighter: pygments
+:icons: font
+
+http://phantomjs.org/[PhantomJS] is a javascript library for functional testing your web applications or html files.
+It has it's own embedded browser, and you can evaluate DOM handling, CSS selector, JSON, Canvas, and SVG. This library,
+comes with an executable to run a test in a .js file.
+
+With http://grooscript.org[grooscript] you can run a PhantomJS test to evaluate groovy code.
+
+=== Requirements
+
+To run your http://phantomjs.org/download.html[PhantomJS] tests from Groovy, you need both installed. If you don't have Groovy installed in your machine,
+use http://gvmtool.net/[GVM]. Also, create an environment variable in your computer
++> export PHANTOMJS_HOME=/path/to/phantomjs+, this isn't mandatory step, but with this variable you don't have to
+define that system property in your groovy project.
+
+=== Script
+
+You can run a PhantomJS test from a groovy script, for example +myScript.groovy+:
+
+[source,groovy]
+[subs="verbatim,attributes"]
+--
+@GrabConfig(systemClassLoader=true)
+@Grab('org.grooscript:grooscript:{gs-version}') //<1>
+
+import org.grooscript.asts.PhantomJsTest
+
+System.setProperty('PHANTOMJS_HOME', '/path/to/phantomjs/folder') //<2>
+
+@PhantomJsTest(url = 'http://beta.groovy-lang.org/') //<3>
+void testCountLinks() {
+    def links = $('a') //<4>
+    assert links.size() > 40, "Number of links in page are ${links.size()}"
+    def linksArray = links.toArray()
+    linksArray.each {
+        println it
+    }
+}
+
+testCountLinks() //<5>
+--
+<1> Grab grooscript jar.
+<2> If you haven't define environment variable, you can set system property.
+<3> The AST that will change the method in a new method that run a PhantomJS test.
+<4> Groovy code that will be converted to javascript and will be evaluated.
+<5> You have to execute the method to run the test.
+
+If you execute this script with +> groovy myScript.groovy+, then a PhantomJS will run. The browser will open the
+url http://beta.groovy-lang.org/ and will evaluate the groovy code converted to javascript. JQuery and grooscript.js are
+injected to PhantomJS and you can use that libraries in your evaluation.
+
+You get some info of the test running in console:
+
+[source,bash]
+--
+[PhantomJs Test] Starting Test in http://beta.groovy-lang.org/
+  [Console]  https://github.com/groovy/groovy-core
+     ...
+  [Console]  http://www.apache.org/licenses/LICENSE-2.0.html
+[PhantomJs Test] Number of tests: 1
+[PhantomJs Test] Result SUCCESS.
+--
+
+=== Details
+
+@PhantomJsTest annotation transform the code of your function in a new method that runs PhantomJS with groovy
+scripting capabilities. Also a temporally .js file is created for the execution, with the evaluation of the groovy
+code. If some assert fails in the evaluation a groovy assert fail will be raised.
+
+Use this feature for simple and fast tests. If you planning a lot of function tests, please consider
+use http://www.gebish.org/[Geb]. Interaction with the DOM and jQuery functions inside PhantomJS test have
+some strange behavior.
+
+With @PhantomJsTest you can use more parameters, only _url_ is mandatory:
+
+=== GroovyTestCase
+
+=== Spock
+
+=== Conclusion
+
+
+Please, if you have comments, suggestions, problems,... don't hesitate to contact me at grooscript@gmail.com, or open
+an issue or feature in http://github.com/chiquitinxx/grooscript/issues?state=open[Github]. This is an open source project and your feedback is more than welcome
+to improve it. More guides come in the future, also can find more documentation in http://grooscript.org[grooscript]
+site.
+
+++++
+include::analytics.info[]
+++++
