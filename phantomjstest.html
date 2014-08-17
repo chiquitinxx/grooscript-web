@@ -437,10 +437,8 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <div class="paragraph">
 <p><a href="http://phantomjs.org/">PhantomJS</a> is a javascript library for functional testing your web applications or html files.
 It has it&#8217;s own embedded browser, and you can evaluate DOM handling, CSS selector, JSON, Canvas, and SVG. This library,
-comes with an executable to run a test in a .js file.</p>
-</div>
-<div class="paragraph">
-<p>With <a href="http://grooscript.org">grooscript</a> you can run a PhantomJS test to evaluate groovy code.</p>
+comes with an executable to run a test in a .js file. With <a href="http://grooscript.org">grooscript</a> you can run a
+PhantomJS test to <strong>evaluate groovy code</strong>.</p>
 </div>
 </div>
 </div>
@@ -461,7 +459,7 @@ define that system property in your groovy project.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code class="groovy language-groovy"><span class="tok-nd">@GrabConfig</span><span class="tok-o">(</span><span class="tok-n">systemClassLoader</span><span class="tok-o">=</span><span class="tok-kc">true</span><span class="tok-o">)</span>
-<span class="tok-nd">@Grab</span><span class="tok-o">(</span><span class="tok-s1">&#39;org.grooscript:grooscript:0.5.2&#39;</span><span class="tok-o">)</span> <i class="conum" data-value="1"></i><b>(1)</b>
+<span class="tok-nd">@Grab</span><span class="tok-o">(</span><span class="tok-s1">&#39;org.grooscript:grooscript:0.5.3&#39;</span><span class="tok-o">)</span> <i class="conum" data-value="1"></i><b>(1)</b>
 
 <span class="tok-kn">import</span> <span class="tok-nn">org.grooscript.asts.PhantomJsTest</span>
 
@@ -471,13 +469,12 @@ define that system property in your groovy project.</p>
 <span class="tok-kt">void</span> <span class="tok-nf">testCountLinks</span><span class="tok-o">()</span> <span class="tok-o">{</span>
     <span class="tok-kt">def</span> <span class="tok-n">links</span> <span class="tok-o">=</span> <span class="tok-n">$</span><span class="tok-o">(</span><span class="tok-s1">&#39;a&#39;</span><span class="tok-o">)</span> <i class="conum" data-value="4"></i><b>(4)</b>
     <span class="tok-k">assert</span> <span class="tok-n">links</span><span class="tok-o">.</span><span class="tok-na">size</span><span class="tok-o">()</span> <span class="tok-o">&gt;</span> <span class="tok-mi">40</span><span class="tok-o">,</span> <span class="tok-s2">&quot;Number of links in page are ${links.size()}&quot;</span>
-    <span class="tok-kt">def</span> <span class="tok-n">linksArray</span> <span class="tok-o">=</span> <span class="tok-n">links</span><span class="tok-o">.</span><span class="tok-na">toArray</span><span class="tok-o">()</span>
-    <span class="tok-n">linksArray</span><span class="tok-o">.</span><span class="tok-na">each</span> <span class="tok-o">{</span>
-        <span class="tok-n">println</span> <span class="tok-n">it</span>
+    <span class="tok-n">links</span><span class="tok-o">.</span><span class="tok-na">toArray</span><span class="tok-o">().</span><span class="tok-na">collect</span> <span class="tok-o">{</span> <span class="tok-n">it</span><span class="tok-o">.</span><span class="tok-na">toString</span><span class="tok-o">()</span> <span class="tok-o">}.</span><span class="tok-na">each</span> <span class="tok-o">{</span> <span class="tok-n">link</span> <span class="tok-o">-&gt;</span> <i class="conum" data-value="5"></i><b>(5)</b>
+         <span class="tok-n">println</span> <span class="tok-n">link</span>
     <span class="tok-o">}</span>
 <span class="tok-o">}</span>
 
-<span class="tok-n">testCountLinks</span><span class="tok-o">()</span> <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
+<span class="tok-n">testCountLinks</span><span class="tok-o">()</span> <i class="conum" data-value="6"></i><b>(6)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -500,6 +497,10 @@ define that system property in your groovy project.</p>
 </tr>
 <tr>
 <td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>jQuery has it owns each, so I have to use collect to get a <em>groovy</em> collection.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
 <td>You have to execute the method to run the test.</td>
 </tr>
 </table>
@@ -539,17 +540,119 @@ some strange behavior.</p>
 <div class="paragraph">
 <p>With @PhantomJsTest you can use more parameters, only <em>url</em> is mandatory:</p>
 </div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">waitSeconds</dt>
+<dd>
+<p>If you want to wait some seconds after page loaded before evaluate your code.</p>
+</dd>
+<dt class="hdlist1">info</dt>
+<dd>
+<p>To show more info in console.</p>
+</dd>
+<dt class="hdlist1">capture</dt>
+<dd>
+<p>To capture an image of page at the end of evaluation.</p>
+</dd>
+</dl>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code class="groovy language-groovy"><span class="tok-nd">@PhantomJsTest</span><span class="tok-o">(</span><span class="tok-n">url</span> <span class="tok-o">=</span> <span class="tok-s1">&#39;myFile.html&#39;</span><span class="tok-o">,</span> <span class="tok-n">waitSeconds</span> <span class="tok-o">=</span> <span class="tok-mi">2</span><span class="tok-o">,</span> <span class="tok-n">info</span> <span class="tok-o">=</span> <span class="tok-kc">true</span><span class="tok-o">,</span> <span class="tok-n">capture</span> <span class="tok-o">=</span> <span class="tok-s1">&#39;image.png&#39;</span><span class="tok-o">)</span>
+<span class="tok-kt">void</span> <span class="tok-nf">testWithAllOptions</span><span class="tok-o">()</span> <span class="tok-o">{</span>
+    <span class="tok-k">assert</span> <span class="tok-n">$</span><span class="tok-o">(</span><span class="tok-s1">&#39;title&#39;</span><span class="tok-o">).</span><span class="tok-na">text</span><span class="tok-o">().</span><span class="tok-na">contains</span><span class="tok-o">(</span><span class="tok-s1">&#39;Welcome&#39;</span><span class="tok-o">)</span>
+<span class="tok-o">}</span>
+</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can pass basic parameters as numbers or strings to your function / method annotated with @PhantomJsTest</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code class="groovy language-groovy"><span class="tok-nd">@PhantomJsTest</span><span class="tok-o">(</span><span class="tok-n">url</span> <span class="tok-o">=</span> <span class="tok-s1">&#39;http://localhost:8000/test&#39;</span><span class="tok-o">)</span>
+<span class="tok-kt">void</span> <span class="tok-nf">testExpectedElements</span><span class="tok-o">(</span><span class="tok-n">element</span><span class="tok-o">,</span> <span class="tok-n">expectedSize</span><span class="tok-o">)</span> <span class="tok-o">{</span>
+    <span class="tok-k">assert</span> <span class="tok-n">$</span><span class="tok-o">(</span><span class="tok-n">element</span><span class="tok-o">).</span><span class="tok-na">size</span> <span class="tok-o">==</span> <span class="tok-n">expectedSize</span><span class="tok-o">,</span><span class="tok-s2">&quot;Number of &#39;${element}&#39; in page is ${$(element).size()}&quot;</span>
+<span class="tok-o">}</span>
+
+<span class="tok-kt">void</span> <span class="tok-nf">testPassParameters</span><span class="tok-o">()</span> <span class="tok-o">{</span>
+    <span class="tok-n">testExpectedElements</span><span class="tok-o">(</span><span class="tok-s1">&#39;p&#39;</span><span class="tok-o">,</span> <span class="tok-mi">1</span><span class="tok-o">)</span>
+    <span class="tok-n">testExpectedElements</span><span class="tok-o">(</span><span class="tok-s1">&#39;body&#39;</span><span class="tok-o">,</span> <span class="tok-mi">1</span><span class="tok-o">)</span>
+<span class="tok-o">}</span>
+</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also get data from the test. That data is parsed to JSON, and return back to groovy parsing that JSON:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code class="groovy language-groovy"><span class="tok-nd">@PhantomJsTest</span><span class="tok-o">(</span><span class="tok-n">url</span> <span class="tok-o">=</span> <span class="tok-s1">&#39;http://localhost:8000/test&#39;</span><span class="tok-o">)</span>
+<span class="tok-kt">def</span> <span class="tok-nf">returnMap</span><span class="tok-o">()</span> <span class="tok-o">{</span>
+    <span class="tok-o">[</span><span class="tok-nl">list:</span> <span class="tok-o">[</span><span class="tok-mi">1</span><span class="tok-o">,</span><span class="tok-mi">2</span><span class="tok-o">],</span> <span class="tok-nl">str:</span> <span class="tok-s1">&#39;string&#39;</span><span class="tok-o">,</span> <span class="tok-nl">number:</span> <span class="tok-mi">9</span><span class="tok-o">,</span> <span class="tok-nl">dec:</span> <span class="tok-mf">8.34</span><span class="tok-o">,</span> <span class="tok-nl">jq:</span> <span class="tok-n">$</span><span class="tok-o">(</span><span class="tok-s1">&#39;p&#39;</span><span class="tok-o">).</span><span class="tok-na">text</span><span class="tok-o">()]</span>
+<span class="tok-o">}</span>
+
+<span class="tok-kt">void</span> <span class="tok-nf">testReturnMap</span><span class="tok-o">()</span> <span class="tok-o">{</span>
+    <span class="tok-kt">def</span> <span class="tok-n">result</span> <span class="tok-o">=</span> <span class="tok-n">returnMap</span><span class="tok-o">()</span>
+    <span class="tok-k">assert</span> <span class="tok-n">result</span> <span class="tok-o">==</span> <span class="tok-o">[</span> <span class="tok-nl">list:</span> <span class="tok-o">[</span><span class="tok-mi">1</span><span class="tok-o">,</span><span class="tok-mi">2</span><span class="tok-o">],</span> <span class="tok-nl">str:</span> <span class="tok-s1">&#39;string&#39;</span><span class="tok-o">,</span> <span class="tok-nl">number:</span> <span class="tok-mi">9</span><span class="tok-o">,</span> <span class="tok-nl">dec:</span> <span class="tok-mf">8.34</span><span class="tok-o">,</span> <span class="tok-nl">jq:</span> <span class="tok-s1">&#39;Welcome&#39;</span><span class="tok-o">]</span>
+<span class="tok-o">}</span>
+</code></pre>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_groovytestcase">GroovyTestCase</h3>
+<div class="paragraph">
+<p>You can annotate a test in a GroovyTestCase with @PhantomJsTest and will work as expected, the test
+will be evaluated in PhantomJs.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code class="groovy language-groovy"><span class="tok-kd">class</span> <span class="tok-nc">TestPhantomJs</span> <span class="tok-kd">extends</span> <span class="tok-n">GroovyTestCase</span> <span class="tok-o">{</span>
 
+    <span class="tok-nd">@PhantomJsTest</span><span class="tok-o">(</span><span class="tok-n">url</span> <span class="tok-o">=</span> <span class="tok-s1">&#39;http://localhost:8000/test&#39;</span><span class="tok-o">)</span>
+    <span class="tok-kt">void</span> <span class="tok-nf">testDirectPhantomJs</span><span class="tok-o">()</span> <span class="tok-o">{</span>
+        <span class="tok-n">println</span> <span class="tok-n">$</span><span class="tok-o">(</span><span class="tok-s1">&#39;p&#39;</span><span class="tok-o">).</span><span class="tok-na">text</span><span class="tok-o">()</span>
+        <span class="tok-k">assert</span> <span class="tok-n">$</span><span class="tok-o">(</span><span class="tok-s1">&#39;p&#39;</span><span class="tok-o">).</span><span class="tok-na">text</span><span class="tok-o">().</span><span class="tok-na">contains</span><span class="tok-o">(</span><span class="tok-s1">&#39;Welcome&#39;</span><span class="tok-o">),</span> <span class="tok-s2">&quot;p html is &#39;Welcome&#39;&quot;</span>
+    <span class="tok-o">}</span>
+<span class="tok-o">}</span>
+</code></pre>
+</div>
+</div>
 </div>
 <div class="sect2">
-<h3 id="_spock">Spock</h3>
+<h3 id="_spock_integration">Spock integration</h3>
+<div class="paragraph">
+<p>The integration with <a href="https://code.google.com/p/spock/">Spock</a> isn&#8217;t very good. The best way, is create a private
+method with @PhantomJsTest in your specification, and call it from your tests.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code class="groovy language-groovy"><span class="tok-kn">import</span> <span class="tok-nn">spock.lang.Specification</span>
 
+<span class="tok-kd">class</span> <span class="tok-nc">MySpec</span> <span class="tok-kd">extends</span> <span class="tok-n">Specification</span> <span class="tok-o">{</span>
+
+    <span class="tok-kt">void</span> <span class="tok-s1">&#39;correct number of divs in test page&#39;</span><span class="tok-o">()</span> <span class="tok-o">{</span>
+        <span class="tok-nl">expect:</span>
+        <span class="tok-n">expectedElements</span><span class="tok-o">(</span><span class="tok-s1">&#39;div&#39;</span><span class="tok-o">,</span> <span class="tok-mi">18</span><span class="tok-o">)</span>
+    <span class="tok-o">}</span>
+
+    <span class="tok-nd">@PhantomJsTest</span><span class="tok-o">(</span><span class="tok-n">url</span> <span class="tok-o">=</span> <span class="tok-s1">&#39;http://localhost:8000/test&#39;</span><span class="tok-o">)</span>
+    <span class="tok-kd">private</span> <span class="tok-kt">void</span> <span class="tok-nf">expectedElements</span><span class="tok-o">(</span><span class="tok-n">element</span><span class="tok-o">,</span> <span class="tok-n">expectedSize</span><span class="tok-o">)</span> <span class="tok-o">{</span>
+        <span class="tok-k">assert</span> <span class="tok-n">$</span><span class="tok-o">(</span><span class="tok-n">element</span><span class="tok-o">).</span><span class="tok-na">size</span> <span class="tok-o">==</span> <span class="tok-n">expectedSize</span><span class="tok-o">,</span><span class="tok-s2">&quot;Number of &#39;${element}&#39; in page is ${$(element).size()}&quot;</span>
+    <span class="tok-o">}</span>
+<span class="tok-o">}</span>
+</code></pre>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_conclusion">Conclusion</h3>
+<div class="paragraph">
+<p>This phantomJs tests are nice for fast and small tests. Is very easy to create a little script or add browser
+tests without too much dependencies. Take care with jQuery in your evaluations, for example I have had some
+problems using <em>each</em> function.</p>
+</div>
 <div class="paragraph">
 <p>Please, if you have comments, suggestions, problems,&#8230; don&#8217;t hesitate to contact me at <a href="mailto:grooscript@gmail.com">grooscript@gmail.com</a>, or open
 an issue or feature in <a href="http://github.com/chiquitinxx/grooscript/issues?state=open">Github</a>. This is an open source project and your feedback is more than welcome
@@ -572,7 +675,7 @@ site.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2014-08-12 00:58:00 CEST
+Last updated 2014-08-17 17:26:26 CEST
 </div>
 </div>
 </body>

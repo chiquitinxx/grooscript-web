@@ -1,4 +1,4 @@
-//Grooscript Version 0.5.2 Apache 2 License
+//Grooscript Version 0.5.3 Apache 2 License
 (function() {
     var gs = function(obj) {
         if (obj instanceof gs) return obj;
@@ -35,6 +35,9 @@
 
     //Delegate
     var actualDelegate = null;
+
+    //Static this
+    var aStT = null;
 
     //@Delegate
     var mapAddDelegate = {};
@@ -77,7 +80,7 @@
     /////////////////////////////////////////////////////////////////
     gs.baseClass = {
         //The with function, with is a reserved word in JavaScript
-        withz : function(closure) { closure.apply(this, closure.arguments); },
+        withz : function(closure) { return closure.apply(this, closure.arguments); },
         getProperties : function() {
             var result = gs.map(), ob;
             for (ob in this) {
@@ -103,7 +106,7 @@
         },
         invokeMethod: function(name, values) {
             var i,newArgs = [];
-            if (values !== null && values !== undefined) {
+            if (values) {
                 for (i=0; i < values.length; i++) {
                     newArgs[i] = values[i];
                 }
@@ -158,13 +161,13 @@
     };
 
     function expandWithMetaclass(item, objectName) {
-        if (globalMetaClass !== undefined && globalMetaClass[objectName] !== null && globalMetaClass[objectName] !== undefined) {
+        if (globalMetaClass && globalMetaClass[objectName]) {
             var obj,map = globalMetaClass[objectName];
             for (obj in map) {
 
                 //Static methods
                 var staticMap = map.getStatic();
-                if (staticMap !== null && staticMap !== undefined) {
+                if (staticMap) {
                     var objStatic;
                     for (objStatic in staticMap) {
                         if (objStatic != 'gSparent') {
@@ -240,7 +243,7 @@
         object.isSet = true;
 
         object.withz = function(closure) {
-            interceptClosureCall(closure, this);
+            return interceptClosureCall(closure, this);
         };
 
         object.add = function(item) {
@@ -723,6 +726,8 @@
             }
             return result;
         };
+
+        this.withz = gs.baseClass.withz;
     }
 
     /////////////////////////////////////////////////////////////////
@@ -732,7 +737,6 @@
 
         //Maybe comes a second parameter with default value
         if (arguments.length==2) {
-            //console.log('uh->'+this[pos]);
             if (this[pos] === null || this[pos] === undefined) {
                 return arguments[1];
             } else {
@@ -748,7 +752,7 @@
     };
 
     Array.prototype.withz = function(closure) {
-        interceptClosureCall(closure, this);
+        return interceptClosureCall(closure, this);
     };
 
     Array.prototype.size = function() {
@@ -1545,7 +1549,7 @@
             var list = gs.list([]);
             var i = 0;
 
-            while (data !== null && data !== undefined) {
+            while (data) {
                 if (data instanceof Array && data.length<2) {
                     list[i] = data[0];
                 } else {
@@ -1670,7 +1674,7 @@
     String.prototype.count = function(value) {
         var reg = new RegExp(value,'g');
         var result = this.match(reg);
-        if (result !== null && result !== undefined) {
+        if (result) {
             return result.length;
         } else {
             return 0;
@@ -1702,7 +1706,7 @@
 
     String.prototype.tokenize = function() {
         var str = " ";
-        if (arguments.length == 1 && arguments[0] !== null && arguments[0] !== undefined) {
+        if (arguments.length == 1 && arguments[0]) {
             str = arguments[0];
         }
         var list = this.split(str);
@@ -1722,6 +1726,11 @@
 
     String.prototype.capitalize = function() {
         return this.charAt(0).toUpperCase() + this.slice(1);
+    };
+
+    String.prototype.each = function(closure) {
+        var list = gs.list(this.split(''));
+        list.each(closure);
     };
 
     function getItemsMultiline(text) {
@@ -1879,10 +1888,10 @@
     };
 
     function interceptClosureCall(func, param) {
-        if ((param instanceof Array) && func.length>1) {
-            func.apply(func,param);
+        if ((param instanceof Array) && func.length > 1) {
+            return func.apply(func, param);
         } else {
-            func(param);
+            return func(param);
         }
     }
 
@@ -1900,7 +1909,7 @@
     };
 
     gs.bool = function(item) {
-        if (item !== null && item !== undefined && item.isEmpty !== undefined) {
+        if (item && item.isEmpty !== undefined) {
             return !item.isEmpty();
         } else {
             if (typeof(item) == 'number' && item === 0) {
@@ -1946,7 +1955,7 @@
         } else if (item.clazz) {
             var classInfo;
             classInfo = item.clazz;
-            while (classInfo !== null && classInfo !== undefined && !gotIt) {
+            while (classInfo && !gotIt) {
                 if (classInfoContainsName(classInfo, name)) {
                     gotIt = true;
                 } else {
@@ -2023,7 +2032,7 @@
 
     // in operator
     gs.gSin = function(item, group) {
-        if (group !== null && group !== undefined && (typeof group.contains === "function")) {
+        if (group && (typeof group.contains === "function")) {
             return group.contains(item);
         } else {
             return false;
@@ -2034,7 +2043,7 @@
     //This can be a closure
     gs.thisOrObject = function(thisItem, objectItem) {
         //this can only be used for our objects, our object must have withz function
-        if (thisItem.withz === undefined && objectItem !== null && objectItem !== undefined) {
+        if (thisItem.withz === undefined && objectItem) {
             return objectItem;
         } else {
             return thisItem;
@@ -2212,6 +2221,10 @@
             console.log('[INFO] gs.mc (' + item + ').' + methodName + ' params:' + values);
         }
 
+        if (item === null || item === undefined) {
+            throw 'gs.mc Calling method: ' + methodName + ' on null or undefined object.';
+        }
+
         if (typeof(item) == 'string' && methodName == 'split') {
             return item.tokenize(values[0]);
         }
@@ -2308,7 +2321,7 @@
                 }
 
                 //Lets check in delegate
-                if (actualDelegate !== null && actualDelegate[methodName] !== undefined) {
+                if (actualDelegate && actualDelegate[methodName]) {
                     return actualDelegate[methodName].apply(item, values);
                 }
                 if (actualDelegate !== null && item.methodMissing === undefined && actualDelegate.methodMissing !== undefined) {
@@ -2477,7 +2490,7 @@
         if (typeof(item) == 'string') {
             className = 'String';
         }
-        if (typeof(item) == 'object' && item.clazz !== undefined && item.clazz.simpleName !== undefined) {
+        if (typeof(item) == 'object' && item.clazz && item.clazz.simpleName) {
             className = item.clazz.simpleName;
         }
         if (className !== null) {
@@ -2589,11 +2602,11 @@
         return result;
     };
 
-    gs.executeCall = function (func, params) {
+    gs.execCall = function (func, thisObject, params) {
         if (typeof func === 'object' && func['call'] !== undefined) {
             return func['call'].apply(func, params);
         } else {
-            return func.apply(func, params);
+            return func.apply(thisObject, params);
         }
     };
 
@@ -2646,13 +2659,17 @@
 
     //MISC Find scope of a var
     gs.fs = function(name, thisScope) {
-        if (thisScope !== undefined && thisScope[name] !== undefined) {
+        if (thisScope && thisScope[name] !== undefined) {
             return thisScope[name];
         } else {
             var value = gs.gp(thisScope, name);
             if (value === undefined) {
-                var func = new Function("return " + name);
-                return func();
+                if (aStT && aStT[name] !== undefined) {
+                    return aStT[name];
+                } else {
+                    var func = new Function("return " + name);
+                    return func();
+                }
             } else {
                 return value;
             }
@@ -2660,9 +2677,9 @@
     };
 
     gs.toJavascript = function(obj) {
-        if (obj !== null && obj !== undefined && gs.isGroovyObj(obj)) {
+        if (obj && gs.isGroovyObj(obj)) {
             var result;
-            if (obj !== null && obj !== undefined && typeof(obj) !== "function") {
+            if (obj && typeof(obj) !== "function") {
                 if (obj instanceof Array) {
                     result = [];
                     var i;
@@ -2691,7 +2708,7 @@
 
     gs.toGroovy = function(obj, objClass) {
         var result;
-        if (obj !== null && obj !== undefined && typeof(obj) !== "function") {
+        if (obj && typeof(obj) !== "function") {
             if (obj instanceof Array) {
                 result = gs.list([]);
                 var i;
@@ -2701,7 +2718,7 @@
             } else {
                 if (obj instanceof Object) {
                     var ob;
-                    if (objClass !== undefined && objClass !== null) {
+                    if (objClass) {
                         result = objClass();
                         for (ob in obj) {
                             result[ob] = gs.toGroovy(obj[ob]);
@@ -2736,6 +2753,14 @@
                 typeof(maybeGroovyObject.withz) === "function") ||
             (maybeGroovyObject.clazz !== undefined &&
                 maybeGroovyObject.clazz.name == 'java.util.LinkedHashMap');
+    };
+
+    gs.execStatic = function(obj, methodName, thisObject, params) {
+        var old = aStT;
+        aStT = thisObject;
+        var res = obj[methodName].apply(thisObject, params);
+        aStT = old;
+        return res;
     };
 
 }).call(this);

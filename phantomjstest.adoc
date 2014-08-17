@@ -1,15 +1,14 @@
 = PhantomJS tests with Groovy
 :author: Jorge Franco
-:gs-version: 0.5.2
+:gs-version: 0.5.3
 :email: grooscript@gmail.com
 :source-highlighter: pygments
 :icons: font
 
 http://phantomjs.org/[PhantomJS] is a javascript library for functional testing your web applications or html files.
 It has it's own embedded browser, and you can evaluate DOM handling, CSS selector, JSON, Canvas, and SVG. This library,
-comes with an executable to run a test in a .js file.
-
-With http://grooscript.org[grooscript] you can run a PhantomJS test to evaluate groovy code.
+comes with an executable to run a test in a .js file. With http://grooscript.org[grooscript] you can run a
+PhantomJS test to *evaluate groovy code*.
 
 === Requirements
 
@@ -36,19 +35,19 @@ System.setProperty('PHANTOMJS_HOME', '/path/to/phantomjs/folder') //<2>
 void testCountLinks() {
     def links = $('a') //<4>
     assert links.size() > 40, "Number of links in page are ${links.size()}"
-    def linksArray = links.toArray()
-    linksArray.each {
-        println it
+    links.toArray().collect { it.toString() }.each { link -> //<5>
+         println link
     }
 }
 
-testCountLinks() //<5>
+testCountLinks() //<6>
 --
 <1> Grab grooscript jar.
 <2> If you haven't define environment variable, you can set system property.
 <3> The AST that will change the method in a new method that run a PhantomJS test.
 <4> Groovy code that will be converted to javascript and will be evaluated.
-<5> You have to execute the method to run the test.
+<5> jQuery has it owns each, so I have to use collect to get a 'groovy' collection.
+<6> You have to execute the method to run the test.
 
 If you execute this script with +> groovy myScript.groovy+, then a PhantomJS will run. The browser will open the
 url http://beta.groovy-lang.org/ and will evaluate the groovy code converted to javascript. JQuery and grooscript.js are
@@ -78,12 +77,94 @@ some strange behavior.
 
 With @PhantomJsTest you can use more parameters, only _url_ is mandatory:
 
+waitSeconds:: If you want to wait some seconds after page loaded before evaluate your code.
+info:: To show more info in console.
+capture:: To capture an image of page at the end of evaluation.
+
+[source,groovy]
+--
+@PhantomJsTest(url = 'myFile.html', waitSeconds = 2, info = true, capture = 'image.png')
+void testWithAllOptions() {
+    assert $('title').text().contains('Welcome')
+}
+--
+
+You can pass basic parameters as numbers or strings to your function / method annotated with @PhantomJsTest
+
+[source,groovy]
+--
+@PhantomJsTest(url = 'http://localhost:8000/test')
+void testExpectedElements(element, expectedSize) {
+    assert $(element).size == expectedSize,"Number of '${element}' in page is ${$(element).size()}"
+}
+
+void testPassParameters() {
+    testExpectedElements('p', 1)
+    testExpectedElements('body', 1)
+}
+--
+
+You can also get data from the test. That data is parsed to JSON, and return back to groovy parsing that JSON:
+
+[source,groovy]
+--
+@PhantomJsTest(url = 'http://localhost:8000/test')
+def returnMap() {
+    [list: [1,2], str: 'string', number: 9, dec: 8.34, jq: $('p').text()]
+}
+
+void testReturnMap() {
+    def result = returnMap()
+    assert result == [ list: [1,2], str: 'string', number: 9, dec: 8.34, jq: 'Welcome']
+}
+--
+
 === GroovyTestCase
 
-=== Spock
+You can annotate a test in a GroovyTestCase with @PhantomJsTest and will work as expected, the test
+will be evaluated in PhantomJs.
+
+[source,groovy]
+--
+class TestPhantomJs extends GroovyTestCase {
+
+    @PhantomJsTest(url = 'http://localhost:8000/test')
+    void testDirectPhantomJs() {
+        println $('p').text()
+        assert $('p').text().contains('Welcome'), "p html is 'Welcome'"
+    }
+}
+--
+
+=== Spock integration
+
+The integration with https://code.google.com/p/spock/[Spock] isn't very good. The best way, is create a private
+method with @PhantomJsTest in your specification, and call it from your tests.
+
+[source,groovy]
+--
+import spock.lang.Specification
+
+class MySpec extends Specification {
+
+    void 'correct number of divs in test page'() {
+        expect:
+        expectedElements('div', 18)
+    }
+
+    @PhantomJsTest(url = 'http://localhost:8000/test')
+    private void expectedElements(element, expectedSize) {
+        assert $(element).size == expectedSize,"Number of '${element}' in page is ${$(element).size()}"
+    }
+}
+--
+
 
 === Conclusion
 
+This phantomJs tests are nice for fast and small tests. Is very easy to create a little script or add browser
+tests without too much dependencies. Take care with jQuery in your evaluations, for example I have had some
+problems using 'each' function.
 
 Please, if you have comments, suggestions, problems,... don't hesitate to contact me at grooscript@gmail.com, or open
 an issue or feature in http://github.com/chiquitinxx/grooscript/issues?state=open[Github]. This is an open source project and your feedback is more than welcome
