@@ -47,7 +47,7 @@ class Draw {
         drawBezier(finalPoints)
     }
 
-    private void drawBezier(points) {
+    private void drawBezier(List points) {
         def xList = points.collect { it.x }
         def yList = points.collect { it.y }
         def color = colors[r.nextInt(4)]
