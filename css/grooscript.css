@@ -103,6 +103,7 @@ canvas {
 .purple {background-color:Fuchsia;}
 .cyan {background-color:Aqua;}
 .orange {background-color:Orange;}
+.pastel {background-color:#aa0000;color: white;}
 .black {background-color:Black;color: white;}
 
 .padLeft {
@@ -147,4 +148,10 @@ canvas {
     font-size: 18px;
     list-style-type: none;
     padding: 20px;
+}
+
+.pastel a {
+    color: #000060;
+    text-decoration: none;
+    font-weight: normal;
 }

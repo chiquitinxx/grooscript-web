@@ -1,4 +1,4 @@
-//Grooscript Version 0.5.3 Apache 2 License
+//Grooscript Version 0.6 Apache 2 License
 (function() {
     var gs = function(obj) {
         if (obj instanceof gs) return obj;
@@ -330,10 +330,12 @@
 
         object.remove = function(value) {
             var index = this.indexOf(value);
-            if (index>=0) {
+            if (index >= 0) {
                 this.splice(index,1);
+                return true;
+            } else {
+                return false;
             }
-            return this;
         };
 
         return object;
@@ -348,9 +350,9 @@
             'each','eachWithIndex','every','find','findAll',
             'findResult','findResults','get','getAt','groupBy',
             'inject','intersect','max','min',
-            'putAll','putAt','reverseEach',
+            'putAll','putAt','reverseEach', 'clear',
             'sort','spread','subMap','add','take','takeWhile',
-            'withDefault','count','drop',
+            'withDefault','count','drop','keySet',
             'put','size','isEmpty','remove','containsKey',
             'containsValue','values'].indexOf(name) >= 0;
     }
@@ -639,6 +641,16 @@
             return result;
         };
 
+        this.keySet = function() {
+            var result = gs.list([]), ob;
+            for (ob in this) {
+                if (!isMapProperty(ob)) {
+                    result.add(ob);
+                }
+            }
+            return result;
+        };
+
         this.values = function() {
             var result = gs.list([]), ob;
             for (ob in this) {
@@ -727,6 +739,15 @@
             return result;
         };
 
+        this.clear = function() {
+            var ob;
+            for (ob in this) {
+                if (!isMapProperty(ob)) {
+                    delete this[ob];
+                }
+            }
+        };
+
         this.withz = gs.baseClass.withz;
     }
 
@@ -763,8 +784,12 @@
         return this.length === 0;
     };
 
-    Array.prototype.add = function(element) {
-        this[this.length] = element;
+    Array.prototype.add = function(pos, element) {
+        if (element === undefined) {
+            this[this.length] = pos;
+        } else {
+            this[pos] = element;
+        }
         return this;
     };
 
@@ -819,6 +844,20 @@
             }
         }
         return gotIt;
+    };
+
+    Array.prototype.containsAll = function(list) {
+        var i, numberEq = 0;
+        for (i=0; i < list.length; i++) {
+            if (this.contains(list[i])) {
+                numberEq++;
+            }
+        }
+        if (numberEq == list.length) {
+            return true;
+        } else {
+            return false;
+        }
     };
 
     Array.prototype.each = function(closure) {
@@ -1296,6 +1335,10 @@
         this[position] = value;
     };
 
+    Array.prototype.clear = function() {
+        this.splice(0, this.length)
+    };
+
     /////////////////////////////////////////////////////////////////
     //list - [] from groovy
     /////////////////////////////////////////////////////////////////
@@ -1399,6 +1442,9 @@
         gSobject.withz = gs.baseClass.withz;
 
         gSobject.time = gSobject.getTime();
+        gSobject.setTime = function(milis) {
+            gSobject.time = milis;
+        };
 
         gSobject.year = gSobject.getFullYear();
         gSobject.month = gSobject.getMonth();
@@ -2062,8 +2108,8 @@
     /////////////////////////////////////////////////////////////////
     //If an object has a function by name
     function hasFunc(item, name) {
-        if (item === null || item === undefined ||
-            item[name] === undefined || item[name] === null || (typeof item[name] !== "function")) {
+        if (item === null || item === undefined || item[name] === undefined ||
+            (typeof item[name] !== "function")) {
             return false;
         } else {
             return true;
@@ -2082,11 +2128,10 @@
             item.gSparent[nameProperty] = value;
         } else {
 
-            if (!hasFunc(item, 'setProperty')) {
-
+            if (!item['setProperty']) {
                 var nameFunction = 'set' + nameProperty.charAt(0).toUpperCase() + nameProperty.slice(1);
 
-                if (item[nameFunction] === undefined || item[nameFunction] === null || (typeof item[nameFunction] != "function")) {
+                if (!item[nameFunction]) {
                     if (item[nameProperty] === undefined &&
                         item.setPropertyMissing !== undefined &&
                         typeof item.setPropertyMissing === "function") {
@@ -2101,36 +2146,7 @@
                 item.setProperty(nameProperty,value);
             }
         }
-        //return value;
     };
-
-    //Calling a setMethod
-    function setMethod(item,methodName,value) {
-
-        if (!hasFunc(item,methodName)) {
-
-            var nameProperty = methodName.charAt(3).toLowerCase() + methodName.slice(4);
-            item[nameProperty] = value;
-        } else {
-            item[methodName](value);
-        }
-
-    }
-
-    //Calling a getMethod
-    function getMethod(item,methodName) {
-
-        if (!hasFunc(item,methodName)) {
-
-            var nameProperty = methodName.charAt(3).toLowerCase() + methodName.slice(4);
-            var res = function () { return item[nameProperty];};
-            return res;
-
-        } else {
-            return item[methodName];
-        }
-
-    }
 
     //Get a property of a class
     gs.gp = function(item, nameProperty) {
@@ -2140,12 +2156,14 @@
             if (item === null || item === undefined) {
                 return null;
             }
+        } else if (item == null || item === undefined) {
+            throw 'gs.gp Get property: ' + nameProperty + ' on null or undefined object.'
         }
 
-        if (!hasFunc(item, 'getProperty')) {
+        if (!item['getProperty']) {
             var nameFunction = 'get' + nameProperty.charAt(0).toUpperCase() + nameProperty.slice(1);
-            if (!hasFunc(item,nameFunction)) {
-                if (typeof item[nameProperty] === "function" && nameProperty == 'size') {
+            if (!item[nameFunction]) {
+                if (nameProperty == 'size' && typeof item[nameProperty] === "function") {
                     return item[nameProperty]();
                 } else {
                     if (item[nameProperty] !== undefined) {
@@ -2194,7 +2212,7 @@
 
     //Control property changes with ++,--
     gs.plusPlus = function(item, nameProperty, plus, before) {
-        var value = gs.gp(item,nameProperty);
+        var value = gs.gp(item, nameProperty);
         var newValue = value;
         if (plus) {
             gs.sp(item, nameProperty, value + 1);
@@ -2225,13 +2243,13 @@
             throw 'gs.mc Calling method: ' + methodName + ' on null or undefined object.';
         }
 
-        if (typeof(item) == 'string' && methodName == 'split') {
+        if (methodName == 'split' && typeof(item) == 'string') {
             return item.tokenize(values[0]);
         }
-        if (typeof(item) == 'string' && methodName == 'length') {
+        if (methodName == 'length' && typeof(item) == 'string') {
             return item.length;
         }
-        if ((item instanceof Array) && methodName == 'join') {
+        if (methodName == 'join' && (item instanceof Array)) {
             if (values.size() > 0) {
                 return item.gSjoin(values[0]);
             } else {
@@ -2246,7 +2264,7 @@
             } catch(e) {}
         }
 
-        if (!hasFunc(item, methodName)) {
+        if (!item[methodName]) {
 
             if (methodName.startsWith('get') || methodName.startsWith('set')) {
                 var varName = methodName.charAt(3).toLowerCase() + methodName.slice(4);
@@ -2490,7 +2508,7 @@
         if (typeof(item) == 'string') {
             className = 'String';
         }
-        if (typeof(item) == 'object' && item.clazz && item.clazz.simpleName) {
+        if (item.clazz && item.clazz.simpleName && typeof(item) == 'object') {
             className = item.clazz.simpleName;
         }
         if (className !== null) {
@@ -2603,7 +2621,7 @@
     };
 
     gs.execCall = function (func, thisObject, params) {
-        if (typeof func === 'object' && func['call'] !== undefined) {
+        if (func['call'] !== undefined && typeof func === 'object') {
             return func['call'].apply(func, params);
         } else {
             return func.apply(thisObject, params);

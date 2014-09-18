@@ -5,7 +5,7 @@
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta name="description" content="Converts Groovy code to JavaScript"/>
-      <meta name="keywords" content="groovy, scripting language, javascript, groovy to javascript, framework"/>
+      <meta name="keywords" content="groovy, scripting language, javascript, groovy to javascript, library"/>
       <meta name="author" content="Jorge Franco">
       <link rel="shortcut icon" href="img/favicon.png">
 
@@ -58,7 +58,7 @@
                 </h3>
                 <p>Grooscript is a groovy library that converts your groovy code to javascipt. At the moment, can do that conversion from a
                     string or file or all groovy files in folder. The javascript code generated, needs grooscript.js to be executed, a file included in the jar
-                    that contains all javascript code needed to run converted code.</p>
+                    that contains all javascript code needed to run converted code. Also Java code is supported, but more limited.</p>
                 <br/>
                 <p>Be aware javascript isn't Java or Groovy, lot of differences between them. The main idea of this project is use
                     Groovy strength in the browser, not create a full conversion. Use Groovy lists, maps, closures, Gstrings, beans, ... as many Groovy magic as
@@ -66,10 +66,10 @@
                 <br/>
             </div>
             <div class="col-md-6">
-                <h4 class="current">Current version: 0.5.3</h4>
+                <h4 class="current">Current version: 0.6</h4>
                 <img class="img-responsive" src="img/convert.png"/>
                 <p class="openSource">
-                    <strong>GrooScript</strong> is an open source project, with only one developer at the moment.
+                    <strong>Grooscript</strong> is an open source project, with only one developer at the moment.
                     If you want to contribute some way, please contact me.
                     After 40 hours week developing, all help is welcome, thank you 680 motivation clickers :) Every little thing helps a lot to continue developing in my free time.
                 </p>
@@ -128,9 +128,18 @@
         </div>
     </div><!-- /.container -->
 
+    <div class="container pastel">
+        <h4>Version 1.0 coming soon</h4>
+        <p>Versions 0.6.* are continuous release candidates.</p>
+        <p>Please, if you have a minute, try last one, open issues or improvements on <a href="https://github.com/chiquitinxx/grooscript/issues">Github</a></p>
+        <p>You can contribute to grooscript with a little of your time. Thank you!</p>
+    </div>
+
     <div class="container news">
         <h4>News</h4>
         <dl class="dl-horizontal">
+            <dt class="releaseDate">2014 Sep 18th</dt>
+            <dd>Version 0.6</dd>
             <dt class="releaseDate">2014 Sep 4th</dt>
             <dd>Jackson Pollock painting <a href="demo/bezier.html">demo</a></dd>
             <dt class="releaseDate">2014 Aug 17th</dt>
@@ -183,13 +192,37 @@
     </div>
 
     <div class="container">
-        <h4>Coming next releases</h4>
+        <h4>Coming in way to 1.0</h4>
         <ul>
             <li>
-                <p>Update this site and add more documentation.</p>
+                <p>Improve grails plugin in way to 1.0.</p>
             </li>
             <li>
-                <p>More and more Groovy sugar support. Also Java!</p>
+                <p>Improve gradle plugin to use groovy templates in the client side.</p>
+            </li>
+            <li>
+                <p>Improve this site and documentation.</p>
+            </li>
+            <li>
+                <p>More and more Groovy sugar support.</p>
+            </li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <h4>What's new in 0.6</h4>
+        <ul>
+            <li>
+                <p>Improved build using gradle plugins to work with node and gulp.</p>
+            </li>
+            <li>
+                <p>Removed grooscript-all.js, now a new file grooscript-tools.js with browser tools.</p>
+            </li>
+            <li>
+                <p>Improved java support, but not too much :).</p>
+            </li>
+            <li>
+                <p>Fixes and speed improvements.</p>
             </li>
         </ul>
     </div>
@@ -205,9 +238,6 @@
             </li>
             <li>
                 <p>Starting support to @BaseScript.</p>
-            </li>
-            <li>
-                <p>Some fixes.</p>
             </li>
         </ul>
     </div>
@@ -536,7 +566,7 @@ testCountLinks()</pre>
           </ul>
       </div>
 
-      <p class="text-center">@GrooScript 2014</p>
+      <p class="text-center">@Grooscript 2014</p>
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>

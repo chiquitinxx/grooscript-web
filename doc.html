@@ -5,7 +5,7 @@
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta name="description" content="Converts Groovy code to JavaScript"/>
-      <meta name="keywords" content="groovy, scripting language, javascript, groovy to javascript, framework"/>
+      <meta name="keywords" content="groovy, scripting language, javascript, groovy to javascript, library"/>
       <meta name="author" content="Jorge Franco">
       <link rel="shortcut icon" href="img/favicon.png">
 
@@ -78,8 +78,8 @@
             Groovy strength in the browser, not create a full conversion. I'm looking for use groovy code and tools in the client,
             wanna use Spock tests in the server and in the browser.</p>
 
-        <p>So, for converting your groovy code, you need <a href='jars/grooscript-0.5.3.jar'>grooscript.jar</a>. You can get from mavenCentral
-            (org.grooscript:grooscript:0.5.3) in your project's dependencies. Remember need grooscript.js, inside the jar or get
+        <p>So, for converting your groovy code, you need <a href='jars/grooscript-0.6.jar'>grooscript.jar</a>. You can get from mavenCentral
+            (org.grooscript:grooscript:0.6) in your project's dependencies. Remember need grooscript.js, inside the jar or get
             <a href='js/grooscript.js'>here</a>.</p>
         <p>Let's see code for conversion:</p>
         <pre class='brush:groovy;'>
@@ -198,7 +198,7 @@
         </pre>
         <p><h4>Conversion options</h4></p>
         <ul>
-            <li><b>classPath</b> (default null): set classPath for conversions. GrooScript compiles your code before convert it. Maybe some times you want to define your own classpath as src/groovy. Then class needed for compilation can be found. You can pass a String or a List.</li>
+            <li><b>classPath</b> (default null): set classPath for conversions. Grooscript compiles your code before convert it. Maybe some times you want to define your own classpath as src/groovy. Then class needed for compilation can be found. You can pass a String or a List.</li>
             <li><b>convertDependencies</b> (default true): setting to false will not convert dependencies (imports) in the result js file.</li>
             <li><b>customization</b> (default null): customizer builder closure. <a href="http://docs.codehaus.org/display/GROOVY/Advanced+compiler+configuration">More info</a></li>
             <li><b>mainContextScope</b> (default null): add name of function or variables that are availables in main scope. Then, grooscript will not try get them from incorrect scope.</li>
@@ -499,7 +499,7 @@
         <td>AST</td>
         <td></td>
         <td class="littleSupport"></td>
-        <td>Support to @Mixin, @Category and @Delegate. Annotations in semantic phase, will be converted, is same phase that GrooScript use.</td>
+        <td>Support to @Mixin, @Category and @Delegate. Annotations in semantic phase, will be converted, is same phase that grooscript use.</td>
     </tr>
     <tr>
         <td>Traits</td>
@@ -517,7 +517,7 @@
     </div>
 
 
-      <p class="text-center">@GrooScript 2014</p>
+      <p class="text-center">@Grooscript 2014</p>
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
