@@ -1,7 +1,7 @@
 //Grooscript converted file
 function Draw() {
   var gSobject = gs.inherit(gs.baseClass,'Draw');
-  gSobject.clazz = { name: 'org.grooscript.demo.bezier.Draw', simpleName: 'Draw'};
+  gSobject.clazz = { name: 'paint.Draw', simpleName: 'Draw'};
   gSobject.clazz.superclass = { name: 'java.lang.Object', simpleName: 'Object'};
   gSobject.functions = Functions();
   gSobject.r = gs.random();

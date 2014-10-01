@@ -1,7 +1,7 @@
 //Grooscript converted file
 function Functions() {
   var gSobject = gs.inherit(gs.baseClass,'Functions');
-  gSobject.clazz = { name: 'org.grooscript.demo.bezier.Functions', simpleName: 'Functions'};
+  gSobject.clazz = { name: 'paint.Functions', simpleName: 'Functions'};
   gSobject.clazz.superclass = { name: 'java.lang.Object', simpleName: 'Object'};
   gSobject['nBezier'] = function(t, points) {
     var length = gs.minus(gs.mc(points,"size",[]), 1);
