@@ -7,7 +7,7 @@
       <meta name="description" content="Converts Groovy code to JavaScript"/>
       <meta name="keywords" content="groovy, scripting language, javascript, groovy to javascript, library"/>
       <meta name="author" content="Jorge Franco">
-      <link rel="shortcut icon" href="img/favicon.png">
+      <link rel="shortcut icon" href="favicon.ico">
 
     <title>Grooscript</title>
 
@@ -78,8 +78,8 @@
             Groovy strength in the browser, not create a full conversion. I'm looking for use groovy code and tools in the client,
             wanna use Spock tests in the server and in the browser.</p>
 
-        <p>So, for converting your groovy code, you need <a href='jars/grooscript-0.6.jar'>grooscript.jar</a>. You can get from mavenCentral
-            (org.grooscript:grooscript:0.6) in your project's dependencies. Remember need grooscript.js, inside the jar or get
+        <p>So, for converting your groovy code, you need <a href='jars/grooscript-0.6.1.jar'>grooscript.jar</a>. You can get from mavenCentral
+            (org.grooscript:grooscript:0.6.1) in your project's dependencies. Remember need grooscript.js, inside the jar or get
             <a href='js/grooscript.js'>here</a>.</p>
         <p>Let's see code for conversion:</p>
         <pre class='brush:groovy;'>
@@ -93,7 +93,7 @@
 
             //And that's all, so easy make conversions
         </pre>
-        <p>If you convert a file with dependencies to other files, all will be converted to target file.</p>
+        <p>If you convert a file with dependencies to other files, you have to convert that files too.</p>
     </div>
     <div class="tab-pane fade" id="features">
         <p><h4>Conversion Daemon</h4> You can activate a daemon to convert your Groovy files when modify them.</p>
@@ -102,10 +102,10 @@
 
             //You can detect changes in files or files in folders. Sources can be a List of String or a String
             def sources = ['src/groovy/presenters', 'myFile.groovy']
-            //Set destination folder for converted files
-            def destination = 'js/grooscript'
+            //Set destination of conversions, a folder or a .js file
+            def destination = 'js/gs.js'
             //You can set conversion options, see below for options supported. Optional.
-            def options = [classpath:'src/groovy', convertDependencies:false]
+            def options = [classpath:'src/groovy']
 
             //The demon starts and converts all the files at start.
             //Then listen, and each time any of the files changes, generate the new javascript file automatically.
@@ -196,10 +196,19 @@
             }
         }
         </pre>
+        <p><h4>GQuery</h4> You can annotate your classes with @GQuery, to add gQuery property to your class.</p>
+        <pre class='brush:groovy;'>
+        import org.grooscript.asts.GQuery
+
+        @GQuery
+        class MyPresenter {
+        }
+
+        new MyPresenter().gQuery.html('body', '<h1>Hello World!</h1>')
+        </pre>
         <p><h4>Conversion options</h4></p>
         <ul>
             <li><b>classPath</b> (default null): set classPath for conversions. Grooscript compiles your code before convert it. Maybe some times you want to define your own classpath as src/groovy. Then class needed for compilation can be found. You can pass a String or a List.</li>
-            <li><b>convertDependencies</b> (default true): setting to false will not convert dependencies (imports) in the result js file.</li>
             <li><b>customization</b> (default null): customizer builder closure. <a href="http://docs.codehaus.org/display/GROOVY/Advanced+compiler+configuration">More info</a></li>
             <li><b>mainContextScope</b> (default null): add name of function or variables that are availables in main scope. Then, grooscript will not try get them from incorrect scope.</li>
             <li><b>initialText</b> (default null): add any text at begin of each converted js file.</li>
@@ -209,7 +218,7 @@
         </ul>
         <pre class='brush:groovy;'>
             //Set a conversion property
-            GrooScript.setConversionProperty('convertDependencies', false)
+            GrooScript.setConversionProperty('recursive', true)
             GrooScript.setConversionProperty('customization', {
                 ast(CompileStatic)
             })

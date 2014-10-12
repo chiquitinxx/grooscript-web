@@ -7,7 +7,7 @@
       <meta name="description" content="Converts Groovy code to JavaScript"/>
       <meta name="keywords" content="groovy, scripting language, javascript, groovy to javascript, library"/>
       <meta name="author" content="Jorge Franco">
-      <link rel="shortcut icon" href="img/favicon.png">
+      <link rel="shortcut icon" href="favicon.ico">
 
     <title>Grooscript</title>
 
@@ -66,7 +66,7 @@
                 <br/>
             </div>
             <div class="col-md-6">
-                <h4 class="current">Current version: 0.6</h4>
+                <h4 class="current">Current version: 0.6.1</h4>
                 <img class="img-responsive" src="img/convert.png"/>
                 <p class="openSource">
                     <strong>Grooscript</strong> is an open source project, with only one developer at the moment.
@@ -89,7 +89,7 @@
                 <p><a href="robots.html">Robots</a> fighting in your browser. <a href="demo/game.html">2048</a> game.</p>
             </div>
             <div id="featureExamples" class="feature col-sm-4 col-xs-12 col-md-3">
-                <h4>Examples</h4><p>Some <a href="examples.html">examples</a> of groovy code converted to javascript.</p>
+                <h4>Examples</h4><p>Some <a href="examples.html">examples</a> of groovy code converted to javascript. Demos together in <a href="https://github.com/chiquitinxx/grooscript-demos">github</a></p>
             </div>
             <div id="featureDoc" class="feature col-sm-4 col-xs-12 col-md-3">
                 <h4>Documentation</h4><p>Detailed <a href="doc.html">info</a> about the library, conversion options, language support, ...</p>
@@ -116,7 +116,7 @@
                 <h4>Video</h4><p>Old <a href="http://vimeo.com/59395085">video</a> showing grooscript in action as <a href="http://meteor.com">meteor</a>. Using websockets with <a href="http://vertx.io">Vert.x</a> to create a real time application.</p>
             </div>
             <div id="onlineConversions" class="feature col-sm-4 col-xs-12 col-md-3">
-                <h4>Conversions</h4><p>Try <a href="http://frameworks-groovygs.rhcloud.com/conversion">online</a> conversions of groovy code to javascript code. Javascript code is executed and evaluated in the server.</p>
+                <h4>Try it!</h4><p>Try <a href="http://frameworks-groovygs.rhcloud.com/conversion">online</a> conversions of groovy code to javascript code. Javascript code is executed and evaluated in the server.</p>
             </div>
             <div id="downloads" class="feature col-sm-4 col-xs-12 col-md-3">
                 <h4>Downloads</h4><p><a href="downloads.html">Download</a> jar or .js files.</p>
@@ -138,6 +138,8 @@
     <div class="container news">
         <h4>News</h4>
         <dl class="dl-horizontal">
+            <dt class="releaseDate">2014 Oct 12th</dt>
+            <dd>Version 0.6.1</dd>
             <dt class="releaseDate">2014 Oct 2th</dt>
             <dd>All demos together in <a href="https://github.com/chiquitinxx/grooscript-demos">github</a>!</dd>
             <dt class="releaseDate">2014 Sep 18th</dt>
@@ -212,6 +214,27 @@
     </div>
 
     <div class="container">
+        <h4>What's new in 0.6.1</h4>
+        <ul>
+            <li>
+                <p>Removed Binder and improved GQuery, both in grooscript-tools.js.</p>
+            </li>
+            <li>
+                <p>Added @GQuery AST, to add gQueryImpl to a class.</p>
+            </li>
+            <li>
+                <p>Changed class loading, convertDependencies conversion option has been removed. Now all dependencies files have to be converted.</p>
+            </li>
+            <li>
+                <p>Destination of a conversion can be a .js file. So, can put all converted code in one .js file, even can include grooscript libraries.</p>
+            </li>
+            <li>
+                <p>Fixes and speed improvements.</p>
+            </li>
+        </ul>
+    </div>
+
+    <div class="container">
         <h4>What's new in 0.6</h4>
         <ul>
             <li>
@@ -222,9 +245,6 @@
             </li>
             <li>
                 <p>Improved java support, but not too much :).</p>
-            </li>
-            <li>
-                <p>Fixes and speed improvements.</p>
             </li>
         </ul>
     </div>
