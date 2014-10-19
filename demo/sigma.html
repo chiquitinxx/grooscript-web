@@ -26,13 +26,13 @@
     var presenter;
 
     $(document).ready(function() {
-        $.getJSON('countries.json', function(json) {
-            console.log('->'+json.length);
+        $.getJSON('countries.json', function(jsonData) {
+            //console.log('->'+jsonData.length);
             var customSigma = CustomSigma('container');
             presenter = CountriesPresenter({customSigma: customSigma});
             presenter.gQuery = GQueryImpl();
             presenter['loadCountries'] = function() {
-                return gs.toGroovy(json);
+                return gs.toGroovy(jsonData);
             };
             presenter.gQuery.onChange('countrySearch', presenter.onChangeCountry);
             console.log('Loading countries...');
