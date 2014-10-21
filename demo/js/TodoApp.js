@@ -29,7 +29,7 @@ function TodoApp() {
             return gs.mc(this,"li",[it], gSobject);
           }]);
           return gs.mc(this,"li",[function(it) {
-            gs.mc(this,"input",[gs.map().add("type","text").add("id","actualTodo").add("value",gSobject.actualTodo)], gSobject);
+            gs.mc(this,"input",[gs.map().add("placeholder","add a to-do...").add("type","text").add("id","actualTodo").add("value",gSobject.actualTodo)], gSobject);
             return gs.mc(this,"button",[function(it) {
               return gs.mc(this,"yield",["Add #" + (gs.plus(gs.mc(gSobject.todos,"size",[]), 1)) + ""], gSobject);
             }], gSobject);
