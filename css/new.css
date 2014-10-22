@@ -8,7 +8,6 @@ html {
 body {
     font-family: 'Roboto', sans-serif;
     color: #fff;
-    min-width: 1224px;
 }
 
 header, section, footer {
@@ -29,11 +28,6 @@ ul, li {
     position: relative;
 }
 
-.smallImage {
-    padding-right: 80px;
-    padding-bottom: 50px;
-}
-
 .why {
     background-color: lightcoral;
 }
@@ -45,18 +39,19 @@ ul, li {
     line-height: 50px;
 }
 
-.todos img {
-    margin-right: 30%;
+.todos {
+    color: #000000;
+    font-size:26px;
+}
+
+.todos li {
+    vertical-align: top;
 }
 
 #todos {
-    position: relative;
-    clear: both;
-    bottom: 800px;
-    float: right;
-    width: 680px;
-    color: #000000;
-    font-size:26px;
+    margin-left: -200px;
+    height: 103px;
+    width: 567px;
 }
 
 #todos li {
@@ -73,9 +68,15 @@ ul, li {
     color: #fff;
 }
 
+.carrousel img {
+    display:block;
+    margin:auto;
+}
+
 form {
     font-family: courier, courier new, monospace;
 }
+
 form h3 {
     margin-bottom: 20px;
     min-width: 200px;
