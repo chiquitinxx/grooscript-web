@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="description" content="Converts Groovy code to JavaScript"/>
+      <meta name="keywords" content="groovy, scripting language, javascript, groovy to javascript, library"/>
+      <meta name="author" content="Jorge Franco">
+      <link rel="shortcut icon" href="favicon.ico">
+
+    <title>Grooscript</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/grooscript.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <div id="headbar" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html">grooscript</a>
+        </div>
+        <div id="socialIcons" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a data-placement="bottom" title="Send Email" href="mailto:grooscript@gmail.com"><img src="img/gmail-48.png"/></a></li>
+            <li><a data-placement="bottom" title="Twitter" href="http://twitter.com/grooscript"><img src="img/twitter-48.png"/></a></li>
+            <li><a data-placement="bottom" title="Blog" href="http://grooscript.wordpress.com"><img src="img/wordpress-48.png"/></a></li>
+            <li><a data-placement="bottom" title="Github" href="http://github.com/chiquitinxx/grooscript"><img src="img/github-48.png"/></a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div id="description" class="col-md-6">
+                <h3 class="text-center">
+                    Groovy to Javascript converter
+                </h3>
+                <p>Grooscript is a groovy library that converts your groovy code to javascipt. At the moment, can do that conversion from a
+                    string or file or all groovy files in folder. The javascript code generated, needs grooscript.js to be executed, a file included in the jar
+                    that contains all javascript code needed to run converted code. Also Java code is supported, but more limited.</p>
+                <br/>
+                <p>Be aware javascript isn't Java or Groovy, lot of differences between them. The main idea of this project is use
+                    Groovy strength in the browser, not create a full conversion. Use Groovy lists, maps, closures, Gstrings, beans, ... as many Groovy magic as
+                    possible. Only converting Groovy 2.0+ core, not support for groovy library around, as json, builders, ...</p>
+                <br/>
+            </div>
+            <div class="col-md-6">
+                <h4 class="current">Current version: 0.6.1</h4>
+                <img class="img-responsive" src="img/convert.png"/>
+                <p class="openSource">
+                    <strong>Grooscript</strong> is an open source project, with only one developer at the moment.
+                    If you want to contribute some way, please contact me.
+                    After 40 hours week developing, all help is welcome, thank you 680 motivation clickers :) Every little thing helps a lot to continue developing in my free time.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container features">
+
+        <div class="row">
+            <div id="starting_gradle" class="feature col-sm-4 col-xs-12 col-md-3">
+                <h4>First steps</h4>
+                <p><a href="starting_gradle.html">Guide</a> to introduce grooscript using gradle plugin.</p>
+            </div>
+            <div id="featureRobot" class="feature col-sm-4 col-xs-12 col-md-3">
+                <h4>Games</h4>
+                <p><a href="robots.html">Robots</a> fighting in your browser. <a href="demo/game.html">2048</a> game.</p>
+            </div>
+            <div id="featureExamples" class="feature col-sm-4 col-xs-12 col-md-3">
+                <h4>Examples</h4><p>Some <a href="examples.html">examples</a> of groovy code converted to javascript. Demos together in <a href="https://github.com/chiquitinxx/grooscript-demos">github</a></p>
+            </div>
+            <div id="featureDoc" class="feature col-sm-4 col-xs-12 col-md-3">
+                <h4>Documentation</h4><p>Detailed <a href="doc.html">info</a> about the library, conversion options, language support, ...</p>
+            </div>
+            <div id="featureInfo" class="feature col-sm-4 col-xs-12 col-md-3">
+                <h4>Info</h4><p>General info <a href="about.html">about</a> the project.</p>
+            </div>
+            <!--
+            <div id="featureCrud" class="feature col-sm-4 col-xs-12 col-md-3">
+                <h4>Crud</h4><p>Example created in groovy and running in your browser after converted to javascript. Create, read, update and delete films.</p>
+            </div>
+            -->
+            <div id="featureGradle" class="feature col-sm-4 col-xs-12 col-md-3">
+                <h4>Gradle plugin</h4><p>Can do conversions, or launch conversion daemon from gradle tasks. <a href="starting_gradle.html">Starting guide</a>.</p>
+            </div>
+            <div id="featureGrails" class="feature col-sm-4 col-xs-12 col-md-3">
+                <h4>Grails plugin</h4>
+                <p>New grooscript <a href="grails-plugin/index.html">plugin</a> from version 0.5 with grails 2.4+. Old grooscript vert.x <a href="http://grails.org/plugin/grooscript-vertx">plugin</a> deprecated.</p>
+            </div>
+            <div id="featureNode" class="feature col-sm-4 col-xs-12 col-md-3">
+                <h4>Node.js</h4><p><a href="https://npmjs.org/package/grooscript">Npm</a> package to run your groovy generated code in <a href="http://nodejs.org">Node.js</a> applications. <a href="nodejs_example.html">[Example]</a></p>
+            </div>
+            <div id="featureVideo" class="feature col-sm-4 col-xs-12 col-md-3">
+                <h4>Video</h4><p>Old <a href="http://vimeo.com/59395085">video</a> showing grooscript in action as <a href="http://meteor.com">meteor</a>. Using websockets with <a href="http://vertx.io">Vert.x</a> to create a real time application.</p>
+            </div>
+            <div id="onlineConversions" class="feature col-sm-4 col-xs-12 col-md-3">
+                <h4>Try it!</h4><p>Try <a href="http://frameworks-groovygs.rhcloud.com/conversion">online</a> conversions of groovy code to javascript code. Javascript code is executed and evaluated in the server.</p>
+            </div>
+            <div id="downloads" class="feature col-sm-4 col-xs-12 col-md-3">
+                <h4>Downloads</h4><p><a href="downloads.html">Download</a> jar or .js files.</p>
+            </div>
+            <div id="roadmap" class="feature col-sm-4 col-xs-12 col-md-3">
+                <h4>Roadmap</h4>
+                <p>Take a look at the <a href="roadmap.html">future</a> of grooscript.</p>
+            </div>
+        </div>
+    </div><!-- /.container -->
+
+    <div class="container pastel">
+        <h4>Version 1.0 coming soon</h4>
+        <p>Versions 0.6.* are continuous release candidates.</p>
+        <p>Please, if you have a minute, try last one, open issues or improvements on <a href="https://github.com/chiquitinxx/grooscript/issues">Github</a></p>
+        <p>You can contribute to grooscript with a little of your time. Thank you!</p>
+    </div>
+
+    <div class="container news">
+        <h4>News</h4>
+        <dl class="dl-horizontal">
+            <dt class="releaseDate">2014 Oct 12th</dt>
+            <dd>Version 0.6.1</dd>
+            <dt class="releaseDate">2014 Oct 2th</dt>
+            <dd>All demos together in <a href="https://github.com/chiquitinxx/grooscript-demos">github</a>!</dd>
+            <dt class="releaseDate">2014 Sep 18th</dt>
+            <dd>Version 0.6</dd>
+            <dt class="releaseDate">2014 Sep 4th</dt>
+            <dd>Jackson Pollock painting <a href="demo/bezier.html">demo</a></dd>
+            <dt class="releaseDate">2014 Aug 17th</dt>
+            <dd>Version 0.5.3</dd>
+            <dt class="releaseDate">2014 Aug 6th</dt>
+            <dd><a href="http://nodejs.org">Node.js</a> support <a href="nodejs_example.html">example.</a></dd>
+            <dt class="releaseDate">2014 Aug 2th</dt>
+            <dd><a href="http://ratpack.io">Ratpack</a> application using grooscript gradle plugin. <a href="ratpack-demo.html">[+info]</a></dd>
+            <dt class="releaseDate">2014 Jul 26th</dt>
+            <dd>Grails plugin version 0.6, for grails 2.4 and with <a href="grails-plugin/websocket-support.html">websockets support</a>.</dd>
+            <dt class="releaseDate">2014 Jul 14th</dt>
+            <dd>Version 0.5.2</dd>
+            <dt class="releaseDate">2014 Jul 4st</dt>
+            <dd>Jorge Franco <a href="http://www.youtube.com/watch?v=PFDNxHh5kyI">talking</a> about grooscript at <a href="http://gr8conf.eu">Gr8Conf</a>. This guy needs to improve english :)</dd>
+            <dt class="releaseDate">2014 Jul 1st</dt>
+            <dd>Gradle plugin 0.4. Using Gradle 2.0.</dd>
+            <dt class="releaseDate">2014 Jun 10th</dt>
+            <dd>Added <a href="roadmap.html">roadmap</a> info and <a href="https://speakerdeck.com/chiquitinxx/grooscript">slides</a> of grooscript talk at <a href="http://gr8conf.eu">Gr8Conf</a> copenhagen.</dd>
+            <dt class="releaseDate">2014 May 29th</dt>
+            <dd>Version 0.5.1</dd>
+            <dt class="releaseDate">2014 May 20th</dt>
+            <dd>Create a <a href="http://grooscript.wordpress.com/2014/05/20/grooving-node-js-modules/">DSL</a> to create a webserver application on top of Node.js using express</dd>
+            <dt class="releaseDate">2014 May 8th</dt>
+            <dd>New version of Gradle plugin 0.3.</dd>
+            <dt class="releaseDate">2014 May 7th</dt>
+            <dd>New version 0.5 is out. Traits supported!</dd>
+            <dt class="releaseDate">2014 April 25th</dt>
+            <dd>Can do online conversions again.</dd>
+            <dt class="releaseDate">2014 April 8th</dt>
+            <dd>Gradle plugin 0.2.1</dd>
+            <dt class="releaseDate">2014 April 5th</dt>
+            <dd>Version 0.4.5</dd>
+            <dt class="releaseDate">2014 March 30th</dt>
+            <dd>grooscript presentation <a href="http://www.slideshare.net/JorgeFrancoLeza/grooscript-greach">slides</a> at <a href="http://greach.es">Greach</a> 2014.</dd>
+            <dt class="releaseDate">2014 March 29th</dt>
+            <dd><a href="http://twitter.com/jfrancoleza">@jfrancoleza</a> will talk about <a href="http://twitter.com/grooscript">@grooscript</a> in Cophenhague, <a href="http://gr8conf.eu/">GR8Conf Europe</a> 2014 June 2-4</dd>
+            <dt class="releaseDate">2014 February 22th</dt>
+            <dd>Version of Gradle plugin 0.2. Now can create an static web project using require.js from scratch.</dd>
+            <dt class="releaseDate">2014 February 22th</dt>
+            <dd>Version 0.4.4</dd>
+            <dt class="releaseDate">2014 February 3th</dt>
+            <dd>Version 0.4.3.</dd>
+            <dt class="releaseDate">2014 January 14th</dt>
+            <dd>New look in this web :)</dd>
+            <dt class="releaseDate">2014 January 09th</dt>
+            <dd>Grails <a href="http://grails.org/plugin/grooscript-vertx">plugin</a> release 0.4</dd>
+            <dt class="releaseDate">2014 January 08th</dt>
+            <dd>First version of Gradle <a href="http://github.com/chiquitinxx/grooscript-gradle-plugin">plugin</a> (0.1)</dd>
+        </dl>
+    </div>
+
+    <div class="container">
+        <h4>Coming in way to 1.0</h4>
+        <ul>
+            <li>
+                <p>Improve grails plugin in way to 1.0.</p>
+            </li>
+            <li>
+                <p>Improve gradle plugin to use groovy templates in the client side.</p>
+            </li>
+            <li>
+                <p>Improve this site and documentation.</p>
+            </li>
+            <li>
+                <p>More and more Groovy sugar support.</p>
+            </li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <h4>What's new in 0.6.1</h4>
+        <ul>
+            <li>
+                <p>Removed Binder and improved GQuery. Gquery and HtmlBuilder, both in grooscript-tools.js.</p>
+            </li>
+            <li>
+                <p>Added @GQuery AST, to add gQuery property to a class.</p>
+            </li>
+            <li>
+                <p>Changed class loading, convertDependencies conversion option has been removed. Now all dependencies files have to be converted.</p>
+            </li>
+            <li>
+                <p>Destination of a conversion can be a .js file. So, can put all converted code in one .js file, even can include grooscript libraries.</p>
+            </li>
+            <li>
+                <p>Fixes.</p>
+            </li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <h4>What's new in 0.6</h4>
+        <ul>
+            <li>
+                <p>Improved build using gradle plugins to work with node and gulp.</p>
+            </li>
+            <li>
+                <p>Removed grooscript-all.js, now a new file grooscript-tools.js with browser tools.</p>
+            </li>
+            <li>
+                <p>Improved java support, but not too much :).</p>
+            </li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <h4>What's new in 0.5.3</h4>
+        <ul>
+            <li>
+                <p>Add some MarkupTemplateEngine functions to HtmlBuilder.</p>
+            </li>
+            <li>
+                <p>Improve @PhantomJsTest, more info about this annotation <a href="phantomjstest.html">here</a>.</p>
+            </li>
+            <li>
+                <p>Starting support to @BaseScript.</p>
+            </li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <h4>What's new in 0.5.2</h4>
+        <ul>
+            <li>
+                <p>Grooscript can convert .java files, but with groovy types.</p>
+            </li>
+            <li>
+                <p>Starting support to inner classes.</p>
+            </li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <h4>What's new in 0.5.1</h4>
+        <ul>
+            <li>
+                <p>New conversion option to include grooscript js libs in converted javascript.</p>
+            </li>
+            <li>
+                <p>Added support to access boolean properties with isXxxx().</p>
+            </li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <h4>What's new in 0.5</h4>
+        <ul>
+            <li>
+                <p>Traits support.</p>
+            </li>
+            <li>
+                <p>Builder renamed to HtmlBuilder, and improved speed. Added Binder to bind object properties and methods to DOM inputs or events.</p>
+            </li>
+            <li>
+                <p>PropertyMissing supported.</p>
+            </li>
+            <li>
+                <p>Removed kimbo.js from PhantomJs tests, now using jQuery 2.</p>
+            </li>
+            <li>
+                <p>Added interface and implementation to work with jQuery.</p>
+            </li>
+            <li>
+                <p>Now project tests run with Node.js also.</p>
+            </li>
+            <li>
+                <p>More js files inside the jar, grooscript-binder.js, grooscript.min.js and grooscript-all.js.</p>
+            </li>
+            <li>
+                <p>Speed improvements and fixes.</p>
+            </li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <h4>What's new in 0.4.5</h4>
+        <ul>
+            <li>
+                <p>Support 'call' method in classes.</p>
+            </li>
+            <li>
+                <p>Improved Date and categories support.</p>
+            </li>
+            <li>
+                <p>Support initialize classes and maps in js with js objects.</p>
+            </li>
+            <li>
+                <p>Starting support to @Delegate.</p>
+            </li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <h4>What's new in 0.4.4</h4>
+        <ul>
+            <li>
+                <p>Builder and conversion daemon improvements.</p>
+            </li>
+            <li>
+                <p>Added starting support to 'as', also 'is' is supported now.</p>
+            </li>
+            <li>
+                <p>Added function drop and dropWhile to maps and lists.</p>
+            </li>
+            <li>
+                <p>Upgraded to gradle wrapper 1.11. Fixed dependencies and build.</p>
+            </li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <h4>What's new in 0.4.3</h4>
+        <ul>
+            <li>
+                <p>Basic html builder in generated grooscript-builder.js</p>
+            </li>
+            <li>
+                <p>New conversion options 'recursive', 'mainContextScope', 'initialText', 'finalText'.</p>
+            </li>
+            <li>
+                <p>Added support to ** operator, constructors of basic java classes, function unique without param or with boolean parameter in lists.</p>
+            </li>
+            <li>
+                <p>Added gradle wrapper with version 1.10. Added more tasks to build.gradle.</p>
+            </li>
+            <li>
+                <p>Refactoring code to split GsConverter.java in more files.</p>
+            </li>
+        </ul>
+    </div>
+
+      <div class="container">
+          <h4>What's new in 0.4.1 and 0.4.2</h4>
+          <ul>
+              <li>
+                  <p>Removed @DomainClass ast, moved to next release of grails plugin.</p>
+              </li>
+              <li>
+                  <p>Fix asserts in PhantomJs tests.</p>
+              </li>
+              <li>
+                  <p>Fixes.</p>
+              </li>
+          </ul>
+      </div>
+
+      <div class="container">
+          <h4>What's new in 0.4</h4>
+          <ul>
+              <li>
+                  <p>New redesigned grooscript.js file. No more a bunch of functions, joined a new anonymous function with 'gs' prefix, as for example underscore with '_'. Speed improvements to run faster code in the client. Using javascript Array native as groovy lists. You have to generate js files again if want to work with this version.</p>
+              </li>
+              <li>
+                  <p>Integration with <a href="http://nodejs.org/">Node.js</a>, there is a new <a href="https://npmjs.org/package/grooscript">npm module</a> that imports grooscript.js an allow work easier with your converted code.</p>
+              </li>
+              <li>
+                  <p>Support @Category, function composition, and more functional stuff.</p>
+              </li>
+              <li>
+                  <p>Default output with println is the console.</p>
+              </li>
+              <li>
+                  <p>Added functions in grooscript.js to convert 'groovy' objects to javascript, and javascript objects to 'groovy'.</p>
+              </li>
+          </ul>
+      </div>
+
+      <div class="container">
+          <h4>What's new in 0.3.3 and 0.3.4</h4>
+          <ul>
+              <li>
+                  <p>@PhantomJsTest not working in some windows machines. Try with 0.3.4 in windows please, thank you very much.</p>
+                  <pre>
+@GrabConfig(systemClassLoader=true)
+@Grab('org.grooscript:grooscript:0.3.4')
+
+import org.grooscript.asts.PhantomJsTest
+
+//You need phantomjs installed
+System.setProperty('PHANTOMJS_HOME','X:\path\to\your\phantomjs\folder')
+
+@PhantomJsTest(url = 'http://www.grails.org', info=true) //Use info to give me feedback if test fails
+void testCountLinks() {
+    assert $('a').size() > 50,"Number of links in page is &#36;{$('a').size()}"
+    def title = $("title")
+    assert title[0].text=='Grails - The search is over.',"Title is &#36;{title[0].text}"
+    def links = $('a')
+    links.each {
+        println it
+    }
+}
+
+testCountLinks()</pre>
+              </li>
+              <li>
+                  <p>Some refactors.</p>
+              </li>
+              <li>
+                  <p>Ranges of chars.</p>
+              </li>
+          </ul>
+      </div>
+
+      <div class="container">
+          <h4>What's new in 0.3.2</h4>
+          <ul>
+              <li>
+                  <p>@PhantomJsTest improved again with new option to wait after page is loaded.
+              </li>
+              <li>
+                  <p>Cleanup some conversion options.</p>
+              </li>
+              <li>
+                  <p>Changes to help plugin.</p>
+              </li>
+          </ul>
+      </div>
+
+      <div class="container">
+          <h4>What's new in 0.3.1</h4>
+          <ul>
+              <li>
+                  <p>@PhantomJsTest improved <a href="https://github.com/chiquitinxx/grooscript/blob/master/src/test/phantomjs/testPhantomAst.groovy">(example)</a> and removed dependencies. Basic support in Spock.</p>
+              </li>
+              <li>
+                  <p>Improve @DomainClass to use with grails plugin.</p>
+              </li>
+              <li>
+                  <p>Added support to @Mixin.</p>
+              </li>
+          </ul>
+      </div>
+
+      <div class="container">
+          <h4>What's new in 0.3</h4>
+          <ul>
+              <li>
+                  <p>Annotation to use PhantomJs from Groovy. Need some js files and <a href="http://phantomjs.org/">PhantomJs</a> path. Can use from a GroovyTestCase but it doesn't work in Spock. <a href="https://github.com/chiquitinxx/grooscript/blob/master/src/test/groovy/org/grooscript/asts/TestPhantomJs.groovy"> Test example</a> </p>
+              </li>
+              <li>
+                  <p>Upgraded to Groovy 2.1. and add new conversion option to support compilation customizers. Changed compilation phase, now you can annotate with @TypeChecked and get a compilation fails.</p>
+              </li>
+              <li>
+                  <p>Ignoring interfaces and starting abstract support.</p>
+              </li>
+              <li>
+                  <p>Daemon improvements to help new coming grails plugin features.</p>
+              </li>
+              <li>
+                  <p>Added curry and rcurry support.</p>
+              </li>
+          </ul>
+      </div>
+
+      <div class="container">
+          <h4>What's new in 0.2.4</h4>
+          <ul>
+              <li>
+                  <p>Experimental annotation to use PhantomJs from Groovy.</p>
+              </li>
+          </ul>
+      </div>
+
+      <div class="container">
+          <h4>What's new in 0.2.3</h4>
+          <ul>
+              <li>
+                  <p>New function to stop the daemon.</p>
+              </li>
+          </ul>
+      </div>
+
+      <div class="container">
+          <h4>What's new in 0.2.2</h4>
+          <ul>
+              <li>
+                  <p>New daemon, that detect changes in your groovy files, and convert to javascript in background.</p>
+              </li>
+              <li>
+                  <p>More spread operator support added. Very little support to use StringBuffer <<.</p>
+              </li>
+              <li>
+                  <p>Starting support on mixins, and improved categories support. @Mixin and @Category not supported.</p>
+              </li>
+              <li>
+                  <p>Added a little, very little support to delegate closures. Now you can create very little dsl's, setting the delegate of the closure, you can access delegate's methods from your dsl.</p>
+              </li>
+          </ul>
+      </div>
+
+      <div class="container">
+          <h4>What's new in 0.2.1</h4>
+          <ul>
+              <li>
+                  <p>Now you can add methods and variables to classes (static functions too). <i>MyClass.metaClass.myFunction = { ... }</i></p>
+              </li>
+              <li>
+                  <p>Basic support Class.forName().</p>
+              </li>
+              <li>
+                  <p>Multiple assignment allowed. <i>(x,y) = { -> [1,2]}</i></p>
+              </li>
+              <li>
+                  <p>Method pointer to class methods. <i>myClosure = someObject.&someMethod</i></p>
+              </li>
+              <li>
+                  <p>Safe expressions. <i>object?.property</i></p>
+              </li>
+              <li>
+                  <p>Starting categories support.</p>
+              </li>
+              <li>
+                  <p>Added a new compilation option for don't convert dependencies. By default, if you convert a class with some imports, that files are converted too in the result.</p>
+              </li>
+          </ul>
+      </div>
+
+      <div class="container">
+          <h4>What's new in 0.2</h4>
+          <ul>
+              <li>
+                  <p>Supporting groovy beans, getter, setters, getProperties, methodMissing,...</p>
+              </li>
+              <li>
+                  <p>Missing pretty print in javascript result, now all method calls and property access are captured.</p>
+              </li>
+              <li>
+                  <p>More lists and maps functions are supported.</p>
+              </li>
+              <li>
+                  <p>grooscript.js inside the jar in meta-inf/resources folder, so can use with servlet 3.0 spec.</p>
+              </li>
+              <li>
+                  <p>Better support in dependency files, can set classpath and all converted in one file.</p>
+              </li>
+              <li>
+                  <p>More javascript and conversion options.</p>
+              </li>
+              <li>
+                  <p>More groovy support. Check documentation, nice example there.</p>
+              </li>
+          </ul>
+      </div>
+
+      <p class="text-center">@Grooscript 2014</p>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+      <script>
+          $('#socialIcons a').hover(function(e) {
+              $(e.target).tooltip('show');
+          }, function(e) {
+              $(e.target).tooltip('hide');
+          });
+      </script>
+  </body>
+
+    <script>
+        //Google Analytics info
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-37511810-1']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+</html>
