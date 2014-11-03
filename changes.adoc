@@ -8,7 +8,9 @@
 
 [source,groovy]
 --
-def gQuery = new GQueryIml()
+import org.grooscript.jquery.GQueryImpl
+
+def gQuery = new GQueryImpl()
 
 gQuery('body').append '<p>Hello World!</p>'
 gQuery('p').click {

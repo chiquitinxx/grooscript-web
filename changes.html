@@ -441,7 +441,9 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code class="groovy language-groovy"><span class="tok-kt">def</span> <span class="tok-n">gQuery</span> <span class="tok-o">=</span> <span class="tok-k">new</span> <span class="tok-n">GQueryIml</span><span class="tok-o">()</span>
+<pre class="pygments highlight"><code class="groovy language-groovy"><span class="tok-kn">import</span> <span class="tok-nn">org.grooscript.jquery.GQueryImpl</span>
+
+<span class="tok-kt">def</span> <span class="tok-n">gQuery</span> <span class="tok-o">=</span> <span class="tok-k">new</span> <span class="tok-n">GQueryImpl</span><span class="tok-o">()</span>
 
 <span class="tok-n">gQuery</span><span class="tok-o">(</span><span class="tok-s1">&#39;body&#39;</span><span class="tok-o">).</span><span class="tok-na">append</span> <span class="tok-s1">&#39;&lt;p&gt;Hello World!&lt;/p&gt;&#39;</span>
 <span class="tok-n">gQuery</span><span class="tok-o">(</span><span class="tok-s1">&#39;p&#39;</span><span class="tok-o">).</span><span class="tok-na">click</span> <span class="tok-o">{</span>
@@ -871,7 +873,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2014-11-03 20:11:31 CET
+Last updated 2014-11-03 22:08:27 CET
 </div>
 </div>
 </body>
