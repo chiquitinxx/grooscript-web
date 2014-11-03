@@ -10,8 +10,8 @@ Be aware javascript isn't Java or Groovy, lot of differences between them. The m
 Groovy strength in the browser, not create a full conversion. I'm looking for use groovy code and tools in the client,
 wanna use Spock tests in the server and in the browser.
 
-So, for converting your groovy code, you need link:jars/grooscript-0.6.1.jar[grooscript.jar]. You can get from mavenCentral
-(org.grooscript:grooscript:0.6.1) in your project's dependencies. Remember need grooscript.js, inside the jar or download
+So, for converting your groovy code, you need link:jars/grooscript-0.6.2.jar[grooscript.jar]. You can get from mavenCentral
+(org.grooscript:grooscript:0.6.2) in your project's dependencies. Remember need grooscript.js, inside the jar or download
 link:downloads.html[here].
 
 Let's see code for conversion:

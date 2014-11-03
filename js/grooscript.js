@@ -1,4 +1,4 @@
-//Grooscript Version 0.6.1 Apache 2 License
+//Grooscript Version 0.6.2 Apache 2 License
 (function() {
     var gs = function(obj) {
         if (obj instanceof gs) return obj;
@@ -34,7 +34,7 @@
     var mixinsObjects = [];
 
     //Delegate
-    var actualDelegate = null;
+    var delegates = [];
 
     //Static this
     var aStT = null;
@@ -1779,6 +1779,11 @@
         list.each(closure);
     };
 
+    String.prototype.inject = function(initial, closure) {
+        var list = gs.list(this.split(''));
+        return list.inject(initial, closure);
+    };
+
     function getItemsMultiline(text) {
         var items = text.split('\n');
         if (items.length > 1 && items[items.length-1] === '') {
@@ -2052,16 +2057,11 @@
     // + operator
     gs.plus = function(a, b) {
         if (!hasFunc(a, 'plus')) {
-            if (!hasFunc(b, 'plus')) {
-                if ((typeof a == 'number') && (typeof b == 'number') && ( a+b < 1)) {
-                    return ((a*1000)+(b*1000))/1000;
-                } else {
-                    return a + b;
-                }
+            if ((typeof a == 'number') && (typeof b == 'number') && (a + b < 1)) {
+                return ((a * 1000) + (b * 1000)) / 1000;
             } else {
-                return b.plus(a);
+                return a + b;
             }
-
         } else {
             return a.plus(b);
         }
@@ -2149,7 +2149,7 @@
     };
 
     //Get a property of a class
-    gs.gp = function(item, nameProperty) {
+    gs.gp = function(item, nameProperty, inDelegates) {
 
         //It's a get with safe operator as item?.data
         if (arguments.length == 3) {
@@ -2198,7 +2198,11 @@
                         if (item.propertyMissing !== undefined && typeof item.propertyMissing === "function") {
                             return item.propertyMissing(nameProperty);
                         } else {
-                            return item[nameProperty];
+                            if (!inDelegates && delegates.length > 0) {
+                                return findPropertyInDelegates(nameProperty, item);
+                            } else {
+                                return item[nameProperty];
+                            }
                         }
                     }
                 }
@@ -2209,6 +2213,20 @@
             return item.getProperty(nameProperty);
         }
     };
+
+    function findPropertyInDelegates(nameProperty, item) {
+        var i = delegates.length;
+        var found = false;
+        var result;
+        while (i > 0 && !found && item ) {
+            i = i - 1;
+            result = gs.gp(delegates[i], nameProperty, true);
+            if (result !== undefined) {
+                found = true;
+            }
+        }
+        return result;
+    }
 
     //Control property changes with ++,--
     gs.plusPlus = function(item, nameProperty, plus, before) {
@@ -2339,16 +2357,17 @@
                 }
 
                 //Lets check in delegate
-                if (actualDelegate && actualDelegate[methodName]) {
-                    return actualDelegate[methodName].apply(item, values);
-                }
-                if (actualDelegate !== null && item.methodMissing === undefined && actualDelegate.methodMissing !== undefined) {
-                    return gs.mc(actualDelegate, methodName, values);
+                if (delegates.length > 0) {
+                    var delegateFunc = delegatesFunc(methodName);
+                    if (delegateFunc) {
+                        return delegateFunc[methodName].apply(item, values);
+                    }
                 }
 
                 if (item.methodMissing) {
                     return item.methodMissing(methodName, values);
-
+                } else if (delegates.length > 0 && delegatesFunc('methodMissing')) {
+                    return gs.mc(delegatesFunc('methodMissing'), methodName, values);
                 } else {
                     //Maybe there is a function in the script with the name of the method
                     //In Node.js 'this.xxFunction()' in the main context fails
@@ -2363,9 +2382,26 @@
 
         } else {
             var f = item[methodName];
-            return f.apply(item, values);
+            if (f['apply']) {
+                return f.apply(item, values);
+            } else {
+                return gs.execCall(f, item, values);
+            }
         }
     };
+
+    function delegatesFunc(nameMethod) {
+        var result = null;
+        if (delegates.length > 0) {
+            var i;
+            for (i = delegates.length - 1; i >= 0 && !result; i--) {
+                if (delegates[i][nameMethod]) {
+                    result = delegates[i];
+                }
+            }
+        }
+        return result;
+    }
 
     function joinParameters(item, items) {
         var listParameters = [item],i;
@@ -2611,12 +2647,9 @@
     // Delegate
     ////////////////////////////////////////////////////////////
     gs.applyDelegate = function(func, delegate, params) {
-        var oldDelegate = actualDelegate;
-        //console.log('setting delegate');
-        actualDelegate = delegate;
+        delegates[delegates.length] = delegate;
         var result = func.apply(delegate, params);
-        //console.log('desetting delegate');
-        actualDelegate = oldDelegate;
+        delegates.pop();
         return result;
     };
 
@@ -2779,6 +2812,10 @@
         var res = obj[methodName].apply(thisObject, params);
         aStT = old;
         return res;
+    };
+
+    gs.asChar = function(value) {
+        return value.charCodeAt(0);
     };
 
 }).call(this);

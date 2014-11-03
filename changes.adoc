@@ -1,0 +1,200 @@
+= link:index.html[Grooscript] changelog
+:author: Jorge Franco
+:source-highlighter: pygments
+
+=== What's new in 0.6.2
+
+* Little changes in gQuery, you can call any jQuery function
+
+[source,groovy]
+--
+def gQuery = new GQueryIml()
+
+gQuery('body').append '<p>Hello World!</p>'
+gQuery('p').click {
+    println 'Clicked!'
+}
+--
+
+* Fixes
+
+=== What's new in 0.6.1
+
+* Removed Binder and improved GQuery. Gquery and HtmlBuilder, both in grooscript-tools.js.
+
+* Added @GQuery AST, to add gQuery property to a class.
+
+* Changed class loading, convertDependencies conversion option has been removed. Now all dependencies files have to be converted.
+
+* Destination of a conversion can be a .js file. So, can put all converted code in one .js file, even can include grooscript libraries.
+
+=== What's new in 0.6
+
+* Improved build using gradle plugins to work with node and gulp.
+
+* Removed grooscript-all.js, now a new file grooscript-tools.js with browser tools.
+
+* Improved java support, but not too much :).
+
+=== What's new in 0.5.3
+
+* Add some MarkupTemplateEngine functions to HtmlBuilder.
+
+* Improve @PhantomJsTest, more info about this annotation link:phantomjstest.html[here].
+
+* Starting support to @BaseScript.
+
+=== What's new in 0.5.2
+
+* Grooscript can convert .java files, but with groovy types.
+
+* Starting support to inner classes.
+
+=== What's new in 0.5.1
+
+* New conversion option to include grooscript js libs in converted javascript.
+* Added support to access boolean properties with isXxxx().
+
+=== What's new in 0.5
+
+* Traits support.
+
+* Builder renamed to HtmlBuilder, and improved speed. Added Binder to bind object properties and methods to DOM inputs or events.
+
+* PropertyMissing supported.
+
+* Removed kimbo.js from PhantomJs tests, now using jQuery 2.
+
+* Added interface and implementation to work with jQuery.
+
+* Now project tests run with Node.js also.
+
+* More js files inside the jar, grooscript-binder.js, grooscript.min.js and grooscript-all.js.
+
+* Speed improvements and fixes.
+
+=== What's new in 0.4.5
+
+* Support 'call' method in classes.
+* Improved Date and categories support.
+* Support initialize classes and maps in js with js objects.
+* Starting support to @Delegate.
+
+=== What's new in 0.4.4
+
+* Builder and conversion daemon improvements.
+* Added starting support to 'as', also 'is' is supported now.
+* Added function drop and dropWhile to maps and lists.
+* Upgraded to gradle wrapper 1.11. Fixed dependencies and build.
+
+=== What's new in 0.4.3
+
+* Basic html builder in generated grooscript-builder.js
+* New conversion options 'recursive', 'mainContextScope', 'initialText', 'finalText'.
+* Added support to ** operator, constructors of basic java classes, function unique without param or with boolean parameter in lists.
+* Added gradle wrapper with version 1.10. Added more tasks to build.gradle.
+* Refactoring code to split GsConverter.java in more files.
+
+=== What's new in 0.4.1 and 0.4.2
+
+* Removed @DomainClass ast, moved to next release of grails plugin.
+* Fix asserts in PhantomJs tests.
+* Fixes.
+
+=== What's new in 0.4
+
+* New redesigned grooscript.js file. No more a bunch of functions, joined a new anonymous function with 'gs' prefix, as for example underscore with '_'. Speed improvements to run faster code in the client. Using javascript Array native as groovy lists. You have to generate js files again if want to work with this version.
+* Integration with http://nodejs.org/[Node.js], there is a new https://npmjs.org/package/grooscript[npm module] that imports grooscript.js an allow work easier with your converted code.
+* Support @Category, function composition, and more functional stuff.
+* Default output with println is the console.
+* Added functions in grooscript.js to convert 'groovy' objects to javascript, and javascript objects to 'groovy'.
+
+=== What's new in 0.3.3 and 0.3.4
+
+* @PhantomJsTest not working in some windows machines. Try with 0.3.4 in windows please, thank you very much.
+
+[source,groovy]
+--
+import org.grooscript.builder.HtmlBuilder
+@GrabConfig(systemClassLoader=true)
+@Grab('org.grooscript:grooscript:0.3.4')
+
+import org.grooscript.asts.PhantomJsTest
+
+//You need phantomjs installed
+System.setProperty('PHANTOMJS_HOME','X:\path\to\your\phantomjs\folder')
+
+@PhantomJsTest(url = 'http://www.grails.org', info=true) //Use info to give me feedback if test fails
+void testCountLinks() {
+    assert $('a').size() > 50,"Number of links in page is &#36;{$('a').size()}"
+    def title = $("title")
+    assert title[0].text=='Grails - The search is over.',"Title is &#36;{title[0].text}"
+    def links = $('a')
+    links.each {
+        println it
+    }
+}
+
+testCountLinks()
+--
+
+* Some refactors.
+* Ranges of chars.
+
+=== What's new in 0.3.2
+
+* @PhantomJsTest improved again with new option to wait after page is loaded.
+* Cleanup some conversion options.
+* Changes to help plugin.
+
+=== What's new in 0.3.1
+
+* @PhantomJsTest improved https://github.com/chiquitinxx/grooscript/blob/master/src/test/phantomjs/testPhantomAst.groovy[(example)] and removed dependencies. Basic support in Spock.
+* Improve @DomainClass to use with grails plugin.
+* Added support to @Mixin.
+
+=== What's new in 0.3
+
+* Annotation to use PhantomJs from Groovy. Need some js files and http://phantomjs.org/[PhantomJs] path. Can use from a GroovyTestCase but it doesn't work in Spock. https://github.com/chiquitinxx/grooscript/blob/master/src/test/groovy/org/grooscript/asts/TestPhantomJs.groovy[Test example]
+* Upgraded to Groovy 2.1. and add new conversion option to support compilation customizers. Changed compilation phase, now you can annotate with @TypeChecked and get a compilation fails.
+* Ignoring interfaces and starting abstract support.
+* Daemon improvements to help new coming grails plugin features.
+* Added curry and rcurry support.
+
+=== What's new in 0.2.4
+
+* Experimental annotation to use PhantomJs from Groovy.
+
+=== What's new in 0.2.3
+
+* New function to stop the daemon.
+
+=== What's new in 0.2.2
+
+* New daemon, that detect changes in your groovy files, and convert to javascript in background.
+* More spread operator support added. Very little support to use StringBuffer <<.
+* Starting support on mixins, and improved categories support. @Mixin and @Category not supported.
+* Added a little, very little support to delegate closures. Now you can create very little dsl's, setting the delegate of the closure, you can access delegate's methods from your dsl.
+
+=== What's new in 0.2.1
+
+* Now you can add methods and variables to classes (static functions too). <i>MyClass.metaClass.myFunction = { ... }</i>
+* Basic support Class.forName().
+* Multiple assignment allowed. <i>(x,y) = { -> [1,2]}</i>
+* Method pointer to class methods. <i>myClosure = someObject.&someMethod</i>
+* Safe expressions. <i>object?.property</i>
+* Starting categories support.
+* Added a new compilation option for don't convert dependencies. By default, if you convert a class with some imports, that files are converted too in the result.
+
+=== What's new in 0.2
+
+* Supporting groovy beans, getter, setters, getProperties, methodMissing,...
+* Missing pretty print in javascript result, now all method calls and property access are captured.
+* grooscript.js inside the jar in meta-inf/resources folder, so can use with servlet 3.0 spec.
+* Better support in dependency files, can set classpath and all converted in one file.
+* More javascript and conversion options.
+* More groovy support. Check documentation, nice example there.
+
+++++
+include::analytics.info[]
+++++
