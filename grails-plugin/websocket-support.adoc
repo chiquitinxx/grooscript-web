@@ -1,5 +1,5 @@
 = Websockets support
-:plugin-version: 0.6
+:plugin-version: 0.7
 :author: Jorge Franco
 :revnumber: {plugin-version}
 :source-highlighter: pygments

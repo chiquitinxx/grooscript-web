@@ -34,6 +34,10 @@ It requires Grails 2.4+, assets pipeline and cache plugin.
 
 == What is new in {plugin-version}
 
+- Upgrade to last changes in grooscript 0.6.2
+
+== What is new in 0.6
+
 - Use http://grails.org/plugin/spring-websocket[spring websocket plugin] to send data to the browsers and process in groovy.
 link:websocket-support.html[+info]
 

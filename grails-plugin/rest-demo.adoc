@@ -1,5 +1,5 @@
 = Creating a REST application
-:plugin-version: 0.5
+:plugin-version: 0.7
 :author: Jorge Franco
 :revnumber: {plugin-version}
 :source-highlighter: pygments

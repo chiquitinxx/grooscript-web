@@ -429,7 +429,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <div id="header">
 <h1>Grooscript Grails Plugin</h1>
 <span id="author" class="author">Jorge Franco</span><br>
-<span id="revnumber">version 0.6</span>
+<span id="revnumber">version 0.7</span>
 <br><span id="revremark">Grails plugin to convert groovy code to javascript in your grails application</span>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -439,6 +439,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <ul class="sectlevel2">
 <li><a href="#_important">Important</a></li>
 <li><a href="#_requisites">Requisites</a></li>
+<li><a href="#_what_is_new_in_0_7">What is new in 0.7</a></li>
 <li><a href="#_what_is_new_in_0_6">What is new in 0.6</a></li>
 <li><a href="#_what_is_new_in_0_5">What is new in 0.5</a></li>
 </ul>
@@ -532,6 +533,16 @@ is interested in this plugin. So, if you want or need something, just <strong>op
 </li>
 <li>
 <p>Work with domain classes still experimental, don&#8217;t use in production.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_what_is_new_in_0_7">What is new in 0.7</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Upgrade to last changes in grooscript 0.6.2</p>
 </li>
 </ul>
 </div>
@@ -677,15 +688,11 @@ this daemon have to configure in your <code>Config.groovy</code>:</p>
 </dd>
 <dt class="hdlist1">destination</dt>
 <dd>
-<p>The folder where javascript files are generated, the folder must exists, and no folders inside will be created. For example: <code><em>'web-app/js</em>'</code></p>
+<p>The folder or .js file where javascript files are generated, and no folders inside will be created. For example: <code><em>'web-app/js</em>'</code></p>
 </dd>
 <dt class="hdlist1">classPath</dt>
 <dd>
 <p>List of folders or jar&#8217;s to find dependencies. Before groovy code is converted to javascript, that code have to be successfully compiled. For example: <code>[<em>'src/groovy</em>']</code></p>
-</dd>
-<dt class="hdlist1">convertDependencies</dt>
-<dd>
-<p>the javascript converted file, by default will not included code of dependencies. If you set this option to true, the javascript converted file will have converted code of classes used in your original converted file. The files will be bigger, but you don&#8217;t have to worry about add that dependencies. For example: <code>true</code></p>
 </dd>
 <dt class="hdlist1">customization</dt>
 <dd>
@@ -1176,8 +1183,8 @@ Spock <em>where:</em> clause not working well with phantom test annotation.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.6<br>
-Last updated 2014-07-26 12:38:53 CEST
+Version 0.7<br>
+Last updated 2014-11-05 21:42:43 CET
 </div>
 </div>
 </body>
