@@ -1,17 +1,15 @@
-//This script needs grooscript.js to run
 function HtmlBuilder() {
   var gSobject = gs.inherit(gs.baseClass,'HtmlBuilder');
   gSobject.clazz = { name: 'org.grooscript.builder.HtmlBuilder', simpleName: 'HtmlBuilder'};
   gSobject.clazz.superclass = { name: 'java.lang.Object', simpleName: 'Object'};
-  gSobject.html = null;
   gSobject.tagSolver = function(name, args) {
-    gSobject.html += "<" + (name) + "";
+    gSobject.htmCd += "<" + (name) + "";
     if ((((gs.bool(args)) && (gs.mc(args,"size",[]) > 0)) && (!gs.instanceOf((args [ 0]), "String"))) && (!gs.instanceOf((args [ 0]), "Closure"))) {
       gs.mc(args [ 0],"each",[function(key, value) {
-        return gSobject.html += " " + (key) + "='" + (value) + "'";
+        return gSobject.htmCd += " " + (key) + "='" + (value) + "'";
       }]);
     };
-    gSobject.html += ">";
+    gSobject.htmCd += ">";
     if (gs.bool(args)) {
       if ((gs.equals(gs.mc(args,"size",[]), 1)) && (gs.instanceOf((args [ 0]), "String"))) {
         gs.mc(gSobject,"yield",[args [ 0]]);
@@ -26,41 +24,42 @@ function HtmlBuilder() {
         };
       };
     };
-    return gSobject.html += "</" + (name) + ">";
+    return gSobject.htmCd += "</" + (name) + ">";
   };
+  gSobject.htmCd = null;
   gSobject.build = function(x0) { return HtmlBuilder.build(x0); }
   gSobject['yield'] = function(text) {
     return gs.mc(text,"each",[function(ch) {
       var gSswitch0 = ch;
       if (gSswitch0 === "&") {
-        gSobject.html += "&amp;";
+        gSobject.htmCd += "&amp;";
         ;
       } else if (gSswitch0 === "<") {
-        gSobject.html += "&lt;";
+        gSobject.htmCd += "&lt;";
         ;
       } else if (gSswitch0 === ">") {
-        gSobject.html += "&gt;";
+        gSobject.htmCd += "&gt;";
         ;
       } else if (gSswitch0 === "\"") {
-        gSobject.html += "&quot;";
+        gSobject.htmCd += "&quot;";
         ;
       } else if (gSswitch0 === "'") {
-        gSobject.html += "&apos;";
+        gSobject.htmCd += "&apos;";
         ;
       } else {
-        gSobject.html += ch;
+        gSobject.htmCd += ch;
         ;
       };
     }]);
   }
   gSobject['yieldUnescaped'] = function(text) {
-    return gSobject.html += text;
+    return gSobject.htmCd += text;
   }
   gSobject['comment'] = function(text) {
-    return gSobject.html += (gs.plus((gs.plus("<!--", text)), "-->"));
+    return gSobject.htmCd += (gs.plus((gs.plus("<!--", text)), "-->"));
   }
   gSobject['newLine'] = function(it) {
-    return gSobject.html += "\n";
+    return gSobject.htmCd += "\n";
   }
   gSobject['methodMissing'] = function(name, args) {
     gs.sp(this,"" + (name) + "",function(ars) {
@@ -78,7 +77,7 @@ function HtmlBuilder() {
     return gs.mc(this,"invokeMethod",[name, args], gSobject);
   }
   gSobject['HtmlBuilder0'] = function(it) {
-    gSobject.html = "";
+    gSobject.htmCd = "";
     return this;
   }
   if (arguments.length==0) {gSobject.HtmlBuilder0(); }
@@ -93,10 +92,68 @@ HtmlBuilder.build = function(closure) {
   gs.sp(builder,"metaClass",mc);
   gs.sp(closure,"delegate",builder);
   (closure.delegate!=undefined?gs.applyDelegate(closure,closure.delegate,[]):gs.execCall(closure, this, []));
-  return gs.gp(builder,"html");
+  return gs.gp(builder,"htmCd");
 }
 
-//This script needs grooscript.js and jQuery to run
+function Observable() {
+  var gSobject = gs.inherit(gs.baseClass,'Observable');
+  gSobject.clazz = { name: 'org.grooscript.rx.Observable', simpleName: 'Observable'};
+  gSobject.clazz.superclass = { name: 'java.lang.Object', simpleName: 'Object'};
+  gSobject.subscribers = gs.list([]);
+  gSobject.sourceList = null;
+  gSobject.chain = gs.list([]);
+  gSobject.listen = function() { return Observable.listen(); }
+  gSobject.from = function(x0) { return Observable.from(x0); }
+  gSobject['produce'] = function(event) {
+    return gs.mc(gSobject.subscribers,"each",[function(it) {
+      return gs.mc(gSobject,"processFunction",[event, it]);
+    }]);
+  }
+  gSobject['map'] = function(cl) {
+    gs.mc(gSobject.chain,'leftShift', gs.list([cl]));
+    return this;
+  }
+  gSobject['filter'] = function(cl) {
+    gs.mc(gSobject.chain,'leftShift', gs.list([function(it) {
+      if ((cl.delegate!=undefined?gs.applyDelegate(cl,cl.delegate,[it]):gs.execCall(cl, this, [it]))) {
+        return it;
+      } else {
+        throw "Exception";
+      };
+    }]));
+    return this;
+  }
+  gSobject['subscribe'] = function(cl) {
+    while (gs.bool(gSobject.chain)) {
+      cl = (gs.mc(cl,'leftShift', gs.list([gs.mc(gSobject.chain,"remove",[gs.minus(gs.mc(gSobject.chain,"size",[]), 1)])])));
+    };
+    gs.mc(gSobject.subscribers,'leftShift', gs.list([cl]));
+    if (gs.bool(gSobject.sourceList)) {
+      return gs.mc(gSobject.sourceList,"each",[function(it) {
+        return gs.mc(gSobject,"processFunction",[it, cl]);
+      }]);
+    };
+  }
+  gSobject['removeSubscribers'] = function(it) {
+    return gSobject.subscribers = gs.list([]);
+  }
+  gSobject['processFunction'] = function(data, cl) {
+    try {
+      (cl.delegate!=undefined?gs.applyDelegate(cl,cl.delegate,[data]):gs.execCall(cl, this, [data]));
+    } catch (e) {
+    };
+  }
+  if (arguments.length == 1) {gs.passMapToObject(arguments[0],gSobject);};
+  
+  return gSobject;
+};
+Observable.listen = function(it) {
+  return Observable();
+}
+Observable.from = function(list) {
+  return Observable(gs.map().add("sourceList",list));
+}
+
 function GQueryImpl() {
   var gSobject = gs.inherit(gs.baseClass,'GQueryImpl');
   gSobject.clazz = { name: 'org.grooscript.jquery.GQueryImpl', simpleName: 'GQueryImpl'};
@@ -200,9 +257,6 @@ function GQueryImpl() {
   gSobject.onReady = function(func) {
     $(document).ready(func);
   }
-  gSobject.html = function(selector, text) {
-    $(selector).html(text);
-  }
   gSobject['attachMethodsToDomEvents'] = function(obj) {
     return gs.mc(gs.gp((obj = gs.metaClass(obj)),"methods"),"each",[function(method) {
       if (gs.mc(gs.gp(method,"name"),"endsWith",["Click"])) {
@@ -280,7 +334,42 @@ function GQueryImpl() {
       };
     }]);
   }
+  gSobject['bindAll'] = function(target) {
+    gs.mc(gSobject,"bindAllProperties",[target]);
+    return gs.mc(gSobject,"attachMethodsToDomEvents",[target]);
+  }
+  gSobject['observeEvent'] = function(selector, nameEvent, data) {
+    if (data === undefined) data = gs.map();
+    var observable = gs.execStatic(Observable,'listen', this,[]);
+    gs.mc((this.delegate!=undefined?gs.applyDelegate(this,this.delegate,[selector]):gs.execCall(this, this, [selector])),"on",[nameEvent, data, function(event) {
+      return gs.mc(observable,"produce",[event]);
+    }]);
+    return observable;
+  }
+  gSobject['call'] = function(selector) {
+    return GQueryList(selector);
+  }
   if (arguments.length == 1) {gs.passMapToObject(arguments[0],gSobject);};
+  
+  return gSobject;
+};
+
+function GQueryList() {
+  var gSobject = gs.inherit(gs.baseClass,'GQueryList');
+  gSobject.clazz = { name: 'org.grooscript.jquery.GQueryList', simpleName: 'GQueryList'};
+  gSobject.clazz.superclass = { name: 'java.lang.Object', simpleName: 'Object'};
+  gSobject.list = null;
+  gSobject.jqueryList = function(selector) {
+    return $(selector);
+  }
+  gSobject.methodMissing = function(name, args) {
+    return gSobject.list[name].apply(gSobject.list, args);
+  }
+  gSobject['GQueryList1'] = function(selector) {
+    gSobject.list = gs.mc(gSobject,"jqueryList",[selector]);
+    return this;
+  }
+  if (arguments.length==1) {gSobject.GQueryList1(arguments[0]); }
   
   return gSobject;
 };
