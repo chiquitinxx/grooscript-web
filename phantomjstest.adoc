@@ -1,10 +1,3 @@
-= PhantomJS tests with Groovy
-:author: Jorge Franco
-:gs-version: 0.5.3
-:email: grooscript@gmail.com
-:source-highlighter: pygments
-:icons: font
-
 http://phantomjs.org/[PhantomJS] is a javascript library for functional testing your web applications or html files.
 It has it's own embedded browser, and you can evaluate DOM handling, CSS selector, JSON, Canvas, and SVG. This library,
 comes with an executable to run a test in a .js file. With http://grooscript.org[grooscript] you can run a
@@ -12,10 +5,9 @@ PhantomJS test to *evaluate groovy code*.
 
 === Requirements
 
-To run your http://phantomjs.org/download.html[PhantomJS] tests from Groovy, you need both installed. If you don't have Groovy installed in your machine,
-use http://gvmtool.net/[GVM]. Also, create an environment variable in your computer
-+> export PHANTOMJS_HOME=/path/to/phantomjs+, this isn't mandatory step, but with this variable you don't have to
-define that system property in your groovy project.
+To run your http://phantomjs.org/download.html[PhantomJS] tests from Groovy, you need both installed.
+Create an environment variable in your computer +> export PHANTOMJS_HOME=/path/to/phantomjs+, this isn't
+mandatory step, but with this variable you don't have to define that system property in your groovy project.
 
 === Script
 
@@ -25,7 +17,7 @@ You can run a PhantomJS test from a groovy script, for example +myScript.groovy+
 [subs="verbatim,attributes"]
 --
 @GrabConfig(systemClassLoader=true)
-@Grab('org.grooscript:grooscript:{gs-version}') //<1>
+@Grab('org.grooscript:grooscript:{grooscript-version}') //<1>
 
 import org.grooscript.asts.PhantomJsTest
 
@@ -160,17 +152,8 @@ class MySpec extends Specification {
 --
 
 
-=== Conclusion
+=== Resume
 
 This phantomJs tests are nice for fast and small tests. Is very easy to create a little script or add browser
 tests without too much dependencies. Take care with jQuery in your evaluations, for example I have had some
 problems using 'each' function.
-
-Please, if you have comments, suggestions, problems,... don't hesitate to contact me at grooscript@gmail.com, or open
-an issue or feature in http://github.com/chiquitinxx/grooscript/issues?state=open[Github]. This is an open source project and your feedback is more than welcome
-to improve it. More guides come in the future, also can find more documentation in http://grooscript.org[grooscript]
-site.
-
-++++
-include::analytics.info[]
-++++

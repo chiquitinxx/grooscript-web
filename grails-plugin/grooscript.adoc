@@ -63,4 +63,6 @@ doAfter is executed 2 times each second, and the list usually is empty. AnyFile.
 
 Is very important understand grooscript conversion options.
 
+source:: Files or folders with files to be converted. If you put a folder, all groovy files inside will be converted. For example: +[''src/grooscript'', ''MyGroovyFile.groovy'']+
+destination:: The folder or .js file where javascript files are generated, and no folders inside will be created. For example: +''web-app/js''+
 include::../conversion_options.adoc[]

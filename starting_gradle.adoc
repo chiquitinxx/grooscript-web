@@ -143,6 +143,8 @@ to javascript. Until you break gradle with ^C.
 Is very important understand grooscript conversion options. In this example some options are used, the gradle plugin
 has some default conversion options. What files have to be converted? Where .js files are saved?...
 
+source:: Files or folders with files to be converted. If you put a folder, all groovy files inside will be converted. For example: +[''src/grooscript'', ''MyGroovyFile.groovy'']+
+destination:: The folder or .js file where javascript files are generated, and no folders inside will be created. For example: +''web-app/js''+
 include::conversion_options.adoc[]
 
 The default conversion options of the grooscript gradle plugin are:
