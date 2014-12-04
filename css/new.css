@@ -156,3 +156,23 @@ h3 {
 .info p {
     padding-bottom: 10px;
 }
+
+#editor {
+    height: 350px;
+    font-size: 18px;
+    position: relative;
+}
+
+#actions, #results {
+    padding: 10px;
+}
+
+.errorMessage {
+    background: red;
+    color: white;
+}
+
+.consoleMessage {
+    background: black;
+    color: white;
+}

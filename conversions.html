@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Try online conversions</title>
+    <link rel="stylesheet" type="text/css" href="css/new.css">
+    <script type="text/javascript" src="js/conversion.js"></script>
+</head>
+<body>
+    <header>
+        <h3>Try groovy to javascript conversion with <a href="http://grooscript.org">grooscript</a></h3>
+    </header>
+    <div id="editor">
+    </div>
+    <div id="actions">
+        <input type="button" class="doButton" id="buttonConvert" value="Convert to javascript"/>
+        <input type="button" class="doButton" id="clearButton" value="Clear"/>
+        Results below
+        <p>Not very fast, wait a bit. Javascript code runs in the server and result's back. Using grooscript 0.6.3, report any fail to <a href="https://github.com/chiquitinxx/grooscript/issues?state=open">Github</a></p>
+    </div>
+    <div id="results">
+    </div>
+<script>
+    ConversionPresenter().init('http://frameworks-groovygs.rhcloud.com/conversion', '#buttonConvert', '#clearButton');
+</script>
+</body>
+</html>
