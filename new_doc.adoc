@@ -1,10 +1,12 @@
-= Documentation
-:grooscript-version: 0.6.3
+= link:index.html[Grooscript] documentation
+:grooscript-version: 1.0-SNAPSHOT
 :author: Jorge Franco
 :email: grooscript@gmail.com
 :source-highlighter: pygments
 :toc: right
 :icons: font
+
+*Groovy to javascript transpiler*
 
 == Introduction
 
@@ -41,18 +43,7 @@ import org.grooscript.GrooScript
 
 def result = GrooScript.convert '''
     def sayHello = { println "Hello ${it}!" }
-    ['Groovy','JavaScript','GrooScript'].each sayHello
-
-    assert [1,2,3].size() == 3
-    class Amazing {}
-
-    amazing = new Amazing()
-    amazing.metaClass.who = []
-    amazing.metaClass.add = { who << it}
-
-    assert amazing.who.size()==0
-    amazing.add 'Rafa Nadal'
-    assert amazing.who.size()==1'''
+    ['Groovy','JavaScript','GrooScript'].each sayHello'''
 
 println result
 --
@@ -79,7 +70,7 @@ But, the gradle plugin helps a lot, and I recommend you to use it. link:starting
 == Conversion
 
 For convert groovy code to javascript, that groovy code is compiled. Then javascript code is generated
-visiting generated AST tree.
+visiting generated AST tree. You can try link:conversions.html[online] conversions at grooscript site.
 
 === Options
 
@@ -97,13 +88,21 @@ GrooScript.setConversionProperty('customization', {
 
 include::conversion_options.adoc[]
 
+=== General support
+
+=== Java support
+
+=== Groovy support
+
+== Converted code
+
 == PhantomJs tests
 
 include::phantomjstest.adoc[]
 
 == Annotations
 
-Grooscript offer two annotations to add in your groovy code.
+Grooscript offer three annotations to add in your groovy code.
 
 === GsNative
 
@@ -154,6 +153,22 @@ class A {
 }
 --
 
-== Tools
+=== GQuery
+
+== Helper Tools
 
 include::tools.adoc[]
+
+== Tricks
+
+== Tools
+
+=== Gradle plugin
+
+=== Grails plugin
+
+=== Npm package
+
+== Guides
+
+== Acknowledgements

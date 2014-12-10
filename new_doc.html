@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="generator" content="Asciidoctor 0.1.4">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Documentation</title>
+<title>Grooscript documentation</title>
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
 article, aside, details, figcaption, figure, footer, header, hgroup, main, nav, section, summary { display: block; }
@@ -427,7 +427,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 </head>
 <body class="article toc2 toc-right">
 <div id="header">
-<h1>Documentation</h1>
+<h1><a href="index.html">Grooscript</a> documentation</h1>
 <span id="author" class="author">Jorge Franco</span><br>
 <span id="email" class="email"><a href="mailto:grooscript@gmail.com">grooscript@gmail.com</a></span><br>
 <div id="toc" class="toc2">
@@ -439,8 +439,12 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <li>
 <ul class="sectlevel2">
 <li><a href="#_options">Options</a></li>
+<li><a href="#_general_support">General support</a></li>
+<li><a href="#_java_support">Java support</a></li>
+<li><a href="#_groovy_support">Groovy support</a></li>
 </ul>
 </li>
+<li><a href="#_converted_code">Converted code</a></li>
 <li><a href="#_phantomjs_tests">PhantomJs tests</a></li>
 <li>
 <ul class="sectlevel2">
@@ -457,20 +461,39 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <ul class="sectlevel2">
 <li><a href="#_gsnative">GsNative</a></li>
 <li><a href="#_gsnotconvert">GsNotConvert</a></li>
+<li><a href="#_gquery">GQuery</a></li>
 </ul>
 </li>
-<li><a href="#_tools">Tools</a></li>
+<li><a href="#_helper_tools">Helper Tools</a></li>
 <li>
 <ul class="sectlevel2">
 <li><a href="#_htmlbuilder">HtmlBuilder</a></li>
-<li><a href="#_gquery">gQuery</a></li>
+<li><a href="#_gquery_2">gQuery</a></li>
 <li><a href="#_observable">Observable</a></li>
 </ul>
 </li>
+<li><a href="#_tricks">Tricks</a></li>
+<li><a href="#_tools">Tools</a></li>
+<li>
+<ul class="sectlevel2">
+<li><a href="#_gradle_plugin">Gradle plugin</a></li>
+<li><a href="#_grails_plugin">Grails plugin</a></li>
+<li><a href="#_npm_package">Npm package</a></li>
+</ul>
+</li>
+<li><a href="#_guides">Guides</a></li>
+<li><a href="#_acknowledgements">Acknowledgements</a></li>
 </ul>
 </div>
 </div>
 <div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>Groovy to javascript transpiler</strong></p>
+</div>
+</div>
+</div>
 <div class="sect1">
 <h2 id="_introduction">Introduction</h2>
 <div class="sectionbody">
@@ -521,32 +544,21 @@ plugin, a <a href="https://github.com/chiquitinxx/grails-grooscript">grails</a> 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code class="groovy language-groovy"><span class="tok-nd">@Grab</span><span class="tok-o">(</span><span class="tok-s1">&#39;org.grooscript:grooscript:0.6.3&#39;</span><span class="tok-o">)</span>
+<pre class="pygments highlight"><code class="groovy language-groovy"><span class="tok-nd">@Grab</span><span class="tok-o">(</span><span class="tok-s1">&#39;org.grooscript:grooscript:1.0-SNAPSHOT&#39;</span><span class="tok-o">)</span>
 
 <span class="tok-kn">import</span> <span class="tok-nn">org.grooscript.GrooScript</span>
 
 <span class="tok-kt">def</span> <span class="tok-n">result</span> <span class="tok-o">=</span> <span class="tok-n">GrooScript</span><span class="tok-o">.</span><span class="tok-na">convert</span> <span class="tok-s1">&#39;&#39;&#39;</span>
 <span class="tok-s1">    def sayHello = { println &quot;Hello ${it}!&quot; }</span>
-<span class="tok-s1">    [&#39;</span><span class="tok-n">Groovy</span><span class="tok-s1">&#39;,&#39;</span><span class="tok-n">JavaScript</span><span class="tok-s1">&#39;,&#39;</span><span class="tok-n">GrooScript</span><span class="tok-s1">&#39;].each sayHello</span>
-
-<span class="tok-s1">    assert [1,2,3].size() == 3</span>
-<span class="tok-s1">    class Amazing {}</span>
-
-<span class="tok-s1">    amazing = new Amazing()</span>
-<span class="tok-s1">    amazing.metaClass.who = []</span>
-<span class="tok-s1">    amazing.metaClass.add = { who &lt;&lt; it}</span>
-
-<span class="tok-s1">    assert amazing.who.size()==0</span>
-<span class="tok-s1">    amazing.add &#39;</span><span class="tok-n">Rafa</span> <span class="tok-n">Nadal</span><span class="tok-s1">&#39;</span>
-<span class="tok-s1">    assert amazing.who.size()==1&#39;&#39;&#39;</span>
+<span class="tok-s1">    [&#39;</span><span class="tok-n">Groovy</span><span class="tok-s1">&#39;,&#39;</span><span class="tok-n">JavaScript</span><span class="tok-s1">&#39;,&#39;</span><span class="tok-n">GrooScript</span><span class="tok-s1">&#39;].each sayHello&#39;&#39;&#39;</span>
 
 <span class="tok-n">println</span> <span class="tok-n">result</span>
 </code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>If you want to make conversions in your groovy / java project, you need <a href="jars/grooscript-0.6.3.jar">grooscript.jar</a>.
-You can get from mavenCentral <code>org.grooscript:grooscript:0.6.3</code> in your project&#8217;s dependencies. Also need grooscript.js,
+<p>If you want to make conversions in your groovy / java project, you need <a href="jars/grooscript-1.0-SNAPSHOT.jar">grooscript.jar</a>.
+You can get from mavenCentral <code>org.grooscript:grooscript:1.0-SNAPSHOT</code> in your project&#8217;s dependencies. Also need grooscript.js,
 inside the jar or download from <a href="downloads.html">here</a> to run the converted code in your javascript environment.</p>
 </div>
 <div class="paragraph">
@@ -573,13 +585,13 @@ inside the jar or download from <a href="downloads.html">here</a> to run the con
 <h2 id="_conversion">Conversion</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>For convert groovy code to javascript, that groovy code is compiled, and transforming to javascript code
-visiting generated AST tree. To help in conversion process, you can set some conversion options</p>
+<p>For convert groovy code to javascript, that groovy code is compiled. Then javascript code is generated
+visiting generated AST tree. You can try <a href="conversions.html">online</a> conversions at grooscript site.</p>
 </div>
 <div class="sect2">
 <h3 id="_options">Options</h3>
 <div class="paragraph">
-<p>To set conversion options:</p>
+<p>To help in conversion process, you can set some conversion options. To set conversion options:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -625,6 +637,24 @@ visiting generated AST tree. To help in conversion process, you can set some con
 </dl>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_general_support">General support</h3>
+
+</div>
+<div class="sect2">
+<h3 id="_java_support">Java support</h3>
+
+</div>
+<div class="sect2">
+<h3 id="_groovy_support">Groovy support</h3>
+
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_converted_code">Converted code</h2>
+<div class="sectionbody">
+
 </div>
 </div>
 <div class="sect1">
@@ -652,7 +682,7 @@ mandatory step, but with this variable you don&#8217;t have to define that syste
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code class="groovy language-groovy"><span class="tok-nd">@GrabConfig</span><span class="tok-o">(</span><span class="tok-n">systemClassLoader</span><span class="tok-o">=</span><span class="tok-kc">true</span><span class="tok-o">)</span>
-<span class="tok-nd">@Grab</span><span class="tok-o">(</span><span class="tok-s1">&#39;org.grooscript:grooscript:0.6.3&#39;</span><span class="tok-o">)</span> <i class="conum" data-value="1"></i><b>(1)</b>
+<span class="tok-nd">@Grab</span><span class="tok-o">(</span><span class="tok-s1">&#39;org.grooscript:grooscript:1.0-SNAPSHOT&#39;</span><span class="tok-o">)</span> <i class="conum" data-value="1"></i><b>(1)</b>
 
 <span class="tok-kn">import</span> <span class="tok-nn">org.grooscript.asts.PhantomJsTest</span>
 
@@ -853,7 +883,7 @@ problems using <em>each</em> function.</p>
 <h2 id="_annotations">Annotations</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Grooscript offer two annotations to add in your groovy code.</p>
+<p>Grooscript offer three annotations to add in your groovy code.</p>
 </div>
 <div class="sect2">
 <h3 id="_gsnative">GsNative</h3>
@@ -910,10 +940,14 @@ in groovy nothing happens (tests pass), but the javascript code runs in converte
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_gquery">GQuery</h3>
+
+</div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_tools">Tools</h2>
+<h2 id="_helper_tools">Helper Tools</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Grooscript comes with some tools. This tools are some classes that you can use in your groovy code. If you convert
@@ -967,7 +1001,7 @@ example:</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_gquery">gQuery</h3>
+<h3 id="_gquery_2">gQuery</h3>
 
 </div>
 <div class="sect2">
@@ -976,10 +1010,45 @@ example:</p>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_tricks">Tricks</h2>
+<div class="sectionbody">
+
+</div>
+</div>
+<div class="sect1">
+<h2 id="_tools">Tools</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_gradle_plugin">Gradle plugin</h3>
+
+</div>
+<div class="sect2">
+<h3 id="_grails_plugin">Grails plugin</h3>
+
+</div>
+<div class="sect2">
+<h3 id="_npm_package">Npm package</h3>
+
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_guides">Guides</h2>
+<div class="sectionbody">
+
+</div>
+</div>
+<div class="sect1">
+<h2 id="_acknowledgements">Acknowledgements</h2>
+<div class="sectionbody">
+
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2014-11-27 22:39:31 CET
+Last updated 2014-12-10 21:29:47 CET
 </div>
 </div>
 </body>
