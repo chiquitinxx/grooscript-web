@@ -1,554 +1,1913 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-      <meta charset="utf-8">
-      <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="description" content="Converts Groovy code to JavaScript"/>
-      <meta name="keywords" content="groovy, scripting language, javascript, groovy to javascript, library"/>
-      <meta name="author" content="Jorge Franco">
-      <link rel="shortcut icon" href="favicon.ico">
+<head>
+<meta charset="UTF-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.2">
+<meta name="author" content="Jorge Franco">
+<title>Grooscript documentation</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
+<style>
+/* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
+/* Remove the comments around the @import statement below when using this as a custom stylesheet */
+/*@import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400";*/
+article,aside,details,figcaption,figure,footer,header,hgroup,main,nav,section,summary{display:block}
+audio,canvas,video{display:inline-block}
+audio:not([controls]){display:none;height:0}
+[hidden],template{display:none}
+script{display:none!important}
+html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}
+body{margin:0}
+a{background:transparent}
+a:focus{outline:thin dotted}
+a:active,a:hover{outline:0}
+h1{font-size:2em;margin:.67em 0}
+abbr[title]{border-bottom:1px dotted}
+b,strong{font-weight:bold}
+dfn{font-style:italic}
+hr{-moz-box-sizing:content-box;box-sizing:content-box;height:0}
+mark{background:#ff0;color:#000}
+code,kbd,pre,samp{font-family:monospace;font-size:1em}
+pre{white-space:pre-wrap}
+q{quotes:"\201C" "\201D" "\2018" "\2019"}
+small{font-size:80%}
+sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}
+sup{top:-.5em}
+sub{bottom:-.25em}
+img{border:0}
+svg:not(:root){overflow:hidden}
+figure{margin:0}
+fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}
+legend{border:0;padding:0}
+button,input,select,textarea{font-family:inherit;font-size:100%;margin:0}
+button,input{line-height:normal}
+button,select{text-transform:none}
+button,html input[type="button"],input[type="reset"],input[type="submit"]{-webkit-appearance:button;cursor:pointer}
+button[disabled],html input[disabled]{cursor:default}
+input[type="checkbox"],input[type="radio"]{box-sizing:border-box;padding:0}
+input[type="search"]{-webkit-appearance:textfield;-moz-box-sizing:content-box;-webkit-box-sizing:content-box;box-sizing:content-box}
+input[type="search"]::-webkit-search-cancel-button,input[type="search"]::-webkit-search-decoration{-webkit-appearance:none}
+button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}
+textarea{overflow:auto;vertical-align:top}
+table{border-collapse:collapse;border-spacing:0}
+*,*:before,*:after{-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box}
+html,body{font-size:100%}
+body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;font-weight:400;font-style:normal;line-height:1;position:relative;cursor:auto}
+a:hover{cursor:pointer}
+img,object,embed{max-width:100%;height:auto}
+object,embed{height:100%}
+img{-ms-interpolation-mode:bicubic}
+#map_canvas img,#map_canvas embed,#map_canvas object,.map_canvas img,.map_canvas embed,.map_canvas object{max-width:none!important}
+.left{float:left!important}
+.right{float:right!important}
+.text-left{text-align:left!important}
+.text-right{text-align:right!important}
+.text-center{text-align:center!important}
+.text-justify{text-align:justify!important}
+.hide{display:none}
+.antialiased,body{-webkit-font-smoothing:antialiased}
+img{display:inline-block;vertical-align:middle}
+textarea{height:auto;min-height:50px}
+select{width:100%}
+p.lead,.paragraph.lead>p,#preamble>.sectionbody>.paragraph:first-of-type p{font-size:1.21875em;line-height:1.6}
+.subheader,.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{line-height:1.45;color:#7a2518;font-weight:400;margin-top:0;margin-bottom:.25em}
+div,dl,dt,dd,ul,ol,li,h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6,pre,form,p,blockquote,th,td{margin:0;padding:0;direction:ltr}
+a{color:#2156a5;text-decoration:underline;line-height:inherit}
+a:hover,a:focus{color:#1d4b8f}
+a img{border:none}
+p{font-family:inherit;font-weight:400;font-size:1em;line-height:1.6;margin-bottom:1.25em;text-rendering:optimizeLegibility}
+p aside{font-size:.875em;line-height:1.35;font-style:italic}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{font-family:"Open Sans","DejaVu Sans",sans-serif;font-weight:300;font-style:normal;color:#ba3925;text-rendering:optimizeLegibility;margin-top:1em;margin-bottom:.5em;line-height:1.0125em}
+h1 small,h2 small,h3 small,#toctitle small,.sidebarblock>.content>.title small,h4 small,h5 small,h6 small{font-size:60%;color:#e99b8f;line-height:0}
+h1{font-size:2.125em}
+h2{font-size:1.6875em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.375em}
+h4,h5{font-size:1.125em}
+h6{font-size:1em}
+hr{border:solid #ddddd8;border-width:1px 0 0;clear:both;margin:1.25em 0 1.1875em;height:0}
+em,i{font-style:italic;line-height:inherit}
+strong,b{font-weight:bold;line-height:inherit}
+small{font-size:60%;line-height:inherit}
+code{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;color:rgba(0,0,0,.9)}
+ul,ol,dl{font-size:1em;line-height:1.6;margin-bottom:1.25em;list-style-position:outside;font-family:inherit}
+ul,ol,ul.no-bullet,ol.no-bullet{margin-left:1.5em}
+ul li ul,ul li ol{margin-left:1.25em;margin-bottom:0;font-size:1em}
+ul.square li ul,ul.circle li ul,ul.disc li ul{list-style:inherit}
+ul.square{list-style-type:square}
+ul.circle{list-style-type:circle}
+ul.disc{list-style-type:disc}
+ul.no-bullet{list-style:none}
+ol li ul,ol li ol{margin-left:1.25em;margin-bottom:0}
+dl dt{margin-bottom:.3125em;font-weight:bold}
+dl dd{margin-bottom:1.25em}
+abbr,acronym{text-transform:uppercase;font-size:90%;color:rgba(0,0,0,.8);border-bottom:1px dotted #ddd;cursor:help}
+abbr{text-transform:none}
+blockquote{margin:0 0 1.25em;padding:.5625em 1.25em 0 1.1875em;border-left:1px solid #ddd}
+blockquote cite{display:block;font-size:.9375em;color:rgba(0,0,0,.6)}
+blockquote cite:before{content:"\2014 \0020"}
+blockquote cite a,blockquote cite a:visited{color:rgba(0,0,0,.6)}
+blockquote,blockquote p{line-height:1.6;color:rgba(0,0,0,.85)}
+@media only screen and (min-width:768px){h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2}
+h1{font-size:2.75em}
+h2{font-size:2.3125em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.6875em}
+h4{font-size:1.4375em}}table{background:#fff;margin-bottom:1.25em;border:solid 1px #dedede}
+table thead,table tfoot{background:#f7f8f7;font-weight:bold}
+table thead tr th,table thead tr td,table tfoot tr th,table tfoot tr td{padding:.5em .625em .625em;font-size:inherit;color:rgba(0,0,0,.8);text-align:left}
+table tr th,table tr td{padding:.5625em .625em;font-size:inherit;color:rgba(0,0,0,.8)}
+table tr.even,table tr.alt,table tr:nth-of-type(even){background:#f8f8f7}
+table thead tr th,table tfoot tr th,table tbody tr td,table tr td,table tfoot tr td{display:table-cell;line-height:1.6}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2;word-spacing:-.05em}
+h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title strong,h4 strong,h5 strong,h6 strong{font-weight:400}
+.clearfix:before,.clearfix:after,.float-group:before,.float-group:after{content:" ";display:table}
+.clearfix:after,.float-group:after{clear:both}
+*:not(pre)>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background-color:#f7f7f8;-webkit-border-radius:4px;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed}
+pre,pre>code{line-height:1.45;color:rgba(0,0,0,.9);font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;text-rendering:optimizeSpeed}
+.keyseq{color:rgba(51,51,51,.8)}
+kbd{display:inline-block;color:rgba(0,0,0,.8);font-size:.75em;line-height:1.4;background-color:#f7f7f7;border:1px solid #ccc;-webkit-border-radius:3px;border-radius:3px;-webkit-box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em white inset;box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em #fff inset;margin:-.15em .15em 0 .15em;padding:.2em .6em .2em .5em;vertical-align:middle;white-space:nowrap}
+.keyseq kbd:first-child{margin-left:0}
+.keyseq kbd:last-child{margin-right:0}
+.menuseq,.menu{color:rgba(0,0,0,.8)}
+b.button:before,b.button:after{position:relative;top:-1px;font-weight:400}
+b.button:before{content:"[";padding:0 3px 0 2px}
+b.button:after{content:"]";padding:0 2px 0 3px}
+p a>code:hover{color:rgba(0,0,0,.9)}
+#header,#content,#footnotes,#footer{width:100%;margin-left:auto;margin-right:auto;margin-top:0;margin-bottom:0;max-width:62.5em;*zoom:1;position:relative;padding-left:.9375em;padding-right:.9375em}
+#header:before,#header:after,#content:before,#content:after,#footnotes:before,#footnotes:after,#footer:before,#footer:after{content:" ";display:table}
+#header:after,#content:after,#footnotes:after,#footer:after{clear:both}
+#content{margin-top:1.25em}
+#content:before{content:none}
+#header>h1:first-child{color:rgba(0,0,0,.85);margin-top:2.25rem;margin-bottom:0}
+#header>h1:first-child+#toc{margin-top:8px;border-top:1px solid #ddddd8}
+#header>h1:only-child,body.toc2 #header>h1:nth-last-child(2){border-bottom:1px solid #ddddd8;padding-bottom:8px}
+#header .details{border-bottom:1px solid #ddddd8;line-height:1.45;padding-top:.25em;padding-bottom:.25em;padding-left:.25em;color:rgba(0,0,0,.6);display:-ms-flexbox;display:-webkit-flex;display:flex;-ms-flex-flow:row wrap;-webkit-flex-flow:row wrap;flex-flow:row wrap}
+#header .details span:first-child{margin-left:-.125em}
+#header .details span.email a{color:rgba(0,0,0,.85)}
+#header .details br{display:none}
+#header .details br+span:before{content:"\00a0\2013\00a0"}
+#header .details br+span.author:before{content:"\00a0\22c5\00a0";color:rgba(0,0,0,.85)}
+#header .details br+span#revremark:before{content:"\00a0|\00a0"}
+#header #revnumber{text-transform:capitalize}
+#header #revnumber:after{content:"\00a0"}
+#content>h1:first-child:not([class]){color:rgba(0,0,0,.85);border-bottom:1px solid #ddddd8;padding-bottom:8px;margin-top:0;padding-top:1rem;margin-bottom:1.25rem}
+#toc{border-bottom:1px solid #efefed;padding-bottom:.5em}
+#toc>ul{margin-left:.125em}
+#toc ul.sectlevel0>li>a{font-style:italic}
+#toc ul.sectlevel0 ul.sectlevel1{margin:.5em 0}
+#toc ul{font-family:"Open Sans","DejaVu Sans",sans-serif;list-style-type:none}
+#toc a{text-decoration:none}
+#toc a:active{text-decoration:underline}
+#toctitle{color:#7a2518;font-size:1.2em}
+@media only screen and (min-width:768px){#toctitle{font-size:1.375em}
+body.toc2{padding-left:15em;padding-right:0}
+#toc.toc2{margin-top:0!important;background-color:#f8f8f7;position:fixed;width:15em;left:0;top:0;border-right:1px solid #efefed;border-top-width:0!important;border-bottom-width:0!important;z-index:1000;padding:1.25em 1em;height:100%;overflow:auto}
+#toc.toc2 #toctitle{margin-top:0;font-size:1.2em}
+#toc.toc2>ul{font-size:.9em;margin-bottom:0}
+#toc.toc2 ul ul{margin-left:0;padding-left:1em}
+#toc.toc2 ul.sectlevel0 ul.sectlevel1{padding-left:0;margin-top:.5em;margin-bottom:.5em}
+body.toc2.toc-right{padding-left:0;padding-right:15em}
+body.toc2.toc-right #toc.toc2{border-right-width:0;border-left:1px solid #efefed;left:auto;right:0}}@media only screen and (min-width:1280px){body.toc2{padding-left:20em;padding-right:0}
+#toc.toc2{width:20em}
+#toc.toc2 #toctitle{font-size:1.375em}
+#toc.toc2>ul{font-size:.95em}
+#toc.toc2 ul ul{padding-left:1.25em}
+body.toc2.toc-right{padding-left:0;padding-right:20em}}#content #toc{border-style:solid;border-width:1px;border-color:#e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;-webkit-border-radius:4px;border-radius:4px}
+#content #toc>:first-child{margin-top:0}
+#content #toc>:last-child{margin-bottom:0}
+#footer{max-width:100%;background-color:rgba(0,0,0,.8);padding:1.25em}
+#footer-text{color:rgba(255,255,255,.8);line-height:1.44}
+.sect1{padding-bottom:.625em}
+@media only screen and (min-width:768px){.sect1{padding-bottom:1.25em}}.sect1+.sect1{border-top:1px solid #efefed}
+#content h1>a.anchor,h2>a.anchor,h3>a.anchor,#toctitle>a.anchor,.sidebarblock>.content>.title>a.anchor,h4>a.anchor,h5>a.anchor,h6>a.anchor{position:absolute;z-index:1001;width:1.5ex;margin-left:-1.5ex;display:block;text-decoration:none!important;visibility:hidden;text-align:center;font-weight:400}
+#content h1>a.anchor:before,h2>a.anchor:before,h3>a.anchor:before,#toctitle>a.anchor:before,.sidebarblock>.content>.title>a.anchor:before,h4>a.anchor:before,h5>a.anchor:before,h6>a.anchor:before{content:"\00A7";font-size:.85em;display:block;padding-top:.1em}
+#content h1:hover>a.anchor,#content h1>a.anchor:hover,h2:hover>a.anchor,h2>a.anchor:hover,h3:hover>a.anchor,#toctitle:hover>a.anchor,.sidebarblock>.content>.title:hover>a.anchor,h3>a.anchor:hover,#toctitle>a.anchor:hover,.sidebarblock>.content>.title>a.anchor:hover,h4:hover>a.anchor,h4>a.anchor:hover,h5:hover>a.anchor,h5>a.anchor:hover,h6:hover>a.anchor,h6>a.anchor:hover{visibility:visible}
+#content h1>a.link,h2>a.link,h3>a.link,#toctitle>a.link,.sidebarblock>.content>.title>a.link,h4>a.link,h5>a.link,h6>a.link{color:#ba3925;text-decoration:none}
+#content h1>a.link:hover,h2>a.link:hover,h3>a.link:hover,#toctitle>a.link:hover,.sidebarblock>.content>.title>a.link:hover,h4>a.link:hover,h5>a.link:hover,h6>a.link:hover{color:#a53221}
+.audioblock,.imageblock,.literalblock,.listingblock,.stemblock,.videoblock{margin-bottom:1.25em}
+.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{text-rendering:optimizeLegibility;text-align:left;font-family:"Noto Serif","DejaVu Serif",serif;font-size:1rem;font-style:italic}
+table.tableblock>caption.title{white-space:nowrap;overflow:visible;max-width:0}
+.paragraph.lead>p,#preamble>.sectionbody>.paragraph:first-of-type p{color:rgba(0,0,0,.85)}
+table.tableblock #preamble>.sectionbody>.paragraph:first-of-type p{font-size:inherit}
+.admonitionblock>table{border-collapse:separate;border:0;background:none;width:100%}
+.admonitionblock>table td.icon{text-align:center;width:80px}
+.admonitionblock>table td.icon img{max-width:none}
+.admonitionblock>table td.icon .title{font-weight:bold;font-family:"Open Sans","DejaVu Sans",sans-serif;text-transform:uppercase}
+.admonitionblock>table td.content{padding-left:1.125em;padding-right:1.25em;border-left:1px solid #ddddd8;color:rgba(0,0,0,.6)}
+.admonitionblock>table td.content>:last-child>:last-child{margin-bottom:0}
+.exampleblock>.content{border-style:solid;border-width:1px;border-color:#e6e6e6;margin-bottom:1.25em;padding:1.25em;background:#fff;-webkit-border-radius:4px;border-radius:4px}
+.exampleblock>.content>:first-child{margin-top:0}
+.exampleblock>.content>:last-child{margin-bottom:0}
+.sidebarblock{border-style:solid;border-width:1px;border-color:#e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;-webkit-border-radius:4px;border-radius:4px}
+.sidebarblock>:first-child{margin-top:0}
+.sidebarblock>:last-child{margin-bottom:0}
+.sidebarblock>.content>.title{color:#7a2518;margin-top:0;text-align:center}
+.exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
+.literalblock pre,.listingblock pre:not(.highlight),.listingblock pre[class="highlight"],.listingblock pre[class^="highlight "],.listingblock pre.CodeRay,.listingblock pre.prettyprint{background:#f7f7f8}
+.sidebarblock .literalblock pre,.sidebarblock .listingblock pre:not(.highlight),.sidebarblock .listingblock pre[class="highlight"],.sidebarblock .listingblock pre[class^="highlight "],.sidebarblock .listingblock pre.CodeRay,.sidebarblock .listingblock pre.prettyprint{background:#f2f1f1}
+.literalblock pre,.literalblock pre[class],.listingblock pre,.listingblock pre[class]{-webkit-border-radius:4px;border-radius:4px;word-wrap:break-word;padding:1em;font-size:.8125em}
+.literalblock pre.nowrap,.literalblock pre[class].nowrap,.listingblock pre.nowrap,.listingblock pre[class].nowrap{overflow-x:auto;white-space:pre;word-wrap:normal}
+@media only screen and (min-width:768px){.literalblock pre,.literalblock pre[class],.listingblock pre,.listingblock pre[class]{font-size:.90625em}}@media only screen and (min-width:1280px){.literalblock pre,.literalblock pre[class],.listingblock pre,.listingblock pre[class]{font-size:1em}}.literalblock.output pre{color:#f7f7f8;background-color:rgba(0,0,0,.9)}
+.listingblock pre.highlightjs{padding:0}
+.listingblock pre.highlightjs>code{padding:1em;-webkit-border-radius:4px;border-radius:4px}
+.listingblock pre.prettyprint{border-width:0}
+.listingblock>.content{position:relative}
+.listingblock code[data-lang]:before{display:none;content:attr(data-lang);position:absolute;font-size:.75em;top:.425rem;right:.5rem;line-height:1;text-transform:uppercase;color:#999}
+.listingblock:hover code[data-lang]:before{display:block}
+.listingblock.terminal pre .command:before{content:attr(data-prompt);padding-right:.5em;color:#999}
+.listingblock.terminal pre .command:not([data-prompt]):before{content:"$"}
+table.pyhltable{border-collapse:separate;border:0;margin-bottom:0;background:none}
+table.pyhltable td{vertical-align:top;padding-top:0;padding-bottom:0}
+table.pyhltable td.code{padding-left:.75em;padding-right:0}
+pre.pygments .lineno,table.pyhltable td:not(.code){color:#999;padding-left:0;padding-right:.5em;border-right:1px solid #ddddd8}
+pre.pygments .lineno{display:inline-block;margin-right:.25em}
+table.pyhltable .linenodiv{background:none!important;padding-right:0!important}
+.quoteblock{margin:0 1em 1.25em 1.5em;display:table}
+.quoteblock>.title{margin-left:-1.5em;margin-bottom:.75em}
+.quoteblock blockquote,.quoteblock blockquote p{color:rgba(0,0,0,.85);font-size:1.15rem;line-height:1.75;word-spacing:.1em;letter-spacing:0;font-style:italic;text-align:justify}
+.quoteblock blockquote{margin:0;padding:0;border:0}
+.quoteblock blockquote:before{content:"\201c";float:left;font-size:2.75em;font-weight:bold;line-height:.6em;margin-left:-.6em;color:#7a2518;text-shadow:0 1px 2px rgba(0,0,0,.1)}
+.quoteblock blockquote>.paragraph:last-child p{margin-bottom:0}
+.quoteblock .attribution{margin-top:.5em;margin-right:.5ex;text-align:right}
+.quoteblock .quoteblock{margin-left:0;margin-right:0;padding:.5em 0;border-left:3px solid rgba(0,0,0,.6)}
+.quoteblock .quoteblock blockquote{padding:0 0 0 .75em}
+.quoteblock .quoteblock blockquote:before{display:none}
+.verseblock{margin:0 1em 1.25em 1em}
+.verseblock pre{font-family:"Open Sans","DejaVu Sans",sans;font-size:1.15rem;color:rgba(0,0,0,.85);font-weight:300;text-rendering:optimizeLegibility}
+.verseblock pre strong{font-weight:400}
+.verseblock .attribution{margin-top:1.25rem;margin-left:.5ex}
+.quoteblock .attribution,.verseblock .attribution{font-size:.9375em;line-height:1.45;font-style:italic}
+.quoteblock .attribution br,.verseblock .attribution br{display:none}
+.quoteblock .attribution cite,.verseblock .attribution cite{display:block;letter-spacing:-.05em;color:rgba(0,0,0,.6)}
+.quoteblock.abstract{margin:0 0 1.25em 0;display:block}
+.quoteblock.abstract blockquote,.quoteblock.abstract blockquote p{text-align:left;word-spacing:0}
+.quoteblock.abstract blockquote:before,.quoteblock.abstract blockquote p:first-of-type:before{display:none}
+table.tableblock{max-width:100%;border-collapse:separate}
+table.tableblock td>.paragraph:last-child p>p:last-child,table.tableblock th>p:last-child,table.tableblock td>p:last-child{margin-bottom:0}
+table.spread{width:100%}
+table.tableblock,th.tableblock,td.tableblock{border:0 solid #dedede}
+table.grid-all th.tableblock,table.grid-all td.tableblock{border-width:0 1px 1px 0}
+table.grid-all tfoot>tr>th.tableblock,table.grid-all tfoot>tr>td.tableblock{border-width:1px 1px 0 0}
+table.grid-cols th.tableblock,table.grid-cols td.tableblock{border-width:0 1px 0 0}
+table.grid-all *>tr>.tableblock:last-child,table.grid-cols *>tr>.tableblock:last-child{border-right-width:0}
+table.grid-rows th.tableblock,table.grid-rows td.tableblock{border-width:0 0 1px 0}
+table.grid-all tbody>tr:last-child>th.tableblock,table.grid-all tbody>tr:last-child>td.tableblock,table.grid-all thead:last-child>tr>th.tableblock,table.grid-rows tbody>tr:last-child>th.tableblock,table.grid-rows tbody>tr:last-child>td.tableblock,table.grid-rows thead:last-child>tr>th.tableblock{border-bottom-width:0}
+table.grid-rows tfoot>tr>th.tableblock,table.grid-rows tfoot>tr>td.tableblock{border-width:1px 0 0 0}
+table.frame-all{border-width:1px}
+table.frame-sides{border-width:0 1px}
+table.frame-topbot{border-width:1px 0}
+th.halign-left,td.halign-left{text-align:left}
+th.halign-right,td.halign-right{text-align:right}
+th.halign-center,td.halign-center{text-align:center}
+th.valign-top,td.valign-top{vertical-align:top}
+th.valign-bottom,td.valign-bottom{vertical-align:bottom}
+th.valign-middle,td.valign-middle{vertical-align:middle}
+table thead th,table tfoot th{font-weight:bold}
+tbody tr th{display:table-cell;line-height:1.6;background:#f7f8f7}
+tbody tr th,tbody tr th p,tfoot tr th,tfoot tr th p{color:rgba(0,0,0,.8);font-weight:bold}
+p.tableblock>code:only-child{background:none;padding:0}
+p.tableblock{font-size:1em}
+td>div.verse{white-space:pre}
+ol{margin-left:1.75em}
+ul li ol{margin-left:1.5em}
+dl dd{margin-left:1.125em}
+dl dd:last-child,dl dd:last-child>:last-child{margin-bottom:0}
+ol>li p,ul>li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
+ul.unstyled,ol.unnumbered,ul.checklist,ul.none{list-style-type:none}
+ul.unstyled,ol.unnumbered,ul.checklist{margin-left:.625em}
+ul.checklist li>p:first-child>.fa-square-o:first-child,ul.checklist li>p:first-child>.fa-check-square-o:first-child{width:1em;font-size:.85em}
+ul.checklist li>p:first-child>input[type="checkbox"]:first-child{width:1em;position:relative;top:1px}
+ul.inline{margin:0 auto .625em auto;margin-left:-1.375em;margin-right:0;padding:0;list-style:none;overflow:hidden}
+ul.inline>li{list-style:none;float:left;margin-left:1.375em;display:block}
+ul.inline>li>*{display:block}
+.unstyled dl dt{font-weight:400;font-style:normal}
+ol.arabic{list-style-type:decimal}
+ol.decimal{list-style-type:decimal-leading-zero}
+ol.loweralpha{list-style-type:lower-alpha}
+ol.upperalpha{list-style-type:upper-alpha}
+ol.lowerroman{list-style-type:lower-roman}
+ol.upperroman{list-style-type:upper-roman}
+ol.lowergreek{list-style-type:lower-greek}
+.hdlist>table,.colist>table{border:0;background:none}
+.hdlist>table>tbody>tr,.colist>table>tbody>tr{background:none}
+td.hdlist1{padding-right:.75em;font-weight:bold}
+td.hdlist1,td.hdlist2{vertical-align:top}
+.literalblock+.colist,.listingblock+.colist{margin-top:-.5em}
+.colist>table tr>td:first-of-type{padding:0 .75em;line-height:1}
+.colist>table tr>td:last-of-type{padding:.25em 0}
+.thumb,.th{line-height:0;display:inline-block;border:solid 4px #fff;-webkit-box-shadow:0 0 0 1px #ddd;box-shadow:0 0 0 1px #ddd}
+.imageblock.left,.imageblock[style*="float: left"]{margin:.25em .625em 1.25em 0}
+.imageblock.right,.imageblock[style*="float: right"]{margin:.25em 0 1.25em .625em}
+.imageblock>.title{margin-bottom:0}
+.imageblock.thumb,.imageblock.th{border-width:6px}
+.imageblock.thumb>.title,.imageblock.th>.title{padding:0 .125em}
+.image.left,.image.right{margin-top:.25em;margin-bottom:.25em;display:inline-block;line-height:0}
+.image.left{margin-right:.625em}
+.image.right{margin-left:.625em}
+a.image{text-decoration:none}
+span.footnote,span.footnoteref{vertical-align:super;font-size:.875em}
+span.footnote a,span.footnoteref a{text-decoration:none}
+span.footnote a:active,span.footnoteref a:active{text-decoration:underline}
+#footnotes{padding-top:.75em;padding-bottom:.75em;margin-bottom:.625em}
+#footnotes hr{width:20%;min-width:6.25em;margin:-.25em 0 .75em 0;border-width:1px 0 0 0}
+#footnotes .footnote{padding:0 .375em;line-height:1.3;font-size:.875em;margin-left:1.2em;text-indent:-1.2em;margin-bottom:.2em}
+#footnotes .footnote a:first-of-type{font-weight:bold;text-decoration:none}
+#footnotes .footnote:last-of-type{margin-bottom:0}
+#content #footnotes{margin-top:-.625em;margin-bottom:0;padding:.75em 0}
+.gist .file-data>table{border:0;background:#fff;width:100%;margin-bottom:0}
+.gist .file-data>table td.line-data{width:99%}
+div.unbreakable{page-break-inside:avoid}
+.big{font-size:larger}
+.small{font-size:smaller}
+.underline{text-decoration:underline}
+.overline{text-decoration:overline}
+.line-through{text-decoration:line-through}
+.aqua{color:#00bfbf}
+.aqua-background{background-color:#00fafa}
+.black{color:#000}
+.black-background{background-color:#000}
+.blue{color:#0000bf}
+.blue-background{background-color:#0000fa}
+.fuchsia{color:#bf00bf}
+.fuchsia-background{background-color:#fa00fa}
+.gray{color:#606060}
+.gray-background{background-color:#7d7d7d}
+.green{color:#006000}
+.green-background{background-color:#007d00}
+.lime{color:#00bf00}
+.lime-background{background-color:#00fa00}
+.maroon{color:#600000}
+.maroon-background{background-color:#7d0000}
+.navy{color:#000060}
+.navy-background{background-color:#00007d}
+.olive{color:#606000}
+.olive-background{background-color:#7d7d00}
+.purple{color:#600060}
+.purple-background{background-color:#7d007d}
+.red{color:#bf0000}
+.red-background{background-color:#fa0000}
+.silver{color:#909090}
+.silver-background{background-color:#bcbcbc}
+.teal{color:#006060}
+.teal-background{background-color:#007d7d}
+.white{color:#bfbfbf}
+.white-background{background-color:#fafafa}
+.yellow{color:#bfbf00}
+.yellow-background{background-color:#fafa00}
+span.icon>.fa{cursor:default}
+.admonitionblock td.icon [class^="fa icon-"]{font-size:2.5em;text-shadow:1px 1px 2px rgba(0,0,0,.5);cursor:default}
+.admonitionblock td.icon .icon-note:before{content:"\f05a";color:#19407c}
+.admonitionblock td.icon .icon-tip:before{content:"\f0eb";text-shadow:1px 1px 2px rgba(155,155,0,.8);color:#111}
+.admonitionblock td.icon .icon-warning:before{content:"\f071";color:#bf6900}
+.admonitionblock td.icon .icon-caution:before{content:"\f06d";color:#bf3400}
+.admonitionblock td.icon .icon-important:before{content:"\f06a";color:#bf0000}
+.conum[data-value]{display:inline-block;color:#fff!important;background-color:rgba(0,0,0,.8);-webkit-border-radius:100px;border-radius:100px;text-align:center;font-size:.75em;width:1.67em;height:1.67em;line-height:1.67em;font-family:"Open Sans","DejaVu Sans",sans-serif;font-style:normal;font-weight:bold}
+.conum[data-value] *{color:#fff!important}
+.conum[data-value]+b{display:none}
+.conum[data-value]:after{content:attr(data-value)}
+pre .conum[data-value]{position:relative;top:-.125em}
+b.conum *{color:inherit!important}
+.conum:not([data-value]):empty{display:none}
+h1,h2{letter-spacing:-.01em}
+dt,th.tableblock,td.content{text-rendering:optimizeLegibility}
+p,td.content{letter-spacing:-.01em}
+p strong,td.content strong{letter-spacing:-.005em}
+p,blockquote,dt,td.content{font-size:1.0625rem}
+p{margin-bottom:1.25rem}
+.sidebarblock p,.sidebarblock dt,.sidebarblock td.content,p.tableblock{font-size:1em}
+.exampleblock>.content{background-color:#fffef7;border-color:#e0e0dc;-webkit-box-shadow:0 1px 4px #e0e0dc;box-shadow:0 1px 4px #e0e0dc}
+.print-only{display:none!important}
+@media print{@page{margin:1.25cm .75cm}
+*{-webkit-box-shadow:none!important;box-shadow:none!important;text-shadow:none!important}
+a{color:inherit!important;text-decoration:underline!important}
+a.bare,a[href^="#"],a[href^="mailto:"]{text-decoration:none!important}
+a[href^="http:"]:not(.bare):after,a[href^="https:"]:not(.bare):after{content:"(" attr(href) ")";display:inline-block;font-size:.875em;padding-left:.25em}
+abbr[title]:after{content:" (" attr(title) ")"}
+pre,blockquote,tr,img{page-break-inside:avoid}
+thead{display:table-header-group}
+img{max-width:100%!important}
+p,blockquote,dt,td.content{font-size:1em;orphans:3;widows:3}
+h2,h3,#toctitle,.sidebarblock>.content>.title{page-break-after:avoid}
+#toc,.sidebarblock,.exampleblock>.content{background:none!important}
+#toc{border-bottom:1px solid #ddddd8!important;padding-bottom:0!important}
+.sect1{padding-bottom:0!important}
+.sect1+.sect1{border:0!important}
+#header>h1:first-child{margin-top:1.25rem}
+body.book #header{text-align:center}
+body.book #header>h1:first-child{border:0!important;margin:2.5em 0 1em 0}
+body.book #header .details{border:0!important;display:block;padding:0!important}
+body.book #header .details span:first-child{margin-left:0!important}
+body.book #header .details br{display:block}
+body.book #header .details br+span:before{content:none!important}
+body.book #toc{border:0!important;text-align:left!important;padding:0!important;margin:0!important}
+body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-break-before:always}
+.listingblock code[data-lang]:before{display:block}
+#footer{background:none!important;padding:0 .9375em}
+#footer-text{color:rgba(0,0,0,.6)!important;font-size:.9em}
+.hide-on-print{display:none!important}
+.print-only{display:block!important}
+.hide-for-print{display:none!important}
+.show-for-print{display:inherit!important}}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded', prettyPrint)</script>
+</head>
+<body class="article toc2 toc-right">
+<div id="header">
+<h1><a href="index.html">Grooscript</a> documentation</h1>
+<div class="details">
+<span id="author" class="author">Jorge Franco</span><br>
+<span id="email" class="email"><a href="mailto:grooscript@gmail.com">grooscript@gmail.com</a></span><br>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_introduction">Introduction</a></li>
+<li><a href="#_getting_started">Getting started</a></li>
+<li><a href="#_conversion">Conversion</a>
+<ul class="sectlevel2">
+<li><a href="#_options">Options</a></li>
+<li><a href="#_general_support">General support</a></li>
+<li><a href="#_java_support">Java support</a></li>
+<li><a href="#_groovy_support_jorge">Groovy support [Jorge]</a></li>
+</ul>
+</li>
+<li><a href="#_converted_code">Converted code</a></li>
+<li><a href="#_phantomjs_tests">PhantomJs tests</a>
+<ul class="sectlevel2">
+<li><a href="#_requirements">Requirements</a></li>
+<li><a href="#_script">Script</a></li>
+<li><a href="#_details">Details</a></li>
+<li><a href="#_groovytestcase">GroovyTestCase</a></li>
+<li><a href="#_spock_integration">Spock integration</a></li>
+<li><a href="#_resume">Resume</a></li>
+</ul>
+</li>
+<li><a href="#_annotations">Annotations</a>
+<ul class="sectlevel2">
+<li><a href="#_gsnative">GsNative</a></li>
+<li><a href="#_gsnotconvert">GsNotConvert</a></li>
+</ul>
+</li>
+<li><a href="#_helper_tools">Helper Tools</a>
+<ul class="sectlevel2">
+<li><a href="#_htmlbuilder">HtmlBuilder</a></li>
+<li><a href="#_gquery">gQuery</a></li>
+<li><a href="#_observable">Observable</a></li>
+</ul>
+</li>
+<li><a href="#_tricks">Tricks</a></li>
+<li><a href="#_tools">Tools</a>
+<ul class="sectlevel2">
+<li><a href="#_gradle_plugin">Gradle plugin</a></li>
+<li><a href="#_grails_plugin">Grails plugin</a></li>
+<li><a href="#_npm_package">Npm package</a></li>
+</ul>
+</li>
+<li><a href="#_guides">Guides</a></li>
+<li><a href="#_acknowledgements">Acknowledgements</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>Groovy to javascript transpiler</strong></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_introduction">Introduction</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Be aware javascript isn&#8217;t Java or Groovy, lot of differences between them. The main idea of this project is use
+Groovy strengths in the browser, not create a full conversion. I&#8217;m looking for use groovy code in the server and the client,
+work in a single environment, use groovy and java tools and IDE&#8217;s.</p>
+</div>
+<div class="paragraph">
+<p>Grooscript is a library that converts your groovy code to javascript. I&#8217;ve tried that converted code doesn&#8217;t contains
+strange code or magical things. So you can use and follow that converted javascript code. This code needs <code><strong>grooscript.js</strong></code>
+or <code><strong>grooscript.min.js</strong></code> to run in a javascript environment.</p>
+</div>
+<div class="paragraph">
+<p>The typical flow is:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Create awesome groovy or java code.</p>
+</li>
+<li>
+<p>Test it with <a href="https://code.google.com/p/spock/">Spock</a> :)</p>
+</li>
+<li>
+<p>Converts code to javascript.</p>
+</li>
+<li>
+<p>Add that converted files to your html or js project.</p>
+</li>
+<li>
+<p>Then, work in your groovy code and use javascript when you want to.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Grooscript offer some tools to help you, a <a href="https://github.com/chiquitinxx/grooscript-gradle-plugin">gradle</a>
+plugin, a <a href="https://github.com/chiquitinxx/grails-grooscript">grails</a> plugin and a node.js
+<a href="https://www.npmjs.org/package/grooscript">npm</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_getting_started">Getting started</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can create a groovy script to make a conversion and see the converted code in your console:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@Grab('org.grooscript:grooscript:1.0.0-rc-1')
 
-    <title>Grooscript</title>
+import org.grooscript.GrooScript
 
-    <!-- Bootstrap core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+def result = GrooScript.convert '''
+    def sayHello = { println "Hello ${it}!" }
+    ['Groovy','JavaScript','GrooScript'].each sayHello'''
 
-    <!-- Custom styles for this template -->
-    <link href="css/grooscript.css" rel="stylesheet">
-    <link href="css/shCoreDefault.css" rel="stylesheet">
+println result</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you want to make conversions in your groovy / java project, you need <a href="jars/grooscript-1.0.0-rc-1.jar">grooscript.jar</a>.
+You can get from mavenCentral or bintray <code>org.grooscript:grooscript:1.0.0-rc-1</code> in your project&#8217;s dependencies. Also need <code>grooscript.js</code>,
+inside the jar or download from <a href="downloads.html">here</a> to run the converted code in your javascript environment.</p>
+</div>
+<div class="paragraph">
+<p>Usually, you will convert groovy or java files to javascript:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import org.grooscript.GrooScript
 
-      <script src="js/shCore.js"></script>
-      <script src="js/shBrushJScript.js"></script>
-      <script src="js/shBrushGroovy.js"></script>
-      <script src="js/shAutoloader.js"></script>
-      <script src="js/shCore.min.js"></script>
+//Convert some file's or folder's, generate .js files with same name of each source file.
+GrooScript.convert('path/to/file/or/folder', 'path/to/destination/folder')
+GrooScript.convert(['file', 'folder', ...], 'path/to/destination/folder')
+//Also can convert all source files to one javascript file
+GrooScript.convert('any/number/of/sources', 'path/file.js')</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When the number of files is increasing, or want to automatize conversions, the gradle plugin helps a lot, and
+I recommend you to use it. <a href="starting_gradle.html">Guide</a></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_conversion">Conversion</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>For convert groovy code to javascript, that groovy code is compiled. Then javascript code is generated
+visiting generated AST tree. You can try <a href="conversions.html">online</a> conversions at grooscript site. In the
+source of the project you can take a look at all the groovy code that is converted to javascript in tests,
+you have full scope of all supported features in a lot of
+<a href="https://github.com/chiquitinxx/grooscript/tree/master/src/test/resources">groovy scripts</a></p>
+</div>
+<div class="paragraph">
+<p>You usually will convert files with groovy code to a destination folder or js file. To be dynamic and automatize
+conversion process I strongly recommend to use <a href="https://github.com/chiquitinxx/grooscript-gradle-plugin">grooscript gradle plugin</a>.
+You can activate a daemon to automatically convert groovy code when files are modified.</p>
+</div>
+<div class="sect2">
+<h3 id="_options">Options</h3>
+<div class="paragraph">
+<p>To help in conversion process, you can set some conversion options. To set conversion options:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">//Set a conversion property
+GrooScript.setConversionProperty('recursive', true)
+GrooScript.setConversionProperty('customization', {
+    ast(CompileStatic)
+})
+//Applied to next conversions</code></pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">classPath</dt>
+<dd>
+<p>List of folders or jar&#8217;s to find dependencies. Before groovy code is converted to javascript, that code have to be successfully compiled. For example: [''src/groovy'']</p>
+</dd>
+<dt class="hdlist1">customization</dt>
+<dd>
+<p>to each file to be converted, will be applied a groovy <a href="http://docs.codehaus.org/display/GROOVY/Advanced+compiler+configuration">customization</a>. For example you can for example type check all the groovy classes to be converted with { -&gt; ast(TypeChecked)}</p>
+</dd>
+<dt class="hdlist1">initialText</dt>
+<dd>
+<p>you can add test at the beginning of your converted javascript file. You can add comments or javascript code. For example: ''//This code has been generated with grooscript''</p>
+</dd>
+<dt class="hdlist1">finalText</dt>
+<dd>
+<p>like initialText, but at the end of the converted file. For example: ''MyClass().init();''</p>
+</dd>
+<dt class="hdlist1">recursive</dt>
+<dd>
+<p>if you specify a folder with the <strong>source</strong> conversion option, by default will not convert files inside folders. To convert recursive, just set to true</p>
+</dd>
+<dt class="hdlist1">mainContextScope</dt>
+<dd>
+<p>you can help the converted, specifying functions and variables that will be availables in the main context of the javascript environment. For example: [''$'', ''window'',''myFunction'']</p>
+</dd>
+<dt class="hdlist1">addGsLib</dt>
+<dd>
+<p>you can add a grooscript js lib at the beginning of the converted file. For example you can add grooscript.js to the result, and then you don&#8217;t have to worry about include that dependency in javascript ''grooscript''</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_general_support">General support</h3>
+<div class="paragraph">
+<p>As you can imagine, not all groovy and java is supported. The main focus is support the conversion of groovy
+code with the logic of your application, and use as many groovy magic as possible. Only groovy-core is
+supported, other modules as Json, File, Swing, Templates, &#8230;&#8203; are not supported.</p>
+</div>
+<div class="paragraph">
+<p>The more you try use a specific Java type or a complex metaprogramming feature, then you will get a fail.
+Java code is supported, but using same types as groovy does. Don&#8217;t hesitate to say that you need a non
+implemented type, or function, can be done in next releases.</p>
+</div>
+<div class="paragraph">
+<p>I&#8217;m going to detail general rules.</p>
+</div>
+<div class="sect3">
+<h4 id="_packages">Packages</h4>
+<div class="paragraph">
+<p>They are supported. Actually conversion generate js code where package info is saved only for class names.
+So two classes with same name in distinct packages are converted with the same name. Lack of package support
+in javascript, but we have some ideas to improve this in the future.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">package one
 
-      <script>
-          SyntaxHighlighter.defaults['light'] = true;
-          SyntaxHighlighter.all();
-      </script>
+class First {}
 
-    <!-- Just for debugging purposes. Don't actually copy this line! -->
-    <!--[if lt IE 9]><script src="js/ie8-responsive-file-warning.js"></script><![endif]-->
+package two
 
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-    <![endif]-->
-  </head>
+class First {}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Are converted to:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-javascript" data-lang="javascript">function First() { ... }
 
-  <body>
-    <div id="headbar" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="index.html">grooscript</a>
-        </div>
-        <div id="socialIcons" class="collapse navbar-collapse">
-          <ul class="nav navbar-nav navbar-right">
-            <li><a data-placement="bottom" title="Send Email" href="mailto:grooscript@gmail.com"><img src="img/gmail-48.png"/></a></li>
-            <li><a data-placement="bottom" title="Twitter" href="http://twitter.com/grooscript"><img src="img/twitter-48.png"/></a></li>
-            <li><a data-placement="bottom" title="Blog" href="http://grooscript.wordpress.com"><img src="img/wordpress-48.png"/></a></li>
-            <li><a data-placement="bottom" title="Github" href="http://github.com/chiquitinxx/grooscript"><img src="img/github-48.png"/></a></li>
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
-    </div>
+function First() { ... }</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_interfaces">Interfaces</h4>
+<div class="paragraph">
+<p>Totally ignored and not converted</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">interface Move {
+    def start()
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_objects">Objects</h4>
+<div class="paragraph">
+<p>Objects are supported, with static and normal properties. You can have more than 1 constructor with same
+number of parameters. Overloading is not supported, you can&#8217;t have two methods with same name. Abstract
+methods are ignored, just convert implementations in extending classes. Private, public, protected, &#8230;&#8203; are
+ignored, as in groovy you can access private methods and fields in javascript. Modifier final also ignored.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class MyObject {
+    private static final NUMBER = 6
+    def name = 'MyObject'
+    Map map
 
-    <div class="container">
-    <div class="row-fluid topMessage">
+    MyObject() {
+        map = [:]
+    }
 
-    <ul id="myTab" class="nav nav-pills">
-        <li class="active"><a href="#started" data-toggle="tab">Get Started</a></li>
-        <li><a href="#features" data-toggle="tab">Features</a></li>
-        <li><a href="#support" data-toggle="tab">Groovy Support</a></li>
-        <!--<li><a href="#crud" data-toggle="tab">CRUD Example</a></li>-->
-    </ul>
+    MyObject(name) {
+        map = [newName: name]
+        this.name = name
+    }
 
-    <div id="myTabContent" class="tab-content span10" >
-    <div class="tab-pane fade in active" id="started">
-        <p>Be aware javascript isn't Java or Groovy, lot of differences between them. The main idea of this project is use
-            Groovy strength in the browser, not create a full conversion. I'm looking for use groovy code and tools in the client,
-            wanna use Spock tests in the server and in the browser.</p>
+    private addToMap(key, value) {
+        map[key] = value
+    }
 
-        <p>So, for converting your groovy code, you need <a href='jars/grooscript-0.6.3.jar'>grooscript.jar</a>. You can get from mavenCentral
-            (org.grooscript:grooscript:0.6.3) in your project's dependencies. Remember need grooscript.js, inside the jar or get
-            <a href='js/grooscript.js'>here</a>.</p>
-        <p>Let's see code for conversion:</p>
-        <pre class='brush:groovy;'>
-            import org.grooscript.GrooScript
+    void register(listActions) {
+        listActions.each {
+            addToMap(it.name, it.data ?: NUMBER)
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Class data not well supported, just a few important methods and properties:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class A { def a }
+class B extends A {}
+def a = new A()
+def b = new B()
 
-            //Convert a fragment code
-            String jsResult = GrooScript.convert("println 'Hello!'")
+assert a.class == a.getClass()
+assert a.metaClass == a.getMetaClass()
+assert a.getClass().getName() == 'contribution.A'
 
-            //Convert some file or folder, generate .js files with same name.
-            GrooScript.convert('path/to/file/or/folder','path/to/destination/folder')
+assert a.getClass().getSimpleName() == 'A'
+assert b instanceof A
+assert b instanceof contribution.B
+assert Class.forName('contribution.B') == B
+assert A.newInstance()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Equals method is used in comparisons, and you can create / use in your classes.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_inheritance">Inheritance</h4>
+<div class="paragraph">
+<p>Support is limited, is ok that you create classes that extends other to add behavior. You can&#8217;t extend
+any java or groovy class, just your own classes or other classes already converted.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Bicycle implements Move {
+    int speed
 
-            //And that's all, so easy make conversions
-        </pre>
-        <p>If you convert a file with dependencies to other files, you have to convert that files too.</p>
-    </div>
-    <div class="tab-pane fade" id="features">
-        <p><h4>Conversion Daemon</h4> You can activate a daemon to convert your Groovy files when modify them.</p>
-        <pre class='brush:groovy;'>
-            import org.grooscript.GrooScript
+    Bicycle() {
+        speed = 0
+    }
 
-            //You can detect changes in files or files in folders. Sources can be a List of String or a String
-            def sources = ['src/groovy/presenters', 'myFile.groovy']
-            //Set destination of conversions, a folder or a .js file
-            def destination = 'js/gs.js'
-            //You can set conversion options, see below for options supported. Optional.
-            def options = [classpath:'src/groovy']
+    def start() {
+        speed = 1
+    }
+}
 
-            //The demon starts and converts all the files at start.
-            //Then listen, and each time any of the files changes, generate the new javascript file automatically.
-            //Read all files each second.
-            //Fourth parameter is an optional closure that will executes each time all read and converted. Optional.
-            //The closure receives a list with absolutePath of files modified
-            //Last parameter set recursion option, by default is false. If set to true, also folders will be converted.
-            def daemon = GrooScript.startConversionDaemon(sources, destination, options, { list -> list.each { println 'Converted file -> '+it}}, true)
+class MountainBike extends Bicycle {
+    def seatHeight
 
-            //For stop the daemon
-            daemon.stop()
-        </pre>
-        <p><h4>PhantomJsTest</h4> You can annotate your methods to do a <a href="http://phantomjs.org">PhantomJs</a> test.
-        This AST convert your method code to a script that launch a PhantomJs test and check results.
-        The code inside the method is converted to javascript and executed in the phantomJs test, included asserts.
-        It needs your phantomJs path. Uses grooscript.js and kimbo.min.js (faster jquery), that try to find inside the jar.</p>
-        <p>After all code is executed, you can capture image with <i>capture</i> option<p>
-        <p>You can start the test some seconds after the page loaded with <i>waitSeconds</i> option<p>
-        <p>You can get extra info with <i>info = true</i> option<p>
-        <pre class='brush:groovy;'>
-            //You must define this, only if not PHANTOMJS_HOME defined in your system
-            System.setProperty('PHANTOMJS_HOME','/Applications/phantomjs')
+    MountainBike() {
+        super() <i class="conum" data-value="1"></i><b>(1)</b>
+        seatHeight = 5
+    }
 
-            //This only needed if fails in get js files from the jar
-            //System.setProperty('JS_LIBRARIES_PATH','../../../src/main/resources/META-INF/resources')
+    <i class="conum" data-value="2"></i><b>(2)</b>
+    //def start() {
+    //    super.start()
+    //}
+}
 
-            @PhantomJsTest(url='http://www.grails.org', capture = 'grails.png', waitSeconds = 2)
-            void testCountLinks() {
-                assert $('a').size() > 50,"Number of links in page is &#36;{$('a').size()}"
-                def title = $("title")
-                assert title[0].text=='Grails - The search is over.',"Title is &#36;{title[0].text}"
-                def links = $('a')
-                links.each {
-                    println it
-                }
-            }
+class CoolMountainBike extends MountainBike {
+    CoolMountainBike() {
+        super()
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>super is allowed in constructors</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>super in not allowed out of constructor</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_try_blocks">Try blocks</h4>
+<div class="paragraph">
+<p>Try, catch, and finally blocks are supported. Only first catch block will be converted if you use more than
+one. Like I/O classes are not supported, I suppose that you will use try blocks a little.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def anyCatch = {
+    try {
+        throw new Exception()
+        value = 4
+    } catch (any) {
+        return 2
+    }
+}
 
-            testCountLinks()
-        </pre>
-        <p><h4>GsNative</h4> You can annotate your methods with javascript code with @GsNative.</p>
-        <pre class='brush:groovy;'>
-        //You add javascript code inside function like a comment between /* and */
-        import org.grooscript.asts.GsNative
+assert anyCatch() == 2
+assert value == 3</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_java_support">Java support</h3>
+<div class="paragraph">
+<p>Java support is not the target of this library, groovy is. Like groovy uses java, grooscript support a lot
+of java stuff. If you need any specific java type, other than a basic type, please before check if is supported.
+Grooscript convert your code to javascript, but the normal use of a normal programming language, not specific
+types or modules. You can expect variables, arrays, data types, operators, control flow, classes and objects you
+create, basic inheritance, numbers, string, dates, collections, maps &#8230;&#8203; are supported. But Thread, XML,
+Reflection, &#8230;&#8203; are not supported.</p>
+</div>
+<div class="sect3">
+<h4 id="_primitives">Primitives</h4>
+<div class="paragraph">
+<p>Basic types are ignored, they are just used in javascript. No differences between float, int, &#8230;&#8203; just numbers
+are 'numbers' and String are javascript String&#8217;s. Integer, Float, Double,&#8230;&#8203; types are not supported, just
+Integer.parseInt and Float.parseFloat are supported. Basic operations are supported: <code>+, -, *, /, %, **</code></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_equals_hashcode_and_compare">Equals, hashCode and compare</h4>
+<div class="paragraph">
+<p>Equals is used comparing objects, hashCode and compareTo are not supported. Groovy truth is used in comparisons.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_enum">Enum</h4>
+<div class="paragraph">
+<p>Not much work with enums, just good as a set of values, stuff like 'values' are not supported.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">enum Days {
+    monday, tuesday, wednesday, thursday, friday, saturday, sunday
 
-        class Numbers {
+    static tellMeOne() {
+        'one'
+    }
+}
 
-            def getFour() {
-                4
-            }
+Days a = Days.monday
 
-            /* A comment */
+assert a == Days.monday
+assert 'one' == Days.tellMeOne()
+assert Days.monday.name() == 'monday'
+assert a.name() == 'monday'
+assert a.ordinal() == 0
+assert Days.sunday.ordinal() == 6</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_types">Types</h4>
+<div class="paragraph">
+<p>Good support in:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>java.util.ArrayList</p>
+</li>
+<li>
+<p>java.util.HashMap</p>
+</li>
+<li>
+<p>java.util.HashSet</p>
+</li>
+<li>
+<p>java.lang.String</p>
+</li>
+<li>
+<p>java.util.Date</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Basic support in:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>java.math.BigDecimal</p>
+</li>
+<li>
+<p>java.util.Random</p>
+</li>
+<li>
+<p>java.lang.StringBuffer</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_java_8">Java 8</h4>
+<div class="paragraph">
+<p>Nothing added in grooscript to support any java 8 feature or type. If you introduce for example lambda expression,
+compilation of the conversion will fail, as groovy fails.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_groovy_support_jorge">Groovy support [Jorge]</h3>
+<div class="paragraph">
+<p>In general groovy features are supported, except advanced metaprogramming techniques and AST&#8217;s applied in phases
+after semantic analysis. <code>as</code> is supported only at specific situations. Let&#8217;s see examples of some conversions.</p>
+</div>
+<div class="sect3">
+<h4 id="_gstrings">GStrings</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">things = '"bread","apple","egg"'
 
-            @GsNative
-            def getFive() {/*
-                //Comment
-                return 5;
-            */}
+def multiline = '''\
+Groovy is closely related to Java,
+so it is quite easy to make a transition.
+'''
 
-            /* Other comment */
+multiline.eachLine { line, count -&gt;
+    assert count == 0 ? 'Groovy is closely related to Java,' : 'so it is quite easy to make a transition.'
+}
 
-            def getSix() {
-                6
+def multilineDouble = """
+things: $things
+"""
+
+assert multilineDouble == '''
+things: "bread","apple","egg"
+'''</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_default_constructor_optional_parameters_pointer_methods_multiple_assignment">Default constructor, optional parameters, pointer methods, multiple assignment</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Language {
+    def name
+    def features
+
+    def twoNiceFeatures() {
+        def result = []
+        2.times {
+            result &lt;&lt; features[randomFeature()]
+        }
+        result.collect this.&amp;nice
+    }
+
+    def randomFeature() {
+        new Random().nextInt(features.size())
+    }
+
+    def nice(value) {
+        "* ${value.toUpperCase()} *"
+    }
+}
+
+def groovy = new Language(name: 'Groovy', features: [
+        'Flat learning curve', 'Smooth Java integration', 'Vibrant and rich ecosystem',
+        'Powerful features', 'Domain-Specific Languages', 'Scripting and testing glue'
+])
+
+def (feature1, feature2) = groovy.twoNiceFeatures()
+//* DOMAIN-SPECIFIC LANGUAGES *
+//* POWERFUL FEATURES *</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_operators">Operators</h4>
+<div class="paragraph">
+<p><code>&lt;=&gt;</code>, <code>.@</code>, <code>*.</code>, <code>in</code>, <code>is</code>, <code>?.</code> and <code>?:</code> are supported.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def compare = { a,b -&gt; a &lt;=&gt; b }
+assert compare(2, 1) == 1 &amp;&amp; compare(1, 1) == 0 &amp;&amp; compare(1, 2) == -1
+
+class Item {
+    def value
+    def config = [:]
+    def getValue() {
+        1
+    }
+    boolean equals(other) {
+        this.config == other.config
+    }
+}
+def item = new Item(value: 5)
+assert item.value == 1
+assert item.@value == 5
+
+assert 5 in [1, 9, 5]
+assert !(2 in [1])
+
+def otherItem = new Item(value: 5)
+assert item == otherItem
+assert !(item.is(otherItem))
+
+assert item?.config?.other == null
+assert 5 == item?.config?.data ?: 5</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Also you can overload this operators in your classes:</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 1. Overload operators</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">operator</th>
+<th class="tableblock halign-left valign-top">function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a + b</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.plus(b)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a - b</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.minus(b)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a * b</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.multiply(b)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a ** b</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.power(b)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a / b</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.div(b)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a % b</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.mod(b)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a &lt;&lt; b</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.leftShift(b)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a &gt;&gt; b</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a.rightShift(b)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_regular_expressions">Regular expressions</h4>
+<div class="paragraph">
+<p>Javascript support regular expressions, so I use it with groovy style. Not much tests on this, try it before .</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert "abc" == /abc/
+assert "\\d" == /\d/
+def reference = "hello"
+assert reference == /$reference/
+assert "\$" == /$/
+
+assert "potatoe" ==~ /potatoe/
+assert !("potatoe with frites" ==~ /potatoe/)
+
+myFairStringy = 'The rain in Spain stays mainly in the plain!'
+
+found = ''
+(myFairStringy =~ /\b\w*ain\b/).each { match -&gt;
+        found += match + ' '
+}
+assert found == 'rain Spain plain '
+
+def matcher = 'class A{ class B {}}' =~ /\bclass\s+(\w+)\s*\{/
+assert matcher.size() == 2</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_lists_ranges_maps_ans_sets">Lists, ranges, maps ans sets</h4>
+<div class="paragraph">
+<p>A lot of lists and map functions are implemented, so the support is very good.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def odd = [1,2,3].findAll{ item -&gt;
+    item % 2 == 1
+}
+assert odd.size() == 2
+assert odd[0] == 1
+assert odd[1] == 3
+
+assert [1,2] + [3,5] == [1,2,3,5]
+assert [1,2,3,4,5] - [3,5] == [1,2,4]
+
+list = [1, 2, 2, 3, 4]
+assert list.unique() == [1, 2, 3, 4]
+list = [1, 2, 2, 3, 4]
+def uniqList = list.unique(false)
+assert list == [1, 2, 2, 3, 4]
+assert uniqList == [1, 2, 3, 4]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Ranges with negative numbers are not supported.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_groovy_truth">Groovy truth</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def a = true
+def b = true
+def c = false
+assert a
+assert a &amp;&amp; b
+assert a || c
+assert !c
+
+def numbers = [1,2,3]
+assert numbers
+numbers = []
+assert !numbers
+
+assert ['one':1]
+assert ![:]
+
+assert ('Hello World' =~ /World/)
+
+assert 'This is true'
+assert !''
+
+def s = ''
+assert !("$s")
+s = 'x'
+assert ("$s")
+
+assert !0
+assert 1
+
+assert new Object()
+assert !null</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Also, you can customize groovy truth of your classes</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Account {
+    String name
+    boolean disabled = false
+
+    boolean asBoolean() { !disabled }
+}
+
+assert new Account(name: 'current')
+assert !new Account(name: 'old', disabled: true)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_expando_class">Expando class</h4>
+<div class="paragraph">
+<p>JavaScript object is similar to Expando object</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>TODO</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_numbers">Numbers</h4>
+<div class="paragraph">
+<p>Numbers types are ignored, in conversion we are working with javascript numbers.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>TODO</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_categories_and_mixing">Categories and Mixing</h4>
+<div class="paragraph">
+<p>Categories are suported with annotation and with the ´use´ keyword. Mixins also supported but we moved to
+better support traits.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>TODO</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_switch">Switch</h4>
+<div class="paragraph">
+<p>Has basic support, can&#8217;t assign variables inside.
+    TODO</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_closures">Closures</h4>
+<div class="paragraph">
+<p>Closures are converted to javascript functions. call, curry, rcurry, ncurry, leftShift are supported. If you
+set delegate of a closure, it will be used.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>TODO</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_groovybeans">GroovyBeans</h4>
+<div class="paragraph">
+<p>Support getter and setters as groovy does. Supporting getProperty, setProperty, methodMissing, propertyMissing.
+Added invokeMethod but don&#8217;t intercept calls.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>TODO</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_metaprogramming">Metaprogramming</h4>
+<div class="paragraph">
+<p>Can add/modify properties and methods in execution time. Some problems with primitive types as Integer or String.
+Can use getProperties() and getMethods() to get names. Can add properties/methods to classes.
+Just working on dynamic features needed, never a full groovy metaClass, metaInfo, &#8230;&#8203; support.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>TODO</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_ast_s">AST&#8217;s</h4>
+<div class="paragraph">
+<p>Support to @Mixin, @Category and @Delegate. Annotations in semantic phase, will be applied and converted, is same phase
+that grooscript use.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>TODO</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_traits">Traits</h4>
+<div class="paragraph">
+<p>Good support, in compile and runtime. Don&#8217;t support SAM coercion and super.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>TODO</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_converted_code">Converted code</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Once you have converted code to javascript, you have to use in javascript environment. To run this converted
+code you need <code>grooscript.js</code> or <code>grooscript.min.js</code> loaded. In Node.js load grooscript
+<a href="https://www.npmjs.com/package/grooscript">npm</a> module, and in your web pages include the lib manually.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;script type="text/javascript" src="js/grooscript.min.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="js/yourConvertedFile.js"&gt;&lt;/script&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_phantomjs_tests">PhantomJs tests</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="http://phantomjs.org/">PhantomJS</a> is a javascript library for functional testing your web applications or html files.
+It has it&#8217;s own embedded browser, and you can evaluate DOM handling, CSS selector, JSON, Canvas, and SVG. This library,
+comes with an executable to run a test in a .js file. With <a href="http://grooscript.org">grooscript</a> you can run a
+PhantomJS test to <strong>evaluate groovy code</strong>.</p>
+</div>
+<div class="sect2">
+<h3 id="_requirements">Requirements</h3>
+<div class="paragraph">
+<p>To run your <a href="http://phantomjs.org/download.html">PhantomJS</a> tests from Groovy, you need both installed.
+Create an environment variable in your computer &gt; export PHANTOMJS_HOME=/path/to/phantomjs, this isn&#8217;t
+mandatory step, but with this variable you don&#8217;t have to define that system property in your groovy project.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_script">Script</h3>
+<div class="paragraph">
+<p>You can run a PhantomJS test from a groovy script, for example myScript.groovy:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@GrabConfig(systemClassLoader=true)
+@Grab('org.grooscript:grooscript:1.0.0-rc-1') <i class="conum" data-value="1"></i><b>(1)</b>
+
+import org.grooscript.asts.PhantomJsTest
+
+System.setProperty('PHANTOMJS_HOME', '/path/to/phantomjs/folder') <i class="conum" data-value="2"></i><b>(2)</b>
+
+@PhantomJsTest(url = 'http://beta.groovy-lang.org/') <i class="conum" data-value="3"></i><b>(3)</b>
+void testCountLinks() {
+    def links = $('a') <i class="conum" data-value="4"></i><b>(4)</b>
+    assert links.size() &gt; 40, "Number of links in page are ${links.size()}"
+    links.toArray().collect { it.toString() }.each { link -&gt; <i class="conum" data-value="5"></i><b>(5)</b>
+         println link
+    }
+}
+
+testCountLinks() <i class="conum" data-value="6"></i><b>(6)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Grab grooscript jar.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>If you haven&#8217;t define environment variable, you can set system property.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The AST that will change the method in a new method that run a PhantomJS test.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Groovy code that will be converted to javascript and will be evaluated.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>jQuery has it owns each, so I have to use collect to get a 'groovy' collection.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>You have to execute the method to run the test.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>If you execute this script with &gt; groovy myScript.groovy, then a PhantomJS will run. The browser will open the
+url <a href="http://beta.groovy-lang.org/" class="bare">http://beta.groovy-lang.org/</a> and will evaluate the groovy code converted to javascript. JQuery and grooscript.js are
+injected to PhantomJS and you can use that libraries in your evaluation.</p>
+</div>
+<div class="paragraph">
+<p>You get some info of the test running in console:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-bash" data-lang="bash">[PhantomJs Test] Starting Test in http://beta.groovy-lang.org/
+  [Console]  https://github.com/groovy/groovy-core
+     ...
+  [Console]  http://www.apache.org/licenses/LICENSE-2.0.html
+[PhantomJs Test] Number of tests: 1
+[PhantomJs Test] Result SUCCESS.</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_details">Details</h3>
+<div class="paragraph">
+<p>@PhantomJsTest annotation transform the code of your function in a new method that runs PhantomJS with groovy
+scripting capabilities. Also a temporally .js file is created for the execution, with the evaluation of the groovy
+code. If some assert fails in the evaluation a groovy assert fail will be raised.</p>
+</div>
+<div class="paragraph">
+<p>Use this feature for simple and fast tests. If you planning a lot of function tests, please consider
+use <a href="http://www.gebish.org/">Geb</a>. Interaction with the DOM and jQuery functions inside PhantomJS test have
+some strange behavior.</p>
+</div>
+<div class="paragraph">
+<p>With @PhantomJsTest you can use more parameters, only <em>url</em> is mandatory:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">waitSeconds</dt>
+<dd>
+<p>If you want to wait some seconds after page loaded before evaluate your code.</p>
+</dd>
+<dt class="hdlist1">info</dt>
+<dd>
+<p>To show more info in console.</p>
+</dd>
+<dt class="hdlist1">capture</dt>
+<dd>
+<p>To capture an image of page at the end of evaluation.</p>
+</dd>
+</dl>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@PhantomJsTest(url = 'myFile.html', waitSeconds = 2, info = true, capture = 'image.png')
+void testWithAllOptions() {
+    assert $('title').text().contains('Welcome')
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can pass basic parameters as numbers or strings to your function / method annotated with @PhantomJsTest</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@PhantomJsTest(url = 'http://localhost:8000/test')
+void testExpectedElements(element, expectedSize) {
+    assert $(element).size == expectedSize,"Number of '${element}' in page is ${$(element).size()}"
+}
+
+void testPassParameters() {
+    testExpectedElements('p', 1)
+    testExpectedElements('body', 1)
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also get data from the test. That data is parsed to JSON, and return back to groovy parsing that JSON:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@PhantomJsTest(url = 'http://localhost:8000/test')
+def returnMap() {
+    [list: [1,2], str: 'string', number: 9, dec: 8.34, jq: $('p').text()]
+}
+
+void testReturnMap() {
+    def result = returnMap()
+    assert result == [ list: [1,2], str: 'string', number: 9, dec: 8.34, jq: 'Welcome']
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_groovytestcase">GroovyTestCase</h3>
+<div class="paragraph">
+<p>You can annotate a test in a GroovyTestCase with @PhantomJsTest and will work as expected, the test
+will be evaluated in PhantomJs.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class TestPhantomJs extends GroovyTestCase {
+
+    @PhantomJsTest(url = 'http://localhost:8000/test')
+    void testDirectPhantomJs() {
+        println $('p').text()
+        assert $('p').text().contains('Welcome'), "p html is 'Welcome'"
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_spock_integration">Spock integration</h3>
+<div class="paragraph">
+<p>The integration with <a href="https://code.google.com/p/spock/">Spock</a> isn&#8217;t very good. The best way, is create a private
+method with @PhantomJsTest in your specification, and call it from your tests.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import spock.lang.Specification
+
+class MySpec extends Specification {
+
+    void 'correct number of divs in test page'() {
+        expect:
+        expectedElements('div', 18)
+    }
+
+    @PhantomJsTest(url = 'http://localhost:8000/test')
+    private void expectedElements(element, expectedSize) {
+        assert $(element).size == expectedSize,"Number of '${element}' in page is ${$(element).size()}"
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_resume">Resume</h3>
+<div class="paragraph">
+<p>This phantomJs tests are nice for fast and small tests. Is very easy to create a little script or add browser
+tests without too much dependencies. Take care with jQuery in your evaluations, for example I have had some
+problems using 'each' function.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_annotations">Annotations</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Grooscript offer two annotations to add in your groovy code.</p>
+</div>
+<div class="sect2">
+<h3 id="_gsnative">GsNative</h3>
+<div class="paragraph">
+<p>You can annotate groovy methods with @GsNative. The javascript code of that method will be the code inside comment,
+between <code>/&#42;</code> and <code>&#42;/</code>, that fragment has to be after <code>{</code> method start. I use a lot this feature to insert
+javascript code in the groovy code. So when I run the code in groovy nothing happens (tests pass), but the
+javascript code runs in converted code.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import org.grooscript.asts.GsNative
+
+class Numbers {
+
+    @GsNative
+    def getFive() {/*
+        $('something').andMoreJsCode();
+        return 5;
+    */}
+
+    def getSix() {
+        6
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This is a very useful feature, even you can put javascript code in a block comment and groovy code after.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@GsNative
+def methodB(){/*
+        gs.println('methodB');
+        this.a++;
+        this.methodA();*/
+    println 'inMethodB'; a = a + 1; this.methodA()
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_gsnotconvert">GsNotConvert</h3>
+<div class="paragraph">
+<p>You can annotate your classes and methods with @GsNotConvert and that code will not be converted to javascript.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import org.grooscript.asts.GsNotConvert
+
+@GsNotConvert
+class ClassNotConvert {
+    def a
+}
+
+class A {
+    @GsNotConvert
+    def methodNotConvert() {
+        println 'No!'
+    }
+
+    def hello() {
+        println 'Hello!'
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_helper_tools">Helper Tools</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Grooscript comes with some tools. This tools are some classes that you can use in your groovy code. If you convert
+code that use this tools, you need the js code of that tools. This code is in <code>grooscript-tools.js</code> file. You
+can find it inside the jar or you can <a href="downloads.html">download</a> it.</p>
+</div>
+<div class="paragraph">
+<p>This tools are little helpers, with only a bit lines of code, don&#8217;t expect full libraries. I have introduced
+this libraries because I think that are interesting in you javascript development. Progress in this tools
+depends of people&#8217;s feedback.</p>
+</div>
+<div class="sect2">
+<h3 id="_htmlbuilder">HtmlBuilder</h3>
+<div class="paragraph">
+<p>Groovy itself comes with more than one html builder, and from last versions of groovy there is a new
+<a href="http://beta.groovy-lang.org/docs/groovy-2.3.7/html/documentation/markup-template-engine.html">template engine</a>.
+Is a fast and modern engine, and my tool has some things from it.</p>
+</div>
+<div class="paragraph">
+<p>I like this builders to create html code, using a dsl is a very powerful way to create pages or templates.
+You can use variables or groovy code inside the builder to convert your templates into code. Let&#8217;s see an
+example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">yieldUnescaped '&lt;!DOCTYPE html&gt;'
+html {
+  head {
+    title('Title of the page')
+    link(rel: 'stylesheet', href: '/css/bootstrap.min.css')
+  }
+  body {
+    div(class: 'container') {
+      ul {
+        //persons is a list of persons that is used to generate the final HTML
+        persons.each { person -&gt;
+          li {
+            a(href:"/person/$person.id", "$person.lastName $person.firstName")
+          }
+        }
+      }
+
+      div {
+        a(href:'/person/add', 'Add new person')
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To use the builder just call the static method <code>build</code> to generate string html code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">package org.grooscript.builder
+
+class HtmlBuilder {
+
+    static String build(@DelegatesTo(HtmlBuilder) Closure closure)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The groovy code can be converted to javascript and will run if you add <code>grooscript-tools.js</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">given:
+def result = HtmlBuilder.build {
+    body {
+        ul(class: 'list', id: 'mainList') {
+            2.times { number -&gt;
+                li number + 'Hello!'
             }
         }
+    }
+}
 
-        numbers = new Numbers()
+expect:
+result == "&lt;body&gt;&lt;ul class='list' id='mainList'&gt;&lt;li&gt;0Hello!&lt;/li&gt;&lt;li&gt;1Hello!&lt;/li&gt;&lt;/ul&gt;&lt;/body&gt;"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Available functions from groovy templates are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>yield</p>
+</li>
+<li>
+<p>comment</p>
+</li>
+<li>
+<p>yieldUnescaped</p>
+</li>
+<li>
+<p>newLine</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_gquery">gQuery</h3>
+<div class="paragraph">
+<p>If you use <a href="http://jquery.com/">jquery</a> in your projects, maybe you want to use from your groovy code that will be
+converted to javascript. I have created an interface <code>Gquery</code> and the implementation <code>GqueryImpl</code> to work with it.
+The implementation is added to <code>grooscript-tools.js</code>. The interface is:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">package org.grooscript.jquery
 
-        //Only works in javascript, fails in groovy
-        assert numbers.getFive() == 5
-        </pre>
-        <p><h4>GsNotConvert</h4> You can annotate your classes and methods with @GsNotConvert and never will be converted to .js files.</p>
-        <pre class='brush:groovy;'>
-        import org.grooscript.asts.GsNotConvert
+import org.grooscript.rx.Observable
 
-        @GsNotConvert
-        class ClassNotConvert {
-            def a
-        }
+interface GQuery {
+    //Bind a selector to a property of an object
+    def bind(String selector, target, String nameProperty)
+    def bind(String selector, target, String nameProperty, Closure closure)
+    //Exist dom element with id
+    boolean existsId(String id)
+    //Exist dom element with name
+    boolean existsName(String name)
+    //Exist dom radio group with that name
+    boolean existsGroup(String name)
+    //Launch closure on dom event, closure not receive params
+    void onEvent(String selector, String nameEvent, Closure func)
+    //Remote call to server to receive JSON
+    void doRemoteCall(String url, String type, params, Closure onSuccess, Closure onFailure)
+    void doRemoteCall(String url, String type, params, Closure onSuccess, Closure onFailure, objectResult)
+    //Launch closure when page loaded
+    void onReady(Closure func)
+    //Atach methods of an object to dom elements with that id (Click, Submit, Change)
+    void attachMethodsToDomEvents(target)
+    //Launch closure on input change event, closure receive a param with the new value
+    void onChange(String id, Closure closure)
+    //Focus dom object, on input put cursor at the end
+    void focusEnd(String selector)
+    //Bind all properties of an object to dom elements, find dom elements by id or name
+    void bindAllProperties(target)
+    //Bind all
+    void bindAll(target)
+    //Returns an Observable from a event
+    Observable observeEvent(String selector, String nameEvent)
+    Observable observeEvent(String selector, String nameEvent, Map data)
+    //Call
+    GQueryList call(String selector)
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>GQueryList</code> is a class with a method missing to execute jquery functions in the result of the selector
+finder, like <code>gQuery('body').append('Hello!')</code>. See in action:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import org.grooscript.jquery.GQueryImpl
 
-        class A {
-            @GsNotConvert
-            def methodNotConvert() {
-                println 'No!'
-            }
+def result = new Result()
+def gQuery = new GQueryImpl()
+gQuery.onReady {
+    gQuery.doRemoteCall('${JSON_ADRESS}', 'GET', null, { res -&gt;
+        gQuery('.result').html('OK')
+        result = res
+    }, {
+        result = 'FAIL!'
+    }, Result)
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_observable">Observable</h3>
+<div class="paragraph">
+<p>I think reactive programming is very interesting, and I have added a little implementation of Observable in grooscript.
+Take a look at this <a href="https://github.com/chiquitinxx/grooscript/blob/master/src/test/groovy/org/grooscript/rx/ObservableSpec.groovy">tests</a>
+to see what can you do. Just subscribe to events, map and filter. There are two functions in gQuery that returns observable.</p>
+</div>
+<div class="paragraph">
+<p>This is just an introduction, if you&#8217;re curious about reactive programming google it!</p>
+</div>
+<div class="paragraph">
+<p>Little example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import org.grooscript.jquery.GQueryImpl
 
-            def hello() {
-                println 'Hello!'
-            }
-        }
-        </pre>
-        <p><h4>GQuery</h4> You can annotate your classes with @GQuery, to add gQuery property to your class.</p>
-        <pre class='brush:groovy;'>
-        import org.grooscript.asts.GQuery
+def clicks = [number: 0]
+def gQuery = new GQueryImpl()
+gQuery.onReady {
+    println 'Ready!'
+    def observable = gQuery.observeEvent('p','click', clicks)
+    observable.map { event -&gt; 2 }.
+      subscribe { num -&gt; clicks.number = clicks.number + num }
+    observable.map { event -&gt; 5 }.
+      subscribe { num -&gt; clicks.number = clicks.number + num }
+    $('p').click()
+}
+// clicks.number == 7</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_tricks">Tricks</h2>
+<div class="sectionbody">
+<div class="literalblock">
+<div class="content">
+<pre>TODO</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_tools">Tools</h2>
+<div class="sectionbody">
+<div class="literalblock">
+<div class="content">
+<pre>TODO</pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_gradle_plugin">Gradle plugin</h3>
+<div class="literalblock">
+<div class="content">
+<pre>TODO</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_grails_plugin">Grails plugin</h3>
+<div class="literalblock">
+<div class="content">
+<pre>TODO</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_npm_package">Npm package</h3>
+<div class="literalblock">
+<div class="content">
+<pre>TODO</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_guides">Guides</h2>
+<div class="sectionbody">
+<div class="literalblock">
+<div class="content">
+<pre>TODO</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_acknowledgements">Acknowledgements</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Thank you for this amazing experience, a lot of fun, I learned a lot. With all the groovy community, groovy and
+grails developers and all people interested in the project, this journey has been an incredible experience.
+Is hard put names of people that helped me this years, sure I forget someone.</p>
+</div>
+<div class="paragraph">
+<p>Special thanks to <strong>@glaforge</strong>, <strong>@marioggar</strong> and <strong>René</strong>, they
+spent time at the beginning of this project. Also thanks to @burtbeckwith, @graemerocher for grails help, only
+good things to say about all groovy and grails teams.</p>
+</div>
+<div class="paragraph">
+<p>Thank you <a href="http://greachconf.com/">Greach</a> and <a href="http://gr8conf.eu/">Gr8Conf</a> teams for let me talk about grooscript in gr8 conferences.
+All that people that sent me emails, commented me something, asked me about the project. Don&#8217;t stop it, I love your feedback.</p>
+</div>
+<div class="paragraph">
+<p>Thank you @jetbrains for a IntelliJ IDEA open source license, the best groovy IDE.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="https://www.jetbrains.com/idea/docs/logo_intellij_idea.png" alt="Jetbrains">
+</div>
+</div>
+<div class="paragraph">
+<p>Finally thanks to last contributors in github, first pull request by <strong>yellowsnow</strong> and nice suggestions from <strong>pioneer</strong>,
+we have nice stuff to do after 1.0 release.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2015-01-02 01:42:28 CET
+</div>
+</div>
+<script>
+    //Google Analytics info
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-37511810-1']);
+    _gaq.push(['_trackPageview']);
 
-        @GQuery
-        class MyPresenter {
-        }
-
-        new MyPresenter().gQuery.html('body', '<h1>Hello World!</h1>')
-        </pre>
-        <p><h4>Conversion options</h4></p>
-        <ul>
-            <li><b>classPath</b> (default null): set classPath for conversions. Grooscript compiles your code before convert it. Maybe some times you want to define your own classpath as src/groovy. Then class needed for compilation can be found. You can pass a String or a List.</li>
-            <li><b>customization</b> (default null): customizer builder closure. <a href="http://docs.codehaus.org/display/GROOVY/Advanced+compiler+configuration">More info</a></li>
-            <li><b>mainContextScope</b> (default null): add name of function or variables that are availables in main scope. Then, grooscript will not try get them from incorrect scope.</li>
-            <li><b>initialText</b> (default null): add any text at begin of each converted js file.</li>
-            <li><b>finalText</b> (default null): add any text at the end of each converted js file.</li>
-            <li><b>recursive</b> (default false): if set to true, folder will be converted also.</li>
-            <li><b>includeJsLib</b> (default null): To include a js lib from the jar at the begin of converted result. ('grooscript', 'grooscript-all', ...)</li>
-        </ul>
-        <pre class='brush:groovy;'>
-            //Set a conversion property
-            GrooScript.setConversionProperty('recursive', true)
-            GrooScript.setConversionProperty('customization', {
-                ast(CompileStatic)
-            })
-        </pre>
-        <p><h4>Javascript Options</h4></p>
-        <ul>
-            <li>In javascript code you can set gSconsoleOutput to false and then you will not see println's in browser console.</li>
-            <li>Set gSconsoleInfo to true and then you see debug info in your browser console.</li>
-            <li>By default, in grooscript.js gSconsoleOutput is true and gSconsoleInfo is false.</li>
-        </ul>
-        <pre class='brush:javascript;'>
-            gSconsoleOutput = false;
-            gSconsoleInfo = true;
-        </pre>
-        <p><h4>Conversion Options</h4></p>
-        <ul>
-            <li>You can get some info in console when converting.</li>
-        </ul>
-        <pre class='brush:groovy;'>
-            GrooScript.debug = true
-        </pre>
-        <p><h4>Join files</h4></p>
-        <p>You can join all js files in a directory in one file.</p>
-        <pre class='brush:groovy;'>
-            GrooScript.joinFiles(SOURCE_DIR, DESTINATION_FILE)
-        </pre>
-        <p><h4>Join list of files</h4></p>
-        <p>You can join any number of js files to a destination file. With this function you control order of the result file.</p>
-        <pre class='brush:groovy;'>
-            GrooScript.joinListOfFiles(SOURCE_FILE1, SOURCE_FILE2, ...., DESTINATION_FILE)
-        </pre>
-    </div>
-    <div class="tab-pane fade" id="support">
-    <p>Working in groovy magic in the browser, not a full Groovy / Java conversion.</p>
-    <p>If you are missing some Groovy magic, don't hesitate contact me.</p>
-    <table style="width: 240px" class="table">
-        <thead>
-        <tr>
-            <th>Color</th>
-            <th>Description</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td class="badSupport"></td>
-            <td>Bad support.</td>
-        </tr>
-        <tr>
-            <td class="littleSupport"></td>
-            <td>Little support.</td>
-        </tr>
-        <tr>
-            <td class="goodSupport"></td>
-            <td>Good support.</td>
-        </tr>
-        </tbody>
-    </table>
-
-    <table class="table">
-    <thead>
-    <tr>
-        <th>Group</th>
-        <th>Feature</th>
-        <th>State</th>
-        <th>Comment</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>Java</td>
-        <td>Interfaces</td>
-        <td class="goodSupport"></td>
-        <td>Are ignored in conversion, not needed in javascript code.</td>
-    </tr>
-    <tr>
-        <td>Java</td>
-        <td>Types</td>
-        <td class="badSupport"></td>
-        <td>Support only in some basic java types as String, ArrayList, HashMap, Date, ...</td>
-    </tr>
-    <tr>
-        <td>Java</td>
-        <td>Objects</td>
-        <td class="littleSupport"></td>
-        <td>Can't define two functions with same name. Constructors can't have same number of parameters. Support class names and instanceOf.</td>
-    </tr>
-    <tr>
-        <td>Java</td>
-        <td>Inheritance</td>
-        <td class="littleSupport"></td>
-        <td>Can only extend your own classes. Can call super only in constructors. Overloading functions of parents.</td>
-    </tr>
-    <tr>
-        <td>Java</td>
-        <td>Packages</td>
-        <td class="badSupport"></td>
-        <td>Ignoring package names. Only can read packages in names of your own classes with a conversion option. Used for little instanceof support.</td>
-    </tr>
-    <tr>
-        <td>Java</td>
-        <td>Try/Catch</td>
-        <td class="littleSupport"></td>
-        <td>Little support, as javascript does.</td>
-    </tr>
-    <tr>
-        <td>Objects</td>
-        <td>Compare</td>
-        <td class="littleSupport"></td>
-        <td>Function equals used in some cases. Is function available.</td>
-    </tr>
-    <tr>
-        <td>Objects</td>
-        <td>Size</td>
-        <td class="goodSupport"></td>
-        <td>size() function created in some objects.</td>
-    </tr>
-    <tr>
-        <td>Objects</td>
-        <td>GString access</td>
-        <td class="goodSupport"></td>
-        <td>Can access properties and methods with Gstrings.</td>
-    </tr>
-    <tr>
-        <td>Objects</td>
-        <td>Default constructor</td>
-        <td class="goodSupport"></td>
-        <td>Objects, without a 1 parameter constructor, have a default constructor with a groovy map or javascript object parameter.</td>
-    </tr>
-    <tr>
-        <td>Objects</td>
-        <td>* operator</td>
-        <td class="goodSupport"></td>
-        <td>Available.</td>
-    </tr>
-    <tr>
-        <td>Strings</td>
-        <td>GStrings</td>
-        <td class="goodSupport"></td>
-        <td>Supporting ''', """, "$ { }" and some functions.</td>
-    </tr>
-    <tr>
-        <td>Regular Expressions</td>
-        <td></td>
-        <td class="goodSupport"></td>
-        <td>Support of common functions and operators.</td>
-    </tr>
-    <tr>
-        <td>Collections</td>
-        <td>Groovy Lists</td>
-        <td class="goodSupport"></td>
-        <td>Supporting lot of groovy list functions, added to javascript Array prototype.</td>
-    </tr>
-    <tr>
-        <td>Collections</td>
-        <td>Groovy Ranges</td>
-        <td class="goodSupport"></td>
-        <td>Converted to lists. &lt supported. Not negative numbers.</td>
-    </tr>
-    <tr>
-        <td>Collections</td>
-        <td>Groovy Maps</td>
-        <td class="goodSupport"></td>
-        <td>Supporting lot of map functions.</td>
-    </tr>
-    <tr>
-        <td>Keywords</td>
-        <td>assert</td>
-        <td class="goodSupport"></td>
-        <td>Using 2 parameters version in conversions.</td>
-    </tr>
-    <tr>
-        <td>Keywords</td>
-        <td>use</td>
-        <td class="goodSupport"></td>
-        <td>With categories.</td>
-    </tr>
-    <tr>
-        <td>Groovy</td>
-        <td>Truth</td>
-        <td class="goodSupport"></td>
-        <td>Empty objects as lists return false.</td>
-    </tr>
-    <tr>
-        <td>Groovy</td>
-        <td>Numbers as objects</td>
-        <td class="littleSupport"></td>
-        <td>Support times, upTo and step.</td>
-    </tr>
-    <tr>
-        <td>Groovy</td>
-        <td>Optional parameters</td>
-        <td class="goodSupport"></td>
-        <td>Support optional parameters in functions.</td>
-    </tr>
-    <tr>
-        <td>Groovy</td>
-        <td>Expando</td>
-        <td class="goodSupport"></td>
-        <td>Yes. JavaScript object is similar to Expando object.</td>
-    </tr>
-    <tr>
-        <td>Groovy</td>
-        <td>Pointer methods</td>
-        <td class="goodSupport"></td>
-        <td>Yes.</td>
-    </tr>
-    <tr>
-        <td>Groovy</td>
-        <td>Multiple assignment</td>
-        <td class="goodSupport"></td>
-        <td>Yes.</td>
-    </tr>
-    <tr>
-        <td>Groovy</td>
-        <td>Categories</td>
-        <td class="goodSupport"></td>
-        <td>Yes.</td>
-    </tr>
-    <tr>
-        <td>Groovy</td>
-        <td>Mixing</td>
-        <td class="goodSupport"></td>
-        <td>Yes.</td>
-    </tr>
-    <tr>
-        <td>Groovy</td>
-        <td>Control Structures</td>
-        <td class="littleSupport"></td>
-        <td>Basic support, can't assign variables inside 'switch' statement. Haven't tried 'break', 'continue', all 'for' options.</td>
-    </tr>
-    <tr>
-        <td>Closures</td>
-        <td>Basic</td>
-        <td class="goodSupport"></td>
-        <td>Yes, cool :)</td>
-    </tr>
-    <tr>
-        <td>Closures</td>
-        <td>Object Methods</td>
-        <td class="littleSupport"></td>
-        <td>Support call, curry, rcurry, ncurry, leftShift.</td>
-    </tr>
-    <tr>
-        <td>Closures</td>
-        <td>Extras</td>
-        <td class="littleSupport"></td>
-        <td>Support set delegate in closures.</td>
-    </tr>
-    <tr>
-        <td>Operators</td>
-        <td>Basic</td>
-        <td class="littleSupport"></td>
-        <td>Support ?:, basic java operators + - * /. You can create plus, minus and multiply functions and will be used.</td>
-    </tr>
-    <tr>
-        <td>Operators</td>
-        <td>Special</td>
-        <td class="littleSupport"></td>
-        <td>Support &lt&lt on lists and maps, can override leftShift method. Support &lt=&gt.</td>
-    </tr>
-    <tr>
-        <td>GroovyBeans</td>
-        <td>Basic</td>
-        <td class="goodSupport"></td>
-        <td>Support getter and setters as groovy does.</td>
-    </tr>
-    <tr>
-        <td>GroovyBeans</td>
-        <td>Advanced</td>
-        <td class="goodSupport"></td>
-        <td>Supporting getProperty, setProperty, methodMissing, propertyMissing. Added invokeMethod but don't intercept calls.</td>
-    </tr>
-    <tr>
-        <td>MOP</td>
-        <td>Basic</td>
-        <td class="goodSupport"></td>
-        <td>Can add/modify properties and methods in execution time. Some problems with primitive types as Integer or String.
-            Can use getProperties() and getMethods() to get names. Can add properties/methods to classes.</td>
-    </tr>
-    <tr>
-        <td>MOP</td>
-        <td>Advanced</td>
-        <td class="badSupport"></td>
-        <td>Just working on dynamic features needed, never a full groovy metaclass, metainfo, ... support. Same for Java class.</td>
-    </tr>
-    <tr>
-        <td>AST</td>
-        <td></td>
-        <td class="littleSupport"></td>
-        <td>Support to @Mixin, @Category and @Delegate. Annotations in semantic phase, will be converted, is same phase that grooscript use.</td>
-    </tr>
-    <tr>
-        <td>Traits</td>
-        <td></td>
-        <td class="goodSupport"></td>
-        <td>In compile and runtime. Don't support SAM coercion, super</td>
-    </tr>
-    </tbody>
-    </table>
-    </div>
-    </div>
-    </div>
-
-    </div>
-    </div>
-
-
-      <p class="text-center">@Grooscript 2014</p>
-
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-
-      <script>
-          $('#socialIcons a').hover(function(e) {
-              $(e.target).tooltip('show');
-          }, function(e) {
-              $(e.target).tooltip('hide');
-          });
-      </script>
-  </body>
-
-    <script>
-        //Google Analytics info
-        var _gaq = _gaq || [];
-        _gaq.push(['_setAccount', 'UA-37511810-1']);
-        _gaq.push(['_trackPageview']);
-
-        (function() {
-            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-        })();
-    </script></html>
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+</script>
+</body>
+</html>

@@ -2,13 +2,21 @@
 :author: Jorge Franco
 :source-highlighter: pygments
 
+=== What's new in 1.0.0-rc-1
+
+* Improve traits and static support
+* Remove @GQuery ast
+* Improve @GsNative
+* Upgrades in libs and plugins in gradle build
+* Improve try / catch / finally support
+* A lot fixes
+
 === What's new in 0.6.3
 
 * Rename conversion option INCLUDE_JS_LIB to ADD_GS_LIB
 * Changes in daemon, now can use a daemon that detect file changes
 * Added a little observable class, to play Reactive! https://github.com/chiquitinxx/grooscript/blob/master/src/test/groovy/org/grooscript/rx/ObservableSpec.groovy[Tests]. Added in grooscript-tools.js.
 * Gradle plugins upgrades, also groovy upgrade to 2.3.8
-* Fixes
 
 === What's new in 0.6.2
 
