@@ -424,20 +424,26 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
+<li><a href="#_about">About</a></li>
 <li><a href="#_introduction">Introduction</a></li>
+<li><a href="#_requirements">Requirements</a></li>
 <li><a href="#_getting_started">Getting started</a></li>
 <li><a href="#_conversion">Conversion</a>
 <ul class="sectlevel2">
 <li><a href="#_options">Options</a></li>
 <li><a href="#_general_support">General support</a></li>
 <li><a href="#_java_support">Java support</a></li>
-<li><a href="#_groovy_support_jorge">Groovy support [Jorge]</a></li>
+<li><a href="#_groovy_support">Groovy support</a></li>
 </ul>
 </li>
-<li><a href="#_converted_code">Converted code</a></li>
+<li><a href="#_converted_code">Converted code</a>
+<ul class="sectlevel2">
+<li><a href="#_combine_both_worlds">Combine both worlds</a></li>
+</ul>
+</li>
 <li><a href="#_phantomjs_tests">PhantomJs tests</a>
 <ul class="sectlevel2">
-<li><a href="#_requirements">Requirements</a></li>
+<li><a href="#_requirements_2">Requirements</a></li>
 <li><a href="#_script">Script</a></li>
 <li><a href="#_details">Details</a></li>
 <li><a href="#_groovytestcase">GroovyTestCase</a></li>
@@ -458,7 +464,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_observable">Observable</a></li>
 </ul>
 </li>
-<li><a href="#_tricks">Tricks</a></li>
+<li><a href="#_tips">Tips</a></li>
 <li><a href="#_tools">Tools</a>
 <ul class="sectlevel2">
 <li><a href="#_gradle_plugin">Gradle plugin</a></li>
@@ -466,7 +472,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_npm_package">Npm package</a></li>
 </ul>
 </li>
-<li><a href="#_guides">Guides</a></li>
+<li><a href="#_more_links">More links</a></li>
 <li><a href="#_acknowledgements">Acknowledgements</a></li>
 </ul>
 </div>
@@ -477,6 +483,21 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="paragraph">
 <p><strong>Groovy to javascript transpiler</strong></p>
 </div>
+<div class="imageblock" style="float: right">
+<div class="content">
+<img src="img/logo.png" alt="image" width="150" height="150">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_about">About</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This is an open source project, with <a href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache 2</a> license. Is part
+of awesome <a href="http://groovy.codehaus.org/">Groovy</a> ecosystem. If you want to contribute, help or support the project,
+you&#8217;re welcome, can contact in <a href="http://github.com/chiquitinxx/grooscript">Github</a> or via email.</p>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -484,8 +505,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sectionbody">
 <div class="paragraph">
 <p>Be aware javascript isn&#8217;t Java or Groovy, lot of differences between them. The main idea of this project is use
-Groovy strengths in the browser, not create a full conversion. I&#8217;m looking for use groovy code in the server and the client,
-work in a single environment, use groovy and java tools and IDE&#8217;s.</p>
+Groovy strengths in the browser. I&#8217;m looking for use groovy and java code in both sides
+(server and client), work in a single environment, use groovy and java tools and IDE&#8217;s.</p>
 </div>
 <div class="paragraph">
 <p>Grooscript is a library that converts your groovy code to javascript. I&#8217;ve tried that converted code doesn&#8217;t contains
@@ -498,13 +519,10 @@ or <code><strong>grooscript.min.js</strong></code> to run in a javascript enviro
 <div class="ulist">
 <ul>
 <li>
-<p>Create awesome groovy or java code.</p>
+<p>Create awesome groovy or java code while test it with <a href="https://code.google.com/p/spock/">Spock</a> :)</p>
 </li>
 <li>
-<p>Test it with <a href="https://code.google.com/p/spock/">Spock</a> :)</p>
-</li>
-<li>
-<p>Converts code to javascript.</p>
+<p>Convert code to javascript.</p>
 </li>
 <li>
 <p>Add that converted files to your html or js project.</p>
@@ -522,6 +540,28 @@ plugin, a <a href="https://github.com/chiquitinxx/grails-grooscript">grails</a> 
 </div>
 </div>
 <div class="sect1">
+<h2 id="_requirements">Requirements</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Grooscript will compile your piece of groovy code, so you need Groovy, at least version 2. If you use Groovy
+2.0, you can&#8217;t convert traits, introduced in Groovy 2.3. So, add grooscript in your project dependencies and that&#8217;s all.
+By default grooscript depends from Groovy 2.4, but you can use the groovy version of your project excluding
+groovy dependencies:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'org.grooscript:grooscript:1.0.0-rc-2', {
+    exclude module: "groovy"
+    exclude module: "groovy-json"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The javascript generated code is ECMAScript 5 compatible. So will run at any browser or node.js.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_getting_started">Getting started</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -529,7 +569,7 @@ plugin, a <a href="https://github.com/chiquitinxx/grails-grooscript">grails</a> 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@Grab('org.grooscript:grooscript:1.0.0-rc-1')
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@Grab('org.grooscript:grooscript:1.0.0-rc-2')
 
 import org.grooscript.GrooScript
 
@@ -541,8 +581,8 @@ println result</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>If you want to make conversions in your groovy / java project, you need <a href="jars/grooscript-1.0.0-rc-1.jar">grooscript.jar</a>.
-You can get from mavenCentral or bintray <code>org.grooscript:grooscript:1.0.0-rc-1</code> in your project&#8217;s dependencies. Also need <code>grooscript.js</code>,
+<p>If you want to make conversions in your groovy / java project, you need <a href="jars/grooscript-1.0.0-rc-2.jar">grooscript.jar</a>.
+You can get from mavenCentral or bintray <code>org.grooscript:grooscript:1.0.0-rc-2</code> in your project&#8217;s dependencies. Also need <code>grooscript.js</code>,
 inside the jar or download from <a href="downloads.html">here</a> to run the converted code in your javascript environment.</p>
 </div>
 <div class="paragraph">
@@ -923,7 +963,7 @@ compilation of the conversion will fail, as groovy fails.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_groovy_support_jorge">Groovy support [Jorge]</h3>
+<h3 id="_groovy_support">Groovy support</h3>
 <div class="paragraph">
 <p>In general groovy features are supported, except advanced metaprogramming techniques and AST&#8217;s applied in phases
 after semantic analysis. <code>as</code> is supported only at specific situations. Let&#8217;s see examples of some conversions.</p>
@@ -1107,7 +1147,8 @@ assert matcher.size() == 2</code></pre>
 <div class="sect3">
 <h4 id="_lists_ranges_maps_ans_sets">Lists, ranges, maps ans sets</h4>
 <div class="paragraph">
-<p>A lot of lists and map functions are implemented, so the support is very good.</p>
+<p>A lot of lists and map functions are implemented, so the support is very good. The <code>*</code> operator to get lists is
+available too.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1190,65 +1231,155 @@ assert !new Account(name: 'old', disabled: true)</code></pre>
 <div class="sect3">
 <h4 id="_expando_class">Expando class</h4>
 <div class="paragraph">
-<p>JavaScript object is similar to Expando object</p>
+<p>JavaScript object is similar to Expando object, and is supported</p>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>TODO</pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">clever = new Expando()
+
+clever.name = 'Groovy'
+clever."$clever.name" = { 'YES'}
+
+assert clever.Groovy() == 'YES'
+clever."name" = 'Groovy 2.0'
+assert clever.name ==  'Groovy 2.0'
+
+def anotherExpando = new Expando(one:1,two:2)
+
+assert anotherExpando.one == 1
+assert anotherExpando.two == 2</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_numbers">Numbers</h4>
 <div class="paragraph">
-<p>Numbers types are ignored, in conversion we are working with javascript numbers.</p>
+<p>Numbers types are ignored, in conversion we are working with javascript numbers. Math library is compatible with
+javascript, and you can use it.</p>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>TODO</pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">assert 0.1 + 0.2 == 0.3
+assert 1.1 + 0.2 == 1.3
+assert 0.1G + 0.2G == 0.3G
+assert 4 * 5 + 45 % 4 == 21
+
+assert 5 / 2 == 2.5
+assert 5 % 2 == 1
+assert 4 ** 3 == 64
+assert -(-5) == 5
+assert +(-5) == -5
+assert Math.PI &gt; 3.14159
+assert Math.PI &lt; 3.1416</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_categories_and_mixing">Categories and Mixing</h4>
+<h4 id="_categories_and_mixins">Categories and Mixins</h4>
 <div class="paragraph">
-<p>Categories are suported with annotation and with the ´use´ keyword. Mixins also supported but we moved to
-better support traits.</p>
+<p>Categories are suported with annotation and with the ´use´ keyword. Support on categories and mixins is not
+very great, you can expect good support in categories, but not in mixins cause deprecated.</p>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>TODO</pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">final class Distance {
+    def number
+    String toString() { "${number}m" }
+}
+
+class NumberCategory {
+    static Distance getMeters(Number self) {
+        new Distance(number: self)
+    }
+}
+
+use(NumberCategory) {
+    def dist = 300.meters
+
+    assert dist instanceof Distance
+    assert dist.toString() == "300m"
+}</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_switch">Switch</h4>
 <div class="paragraph">
-<p>Has basic support, can&#8217;t assign variables inside.
-    TODO</p>
+<p>Groovy features are not supported, can&#8217;t assign variables inside, not comparing with lists, sets, classes,
+regular expressions, &#8230;&#8203; Just a basic switch.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def res
+
+switch ([true,false]) {
+    case {it[0]}: res = 0; break
+    case {it[1]}: res = 1; break
+    default : res = 2
+}
+
+assert res == 0</code></pre>
+</div>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_closures">Closures</h4>
 <div class="paragraph">
 <p>Closures are converted to javascript functions. call, curry, rcurry, ncurry, leftShift are supported. If you
-set delegate of a closure, it will be used.</p>
+set delegate of a closure, it will be used. Also support closures as last argument in methods, and closure
+composition.</p>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>TODO</pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def plus2 = { it + 2}
+def times3 = { it * 3}
+
+def times3plus2 = plus2 &lt;&lt; times3
+assert times3plus2(3) == 11
+assert times3plus2(4) == plus2(times3(4))
+
+def plus2times3 = times3 &lt;&lt; plus2
+assert plus2times3(3) == 15
+assert plus2times3(5) == times3(plus2(5))
+
+assert times3plus2(3) == (times3 &gt;&gt; plus2)(3)
+//
+void unless(boolean b, Closure c) {
+    if (!b) c()
+}
+
+def (speed, limit) = [80, 90]
+def tooFast = false
+
+unless (speed &gt; limit) {
+    tooFast = true
+}
+
+assert tooFast</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_groovybeans">GroovyBeans</h4>
 <div class="paragraph">
-<p>Support getter and setters as groovy does. Supporting getProperty, setProperty, methodMissing, propertyMissing.
-Added invokeMethod but don&#8217;t intercept calls.</p>
+<p>Support getter and setters as groovy does, named parameters in the default constructor</p>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>TODO</pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class MyBean {
+    def a
+    def b
+
+    def getA() { 5 }
+
+    def getC() { 6 }
+}
+
+def myBean = new MyBean(a: 3, b: 4)
+assert myBean.a == 5
+assert myBean.@a == 3
+assert myBean.b == 4
+assert myBean.c == 6</code></pre>
 </div>
 </div>
 </div>
@@ -1257,24 +1388,42 @@ Added invokeMethod but don&#8217;t intercept calls.</p>
 <div class="paragraph">
 <p>Can add/modify properties and methods in execution time. Some problems with primitive types as Integer or String.
 Can use getProperties() and getMethods() to get names. Can add properties/methods to classes.
+Supporting getProperty, setProperty, methodMissing, propertyMissing.
+Added invokeMethod but doesn&#8217;t intercept calls.
 Just working on dynamic features needed, never a full groovy metaClass, metaInfo, &#8230;&#8203; support.</p>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>TODO</pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Magic {
+    def data = [:]
+    void setProperty(String name, value) {
+        data[name] = value
+    }
+    def getProperty(name) {
+        data[name]
+    }
+}
+Magic.metaClass.getAllData = { -&gt;
+    data
+}
+
+def magic = new Magic()
+magic.a = 5
+magic.allData == [a: 5]
+
+magic.metaClass.methodMissing = { String name, args -&gt;
+    name
+}
+
+assert magic.Groovy() == 'Groovy'</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_ast_s">AST&#8217;s</h4>
 <div class="paragraph">
-<p>Support to @Mixin, @Category and @Delegate. Annotations in semantic phase, will be applied and converted, is same phase
-that grooscript use.</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>TODO</pre>
-</div>
+<p>Support to @Mixin, @Category and @Delegate. Annotations in semantic phase, will be applied and converted, is phase
+where grooscript converts compiled code.</p>
 </div>
 </div>
 <div class="sect3">
@@ -1282,9 +1431,22 @@ that grooscript use.</p>
 <div class="paragraph">
 <p>Good support, in compile and runtime. Don&#8217;t support SAM coercion and super.</p>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>TODO</pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">interface Named {
+    String name()
+}
+trait Greetable implements Named {
+    String greeting() { "Hello, ${name()}!" }
+}
+class Person implements Greetable {
+    String name() { 'Bob' }
+}
+
+def p = new Person()
+assert p.greeting() == 'Hello, Bob!'
+assert p instanceof Named
+assert p instanceof Greetable</code></pre>
 </div>
 </div>
 </div>
@@ -1305,6 +1467,72 @@ code you need <code>grooscript.js</code> or <code>grooscript.min.js</code> loade
 &lt;script type="text/javascript" src="js/yourConvertedFile.js"&gt;&lt;/script&gt;</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>Now, your groovy code is available. If you have converted a groovy script, in javascript the code will run. If
+the code that you converted has dependencies from other files, you have to be sure that files are also converted
+and are loaded. You have to convert any parent class, trait, category,&#8230;&#8203; but you don&#8217;t have to convert interfaces,
+they are not used. For next versions of grooscript, we are working to use <a href="http://requirejs.org/">Require.js</a> for package
+management.</p>
+</div>
+<div class="paragraph">
+<p>If you convert a class and you want to use it in javascript, you are working with the 'static' form of the class.
+To create instances of the class <strong>don&#8217;t</strong> use new, just call the function, for example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-javascript" data-lang="javascript">//To create a class instance
+var instance = MyClass();
+
+//Using default constructor
+var otherInstance = MyClass({ data: 1, name: 'name'});
+
+//Call a method or access a property as usual
+instance.method();
+instance.methodTwo(otherInstance.name);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When you are using converted code in javascript, you don&#8217;t have 'dynamic' magic, as getters, setters, methodMissing,
+getProperty,&#8230;&#8203; The resolution of method calling, access properties, context stuff,&#8230;&#8203; is done by functions in
+<code>grooscript.js</code> lib. Just take a look at converted code, there are functions as <code>gs.mc</code> or <code>gs.gp</code> that do that work.
+So if you are planning to use groovy magic, do in groovy and convert it, in javascript you can&#8217;t do.</p>
+</div>
+<div class="sect2">
+<h3 id="_combine_both_worlds">Combine both worlds</h3>
+<div class="paragraph">
+<p>When you are creating groovy code, that will be converted to javascript and will use javascript libraries, maybe
+you have to use any conversion between variables. For example, if you have a groovy map, or object, and you calling
+a javascript library with a method that accepts a javascript map with the groovy object, that groovy object has more
+things (methods, properties) that javascript expects. You don&#8217;t have to use that conversion if you work with strings,
+numbers and usually arrays. You have two static function to do that conversions, that functions do nothing in groovy,
+but in javascript will convert objects. Let&#8217;s see an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import static org.grooscript.GrooScript.toJavascript
+import static org.grooscript.GrooScript.toGroovy
+
+def map = [x: 1, y: 2]
+
+//point is a javascript object that has a method init, that accepts an object
+point.init(map) // [BAD] You are passing a groovy object to javascript, maybe can fail
+point.init(toJavascript(map)) // [GOOD] You now are passing {x: 1, y: 2}
+
+//point has a method info() that returns a javascript object with some data
+def badData = point.info() // [BAD] You will have a 'javascript' object, and if you try use 'each', exception
+def goodData = toGroovy(point.info()) // [GOOD] goodData will be a 'groovy' object</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In javascript, you have similar functions to do this conversions:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-javascript" data-lang="javascript">point.init(gs.toJavascript(map));
+var goodData = gs.toGroovy(point.info());</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -1317,7 +1545,7 @@ comes with an executable to run a test in a .js file. With <a href="http://groos
 PhantomJS test to <strong>evaluate groovy code</strong>.</p>
 </div>
 <div class="sect2">
-<h3 id="_requirements">Requirements</h3>
+<h3 id="_requirements_2">Requirements</h3>
 <div class="paragraph">
 <p>To run your <a href="http://phantomjs.org/download.html">PhantomJS</a> tests from Groovy, you need both installed.
 Create an environment variable in your computer &gt; export PHANTOMJS_HOME=/path/to/phantomjs, this isn&#8217;t
@@ -1332,7 +1560,7 @@ mandatory step, but with this variable you don&#8217;t have to define that syste
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@GrabConfig(systemClassLoader=true)
-@Grab('org.grooscript:grooscript:1.0.0-rc-1') <i class="conum" data-value="1"></i><b>(1)</b>
+@Grab('org.grooscript:grooscript:1.0.0-rc-2') <i class="conum" data-value="1"></i><b>(1)</b>
 
 import org.grooscript.asts.PhantomJsTest
 
@@ -1807,56 +2035,90 @@ gQuery.onReady {
 </div>
 </div>
 <div class="sect1">
-<h2 id="_tricks">Tricks</h2>
+<h2 id="_tips">Tips</h2>
 <div class="sectionbody">
-<div class="literalblock">
-<div class="content">
-<pre>TODO</pre>
-</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Keep your groovy code tested, sometimes your converted code doesn&#8217;t work because groovy code fails.</p>
+</li>
+<li>
+<p>Don&#8217;t use grooscript to create a big project, just introduce it in your projects.</p>
+</li>
+<li>
+<p>If you use @GsNative, keep that code in isolated classes, that can be easy to mock them.</p>
+</li>
+<li>
+<p>Grooscript doesn&#8217;t support all groovy and java, use <a href="conversions.html">online</a> convert before use it, to check support.</p>
+</li>
+<li>
+<p>You can activate <code>debug</code> console info in javascript with <code>gs.consoleInfo = true;</code>.</p>
+</li>
+</ul>
 </div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="_tools">Tools</h2>
 <div class="sectionbody">
-<div class="literalblock">
-<div class="content">
-<pre>TODO</pre>
-</div>
+<div class="paragraph">
+<p>Grooscript itself is just a Java library. We have created some tools to improve the experience using it, in your
+<a href="http://gradle.org/">Gradle</a> projects, using it in <a href="http://grails.org/">Grails</a> and with your <a href="http://nodejs.org/">Node.js</a> projects.</p>
 </div>
 <div class="sect2">
 <h3 id="_gradle_plugin">Gradle plugin</h3>
-<div class="literalblock">
-<div class="content">
-<pre>TODO</pre>
-</div>
+<div class="paragraph">
+<p>We are working to make good integration with gradle. See the getting started <a href="starting_gradle.html">guide</a> to start
+working with grooscript. Later you will discover more advanced features, as convert groovy templates or tell your
+server that some files have changed. Source on <a href="https://github.com/chiquitinxx/grooscript-gradle-plugin">github</a>. See in
+gradle plugin <a href="http://plugins.gradle.org/plugin/org.grooscript.conversion">repository</a>.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_grails_plugin">Grails plugin</h3>
-<div class="literalblock">
-<div class="content">
-<pre>TODO</pre>
-</div>
+<div class="paragraph">
+<p>There is an available <a href="http://grails.org/plugin/grooscript">plugin</a> for grails 2.4 with nice features, like use your domain
+classes in the client, websocket support or put groovy code in your gsp&#8217;s that will be run in javascript. Take a look
+at the <a href="grails-plugin/index.html">documentation</a> for more info. Github <a href="https://github.com/chiquitinxx/grails-grooscript">source code</a>.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_npm_package">Npm package</h3>
-<div class="literalblock">
-<div class="content">
-<pre>TODO</pre>
+<div class="paragraph">
+<p>If you have a Node.js project, and you want to use some converted code, you can use grooscript npm
+<a href="https://www.npmjs.com/package/grooscript">package</a>, that will include <code>grooscript.js</code>, then your converted code will run.</p>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-javascript" data-lang="javascript">var gs = require('grooscript');
+
+eval(fs.readFileSync('aConvertedFile.js')+'');</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Little <a href="nodejs_example.html">guide</a></p>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_guides">Guides</h2>
+<h2 id="_more_links">More links</h2>
 <div class="sectionbody">
-<div class="literalblock">
-<div class="content">
-<pre>TODO</pre>
-</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Cool <a href="https://github.com/chiquitinxx/grooscript-demos">demos</a></p>
+</li>
+<li>
+<p>Chat <a href="chat_example.html">example</a></p>
+</li>
+<li>
+<p>Ratpack <a href="ratpack-demo.html">demo</a></p>
+</li>
+<li>
+<p>React <a href="react_example.html">example</a></p>
+</li>
+</ul>
 </div>
 </div>
 </div>
@@ -1886,15 +2148,15 @@ All that people that sent me emails, commented me something, asked me about the 
 </div>
 </div>
 <div class="paragraph">
-<p>Finally thanks to last contributors in github, first pull request by <strong>yellowsnow</strong> and nice suggestions from <strong>pioneer</strong>,
-we have nice stuff to do after 1.0 release.</p>
+<p>Finally thanks to last contributors in github, first pull request by <strong>yellowsnow</strong>, nice suggestions from <strong>pioneer</strong>, <strong>abelsromero</strong>
+improving build and <strong>alnavart</strong> giving feedback. We have nice stuff to do after 1.0 release.</p>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-01-02 01:42:28 CET
+Last updated 2015-01-17 15:37:12 CET
 </div>
 </div>
 <script>
