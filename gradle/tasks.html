@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.2">
 <meta name="author" content="Jorge Franco">
-<title>Getting started with grooscript and gradle</title>
+<title>Gradle plugin tasks</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -416,7 +416,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article">
 <div id="header">
-<h1>Getting started with <a href="index.html">grooscript</a> and gradle</h1>
+<h1>Gradle plugin tasks</h1>
 <div class="details">
 <span id="author" class="author">Jorge Franco</span><br>
 <span id="email" class="email"><a href="mailto:grooscript@gmail.com">grooscript@gmail.com</a></span><br>
@@ -426,339 +426,245 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>With grooscript, you can convert your groovy code to javascript. We will use <a href="http://www.gradle.org">gradle</a> to
-create a static web project, with html file and some .js files. Application logic done in groovy, and run in the
-browser because groovy code is converted to javascript.</p>
+<p>This plugin convert groovy files to javascript, convert groovy templates to a .js file, generate a little web
+static project to start with grooscript, and listen for changes in
+files. To do this tasks, uses <a href="http://grooscript.org">grooscript</a>, a library that converts groovy code to javascript.
+In folders or files options, you can&#8217;t use wildcards as * or **, just put relative path from folder where build is.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_convert_files">Convert files</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>There are 3 tasks:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>convert</strong> (org.grooscript.gradle.ConvertTask) to convert groovy files to javascript</p>
+</li>
+<li>
+<p><strong>daemon</strong> (org.grooscript.gradle.DaemonTask) standalone task, listen changes in groovy files and convert them to javascript</p>
+</li>
+<li>
+<p><strong>thread</strong> (org.grooscript.gradle.ThreadTask) same that daemon task, but don&#8217;t stop execution, must be used with other tasks</p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
-<p>Let&#8217;s use <a href="https://github.com/chiquitinxx/grooscript-gradle-plugin">grooscript gradle plugin</a> to play with
-grooscript. Install <a href="http://www.gradle.org">gradle</a> if you don&#8217;t have it installed in your machine. You can use
-<a href="http://gvmtool.net">Gvm</a> to install gradle 2.1+. Is important you use at least gradle 2.1, because grooscript works with
-groovy 2.0+ and we will use new plugin system in this demo. After install gradle, just create a new folder and move to it.</p>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_creating_project">Creating project</h3>
-<div class="paragraph">
-<p>Create a <code>build.gradle</code> file with the grooscript plugin data and gradle wrapper.</p>
+<p>There is an extension to configure this tasks</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">plugins {
-  id "org.grooscript.conversion" version "0.10"
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">package org.grooscript.gradle
+
+class ConversionExtension {
+    def source = ['src/main/groovy']
+    String destination = 'src/main/webapp/js/app'
+    List&lt;String&gt; classPath = ['src/main/groovy']
+    Closure customization
+    String initialText
+    String finalText
+    boolean recursive = false
+    List&lt;String&gt; mainContextScope
+    String addGsLib
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.2.1'
+//Example:
+grooscript {
+    source = ['src/main/groovy']
+    destination = 'js'
 }</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Run <code>&gt; gradle wrapper</code> to create gradlew executable. Run <code>&gt; ./gradlew task</code> to see grooscript tasks.</p>
+<p>If you execute <code>&gt;gradle convert</code>, will convert groovy and java files in <code>src/main/groovy</code> to .js files, and will
+be saved in <code>./js</code> folder.</p>
 </div>
 <div class="paragraph">
-<p>Let&#8217;s start with <strong>initStaticWeb</strong> task to create a html static project. Run <code>&gt; ./gradlew initStaticWeb</code> and the
-plugin will create the following files.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code>├── build.gradle
-└── src
-    └── main
-        ├── groovy
-        │   └── Presenter.groovy
-        └── webapp
-            ├── index.html
-            └── js
-                ├── app
-                └── lib
-                    ├── grooscript-tools.js
-                    ├── grooscript.min.js
-                    └── jquery.min.js</code></pre>
-</div>
+<p>If you execute <strong>daemon</strong> task, gradle will be running forever doing conversions if files in <code>src/main/groovy</code> change.</p>
 </div>
 <div class="paragraph">
-<p>Now, let&#8217;s open index.html in your browser, for example running <code>&gt; open src/main/webapp/index.html</code> open my Google
-Chrome. You must see an input text with label <em>Name:</em> and a button <em>Say hello!</em>. If you put your name and
-press button nothing happens. In javascript console you can see the error, a file called <strong>Presenter.js</strong> not
-found in <code>src/main/webapp/js/app</code>.</p>
+<p>You will use <strong>thread</strong> task when other task keeps gradle up, like a web application server.</p>
 </div>
 <div class="paragraph">
-<p>I introduced this error to show you that you have to convert your groovy code to javascript each time you
-change your groovy files. We will see later that you can run a daemon to automatically convert your code when
-a file change is detected. But for now, it&#8217;s important that you understand that your groovy code isn&#8217;t running
-in your browser, the javascript converted code is. To <strong>convert</strong> your groovy code to javascript,
-run <code>&gt; ./gradlew convert</code> and a new javascript file is generated, the missing file in the browser error.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-shell" data-lang="shell">└── src
-    └── main
-        └── webapp
-            └── js
-                └── app
-                    └── Presenter.js</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Now, go the browser, reload the page, put your name and press <em>Say hello!</em>. The text <code><em>Hello your_name!</em></code> will
-be append to the page. So, nice, all is working, and the code that is running in your browser, is Groovy code.
-The file <strong>Presenter.groovy</strong> is a groovy file, that has been converted to javascript <strong>Presenter.js</strong> with grooscript.
-You can test the groovy class with a spock and use your favorite groovy IDE. This is one of the
-reasons to use grooscript, <strong>you use the tools you know to create groovy code that runs in your browser</strong>.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_playing">Playing</h3>
-<div class="paragraph">
-<p>Now, let&#8217;s take a look to <code>index.html</code> code.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;html&gt;
-&lt;head&gt;
-    &lt;title&gt;Initial static web page&lt;/title&gt;
-    &lt;script type="text/javascript" src="js/lib/jquery.min.js"&gt;&lt;/script&gt; <i class="conum" data-value="1"></i><b>(1)</b>
-    &lt;script type="text/javascript" src="js/lib/grooscript.min.js"&gt;&lt;/script&gt; <i class="conum" data-value="2"></i><b>(2)</b>
-    &lt;script type="text/javascript" src="js/lib/grooscript-tools.js"&gt;&lt;/script&gt;
-    &lt;script type="text/javascript" src="js/app/Presenter.js"&gt;&lt;/script&gt; <i class="conum" data-value="3"></i><b>(3)</b>
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;p&gt;Name:&lt;input type="text" id="name"/&gt;&lt;/p&gt; <i class="conum" data-value="4"></i><b>(4)</b>
-    &lt;input type="button" id="button" value="Say hello!"/&gt; <i class="conum" data-value="5"></i><b>(5)</b>
-    &lt;div id="salutes"/&gt; <i class="conum" data-value="6"></i><b>(6)</b>
-    &lt;script type="text/javascript"&gt;
-        presenter = Presenter(); <i class="conum" data-value="7"></i><b>(7)</b>
-        $(document).ready(function() {
-            var gQuery = GQueryImpl(); <i class="conum" data-value="8"></i><b>(8)</b>
-            gQuery.bindAll(presenter); <i class="conum" data-value="9"></i><b>(9)</b>
-            console.log('All binds done.');
-        });
-    &lt;/script&gt;
-&lt;/body&gt;</code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Grooscript itself doesn&#8217;t requires jquery, but some of the tools in grooscript-tools.js does.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>This js contains grooscript core. Is needed to run any code converted with grooscript.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>This is the converted javascript code generated from Presenter.groovy.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>The input text with id <em>name</em>.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="5"></i><b>5</b></td>
-<td>The button with id <em>button</em>.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="6"></i><b>6</b></td>
-<td>The div where all salutes are added.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="7"></i><b>7</b></td>
-<td>Creation of the class, to create a class generated with grooscript, don&#8217;t use <em>new</em>.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="8"></i><b>8</b></td>
-<td>Use jQuery implementation, that comes in grooscript-tools.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="9"></i><b>9</b></td>
-<td>Bind methods and properties to dom objects. Now <em>name</em> input is binded to <code>presenter.name</code> property. And when
-you press the button, method <code>presenter.buttonClick()</code> is executed.</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>Is very important, all code that you convert to javascript, using grooscript, it needs <strong>grooscript.js</strong> or
-minified <strong>grooscript.min.js</strong>. If you take a look at <strong>Presenter.js</strong> you will see some functions that starts with <strong>gs.xx</strong>.
-For example if you call a method, maybe the method doesn&#8217;t exist, groovy is a dynamic language, and maybe at
-runtime that method exists or not, or maybe there is a <em>methodMissing</em> call. grooscript.js resolves method
-calls, access to properties, java / groovy types,&#8230;&#8203; If you use grooscript generated code in other pages or
-environments, remember include any of this libraries.</p>
-</div>
-<div class="paragraph">
-<p>Now, you can start to modify Presenter.groovy, much better if you create a Spock test for it. When you make a
-change, remember that you have to generate the javascript code with <code>&gt; ./gradlew convert</code>. So in a typical
-grooscript workflow, you are working with your groovy code, and see the results in your browser, no class
-loading issues, just reload the page with the changes in your javascript generated files. But is boring run
-convert all the time, much better if you run <code>&gt; ./gradlew daemon</code>. This <strong>daemon</strong> blocks execution of gradle,
-and will listen changes in your groovy files. Each time a groovy file changes, groovy code will be converted
-to javascript. Until you break gradle with ^C.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_conversion_options">Conversion options</h3>
-<div class="paragraph">
-<p>Is very important understand grooscript conversion options. In this example some options are used, the gradle plugin
-has some default conversion options. What files have to be converted? Where .js files are saved?&#8230;&#8203;</p>
-</div>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">source</dt>
-<dd>
-<p>Files or folders with files to be converted. If you put a folder, all groovy files inside will be converted. For example: <code>['src/grooscript', 'MyGroovyFile.groovy']</code></p>
-</dd>
-<dt class="hdlist1">destination</dt>
-<dd>
-<p>The folder or .js file where javascript files are generated, and no folders inside will be created. For example: <code>'web-app/js'</code></p>
-</dd>
-<dt class="hdlist1">classPath</dt>
-<dd>
-<p>List of folders or jar&#8217;s to find dependencies. Before groovy code is converted to javascript, that code have to be successfully compiled. For example: [''src/groovy'']</p>
-</dd>
-<dt class="hdlist1">customization</dt>
-<dd>
-<p>to each file to be converted, will be applied a groovy <a href="http://docs.codehaus.org/display/GROOVY/Advanced+compiler+configuration">customization</a>. For example you can for example type check all the groovy classes to be converted with { -&gt; ast(TypeChecked)}</p>
-</dd>
-<dt class="hdlist1">initialText</dt>
-<dd>
-<p>you can add test at the beginning of your converted javascript file. You can add comments or javascript code. For example: ''//This code has been generated with grooscript''</p>
-</dd>
-<dt class="hdlist1">finalText</dt>
-<dd>
-<p>like initialText, but at the end of the converted file. For example: ''MyClass().init();''</p>
-</dd>
-<dt class="hdlist1">recursive</dt>
-<dd>
-<p>if you specify a folder with the <strong>source</strong> conversion option, by default will not convert files inside folders. To convert recursive, just set to true</p>
-</dd>
-<dt class="hdlist1">mainContextScope</dt>
-<dd>
-<p>you can help the converted, specifying functions and variables that will be availables in the main context of the javascript environment. For example: [''$'', ''window'',''myFunction'']</p>
-</dd>
-<dt class="hdlist1">addGsLib</dt>
-<dd>
-<p>you can add a grooscript js lib at the beginning of the converted file. For example you can add grooscript.js to the result, and then you don&#8217;t have to worry about include that dependency in javascript ''grooscript''</p>
-</dd>
-</dl>
-</div>
-<div class="paragraph">
-<p>The default conversion options of the grooscript gradle plugin are:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>source = ['src/main/groovy']
-destination = 'src/main/webapp/js/app'
-classPath = ['src/main/groovy']
-convertDependencies = false</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>You can change, or set new options in your <strong>build.gradle</strong>, for example with this new options:</p>
+<p>Apart from <code>source</code> and <code>destination</code>, mandatory properties, you can define conversion options:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">grooscript {
-    source = ['src/main/groovy/presenters']
-    destination = 'js'
-    classPath = ['src/groovy']
-    convertDependencies = true
-    mainContextScope = ['$', 'window', 'Handlebars']
+    source = ['src/main/groovy/presenters'] //Sources to be converted
+    destination = 'js' //Target directory or js file
+    classPath = ['src/groovy'] //Needed classpath to compile source files
+    customization = null //Customization in files, for example { -&gt; ast(groovy.transform.TypeChecked) }
     initialText = '//Grooscript converted file'
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_javascript_code_in_your_groovy_code">Javascript code in your groovy code</h3>
-<div class="paragraph">
-<p>If you are reading this, and you have started to play with grooscript, maybe you have thought about put javascript
-code in your groovy code. Imagine you want to use a javascript library, and you want to init it, but in the init
-method of your groovy class that will be converted to javascript. For example, in this class, initDrawScene is a
-javascript function to initialize a canvas scene with a draw method:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Draw {
-    def points
-    def scene
-    def init() {
-        points = [3, 4, 45, 65]
-        initDrawScene()
-        drawPoints()
-    }
-    def drawPoints() {
-        points.each {
-            scene.draw it
-        }
-    }
+    initialText = '//End converted file'
+    recursive = true
+    mainContextScope = ['$'] //Variables available in main scope
+    addGsLib = 'grooscript, grooscript-tools' //Include libs (comma separated) from grooscript ('grooscript', 'grooscript.min', 'grooscript-tools' or 'jquery.min')
 }</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>With grooscript you can put javascript code in a groovy method using @GsNative annotation.</p>
+<p>Also you can create distinct conversion tasks to use in your gradle build:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import org.grooscript.asts.GsNative
-
-class Draw {
-    ...
-    @GsNative
-    def initDrawScene() {/*
-        //This is just javascript code that will be used in your javascript converted method
-        this.scene = canvas.init({x: 400, y: 200});
-    */}
-    ...
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>You have to add grooscript dependency to your project in your <strong>build.gradle</strong>:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">repositories {
-    mavenCentral()
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">task convertCountries(type: org.grooscript.gradle.ConvertTask) {
+    source = ['src/main/groovy/countries']
+    mainContextScope = ['Snap']
+    destination = 'src/main/webapp/js'
 }
 
-dependencies {
-    compile 'org.grooscript:grooscript:1.0.0-rc-2'
+task convertChatServer(type: org.grooscript.gradle.ConvertTask) {
+    source = ['src/main/groovy/chat/NodeServer.groovy', 'src/main/groovy/startServer.groovy']
+    destination = 'js/allTogether.js'
+}
+
+build.dependsOn convertCountries, convertChatServer</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_create_static_project">Create static project</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>There is 1 tasks:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>initStaticWeb</strong> that will create files and folder to generate a little static web project to start with grooscript.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Read this <a href="../starting_gradle.html">guide</a></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_convert_groovy_templates">Convert groovy templates</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>There are 2 tasks:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>templatesJs</strong> (org.grooscript.gradle.TemplatesTask) to convert groovy templates to a .js file</p>
+</li>
+<li>
+<p><strong>templatesThread</strong> (org.grooscript.gradle.TemplatesThreadTask) listen changes in groovy templates, and generate .js file if some file changes</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>There is an extension to configure this task:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">package org.grooscript.gradle
+
+class TemplatesExtension {
+    String templatesPath = 'src/main/webapp/templates'
+    List&lt;String&gt; templates
+    String destinationFile = 'src/main/webapp/js/lib/Templates.js'
+    List&lt;String&gt; classPath = ['src/main/groovy']
+}
+
+//Example:
+templates {
+    templatesPath = 'templates'
+    templates = ['main.gtpl', 'little/small.tpl'] //Files from templatesPath
+    destinationFile = 'js/Templates.js'
+    classPath = ['src/groovy']
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The support in convert templates is a bit limited, you can&#8217;t use code out of the template&#8217;s engine. You can&#8217;t use
+imports, or insert data from other files. The destination js is the next class, converted, with templates map
+filled with all converted templates:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">package org.grooscript.templates
+
+class Templates {
+
+    static Map&lt;String, Closure&gt; templates
+
+    static String applyTemplate(String name, model = [:]) {
+        Closure cl = templates[name]
+        cl.delegate = model
+        cl(model)
+    }
 }</code></pre>
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_conclusion">Conclusion</h3>
+</div>
+<div class="sect1">
+<h2 id="_spy_file_changes">Spy file changes</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>I have shown a good way to play with grooscript. It&#8217;s time you start to play with it. Just code in groovy
-and see the results in your browser. You know conversion options and some grooscript tips. There are more tips, more
-helper classes in grooscript-all.js as the html builder or the jquery bean.</p>
+<p>There is 1 tasks:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>spyChanges</strong> (org.grooscript.gradle.ChangesTask) listen to changes on files</p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
-<p>This is just a introduction to grooscript, more things to discover as the grails plugin or the Node.js support. Grooscript is
-just a tool that allow you create javascript code from your groovy code. You don&#8217;t have to repeat code in your server
-side and client side, you can just convert it, for example for your validations or your pogo''s.</p>
+<p>There is an extension to configure this task:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">package org.grooscript.gradle
+
+class ChangesExtension {
+    List&lt;String&gt; files
+    Closure onChanges
+}
+
+//Example:
+spy {
+    files = ['src/main/webapp/static/css/app.css', 'src/main/webapp/static/js/app']
+    onChanges = { list -&gt;
+        println 'Changes!! ' + list
+    }
+}</code></pre>
+</div>
 </div>
 <div class="paragraph">
-<p>You can see an example of a <a href="http://projects.spring.io/spring-boot/">spring boot</a> application using grooscript deployed in
-<a href="http://frameworks-groovygs.rhcloud.com/">the cloud</a>, the source code is in <a href="https://github.com/chiquitinxx/springboot-rest-demo">github</a>.</p>
+<p>I have introduced spring websockets support in onChanges closure. Now you can send a groovy object to a spring websocket
+server that uses Stomp protocol. So you can notify by websockets changes on files, in this example I want to send to
+server a reload message.</p>
 </div>
-<div class="paragraph">
-<p>Please, if you have comments, suggestions, problems,&#8230;&#8203; don&#8217;t hesitate to contact me at <a href="mailto:grooscript@gmail.com">grooscript@gmail.com</a>, or open
-an issue or feature in <a href="http://github.com/chiquitinxx/grooscript/issues?state=open">Github</a>. This is an open source project and your feedback is more than welcome
-to improve it. More guides come in the future, also can find more documentation in <a href="http://grooscript.org">grooscript</a>
-site.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">spy {
+    files = ['Templates.js']
+    onChanges = { list -&gt;
+        springWebsocketTo 'http://localhost:8080/demo' data 'templates' onChannel '/app/reload'
+    }
+}</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-01-09 19:28:47 CET
+Last updated 2015-01-14 19:36:01 CET
 </div>
 </div>
+</body>
 <script>
     //Google Analytics info
     var _gaq = _gaq || [];
@@ -771,5 +677,4 @@ Last updated 2015-01-09 19:28:47 CET
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
     })();
 </script>
-</body>
 </html>
