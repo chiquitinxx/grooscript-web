@@ -541,7 +541,7 @@ build.dependsOn convertCountries, convertChatServer</code></pre>
 </ul>
 </div>
 <div class="paragraph">
-<p>Read this <a href="../starting_gradle.html">guide</a></p>
+<p>Read this <a href="starting_gradle.html">guide</a></p>
 </div>
 </div>
 </div>
@@ -658,13 +658,31 @@ server a reload message.</p>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_sync_grooscript_libraries">Sync grooscript libraries</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>There is 1 tasks:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>syncGsLibs</strong> (org.grooscript.gradle.SyncGrooscriptLibsTask) sync grooscript js libs with actual version</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>With this tasks, all your grooscript libraries in the project ('grooscript.js', 'grooscript.min.js',
+'grooscript-tools.js') will be replaced by the libs that comes in the grooscript version of the current plugin.</p>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-01-14 19:36:01 CET
+Last updated 2015-01-24 01:17:35 CET
 </div>
 </div>
-</body>
 <script>
     //Google Analytics info
     var _gaq = _gaq || [];
@@ -677,4 +695,5 @@ Last updated 2015-01-14 19:36:01 CET
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
     })();
 </script>
+</body>
 </html>
