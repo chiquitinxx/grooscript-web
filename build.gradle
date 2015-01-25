@@ -1,0 +1,20 @@
+plugins {
+    id "org.grooscript.conversion" version "0.12"
+}
+
+apply plugin: 'groovy'
+apply plugin: 'idea'
+
+grooscript {
+    source = ['../rest/src/main/groovy/robot/RobotGame.groovy',
+              '../rest/src/main/groovy/robot/Robot.groovy',
+              '../rest/src/main/groovy/robot/Position.groovy',
+              '../rest/src/main/groovy/robot/Direction.groovy',
+    ]
+    destination = 'js/robot.js'
+    classPath = ['../rest/src/main/groovy']
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.2.1'
+}

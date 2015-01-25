@@ -1,4 +1,4 @@
-//Grooscript Version 0.6.3 Apache 2 License
+//Grooscript Version 1.0.0-rc-2 Apache 2 License
 (function() {
     var gs = function(obj) {
         if (obj instanceof gs) return obj;
@@ -54,7 +54,7 @@
             if (arguments.length == 2 && arguments[1] !== null) {
                 message = arguments[1] + ' - ';
             }
-            gs.println(message+value);
+            gs.println(message + value);
         }
     };
 
@@ -105,7 +105,7 @@
             return result;
         },
         invokeMethod: function(name, values) {
-            var i,newArgs = [];
+            var i, newArgs = [];
             if (values) {
                 for (i=0; i < values.length; i++) {
                     newArgs[i] = values[i];
@@ -129,40 +129,46 @@
                 arguments[i].gSaT(this);
             }
             return this;
+        },
+        getClass : function() {
+            return this.clazz;
+        },
+        getMetaClass : function() {
+            return gs.metaClass(this);
         }
     };
 
     function applyBaseClassFunctions(item) {
-        item.asType = gs.baseClass.asType
+        item.asType = gs.baseClass.asType;
     }
 
     function isObjectProperty(name) {
         return ['clazz','gSdefaultValue','leftShift',
             'minus','plus','equals','toString',
-            'clone','withz','getProperties','getStatic',
+            'clone','withz','getProperties','getStatic', 'getClass', 'getMetaClass',
             'getMethods','invokeMethod','constructor', 'asType', 'withTraits'].indexOf(name) >= 0;
     }
 
     gs.expando = function() {
         var object = gs.inherit(gs.baseClass, 'Expando');
 
-        object.constructorWithMap = function(map) { gs.passMapToObject(map,this); return this;};
-        if (arguments.length==1) {object.constructorWithMap(arguments[0]); }
+        object.constructorWithMap = function(map) { gs.passMapToObject(map, this); return this;};
+        if (arguments.length == 1) {object.constructorWithMap(arguments[0]); }
 
         return object;
     };
 
     gs.expandoMetaClass = function() {
-        var object = gs.inherit(gs.baseClass,'ExpandoMetaClass');
+        var object = gs.inherit(gs.baseClass, 'ExpandoMetaClass');
         object.initialize = function() {
             return this;
         };
         return object;
     };
 
-    function expandWithMetaclass(item, objectName) {
+    function expandWithMetaClass(item, objectName) {
         if (globalMetaClass && globalMetaClass[objectName]) {
-            var obj,map = globalMetaClass[objectName];
+            var obj, map = globalMetaClass[objectName];
             for (obj in map) {
 
                 //Static methods
@@ -183,22 +189,10 @@
         return item;
     }
 
-    gs.inherit = function(p,objectName) {
-    //    function inherit(p,objectName) {
-        if (p === null) throw TypeError();
-        if (Object.create) {
-            return expandWithMetaclass(Object.create(p),objectName);
-        }
-        var t = typeof p;
-
-        // If Object.create() is defined... // then just use it.
-        // Otherwise do some more type checking
-        if (t !== "object" && t !== "function") {
-            throw TypeError();
-        }
+    gs.inherit = function(p, objectName) {
         function f() {}
         f.prototype = p;
-        return expandWithMetaclass(new f(),objectName);
+        return expandWithMetaClass(new f(), objectName);
     };
 
     function createClassNames(item, items) {
@@ -248,7 +242,7 @@
 
         object.add = function(item) {
             if (!(this.contains(item))) {
-                this[this.length]=item;
+                this[this.length] = item;
                 return this;
             } else {
                 return false;
@@ -260,7 +254,7 @@
                 var i, fails = false;
 
                 //Check if items not in set
-                for (i=0;!fails && i<elements.length;i++) {
+                for (i = 0; !fails && i < elements.length; i++) {
                     if (this.contains(elements[i])) {
                         fails = true;
                     }
@@ -269,7 +263,7 @@
                     return false;
                 } else {
                     //All ok, we add items to the set
-                    for (i=0;i<elements.length;i++) {
+                    for (i = 0; i < elements.length; i++) {
                         this.add(elements[i]);
                     }
                 }
@@ -278,12 +272,11 @@
         };
 
         object.equals = function(other) {
-            if (!(other instanceof Array) || other.length!=this.length || !(other.isSet)) {
+            if (!(other instanceof Array) || other.length != this.length || !(other.isSet)) {
                 return false;
             } else {
-                var i;
-                var result = true;
-                for (i=0;i<this.length && result;i++) {
+                var i, result = true;
+                for (i = 0; i < this.length && result; i++) {
                     if (!(other.contains(this[i]))) {
                         result = false;
                     }
@@ -293,8 +286,8 @@
         };
 
         object.toList = function() {
-            var i,list = [];
-            for (i=0;i<this.length;i++) {
+            var i, list = [];
+            for (i = 0; i < this.length; i++) {
                 list[i] = this[i];
             }
             return gs.list(list);
@@ -305,7 +298,7 @@
             result.addAll(this);
             if (other instanceof Array) {
                 var i;
-                for (i=0;i<other.length;i++) {
+                for (i = 0; i < other.length; i++) {
                     if (!(result.contains(other[i]))) {
                         result.add(other[i]);
                     }
@@ -319,7 +312,7 @@
             result.addAll(this);
             if (other instanceof Array) {
                 var i;
-                for (i=0;i<other.length;i++) {
+                for (i = 0;i < other.length; i++) {
                     if (result.contains(other[i])) {
                         result.remove(other[i]);
                     }
@@ -331,7 +324,7 @@
         object.remove = function(value) {
             var index = this.indexOf(value);
             if (index >= 0) {
-                this.splice(index,1);
+                this.splice(index, 1);
                 return true;
             } else {
                 return false;
@@ -359,8 +352,7 @@
 
     gs.map = function() {
         var gSobject = new GsGroovyMap();
-        //gs.inherit(gs.baseClass,'LinkedHashMap');
-        expandWithMetaclass(gSobject, 'LinkedHashMap');
+        expandWithMetaClass(gSobject, 'LinkedHashMap');
         applyBaseClassFunctions(gSobject);
         if (arguments.length == 1 && arguments[0] instanceof Object) {
             gs.passMapToObject(arguments[0], gSobject);
@@ -422,10 +414,10 @@
                 if (!isMapProperty(ob)) {
                     var f = arguments[0];
                     //Nice, number of arguments in length property
-                    if (f.length==1) {
-                        closure({key:ob, value:this[ob]});
+                    if (f.length == 1) {
+                        closure({key: ob, value: this[ob]});
                     }
-                    if (f.length==2) {
+                    if (f.length == 2) {
                         closure(ob,this[ob]);
                     }
                 }
@@ -436,13 +428,13 @@
             var number = 0, ob;
             for (ob in this) {
                 if (!isMapProperty(ob)) {
-                    if (closure.length==1) {
-                        if (closure({key:ob, value:this[ob]})) {
+                    if (closure.length == 1) {
+                        if (closure({key: ob, value: this[ob]})) {
                             number++;
                         }
                     }
-                    if (closure.length==2) {
-                        if (closure(ob,this[ob])) {
+                    if (closure.length == 2) {
+                        if (closure(ob, this[ob])) {
                             number++;
                         }
                     }
@@ -456,13 +448,13 @@
             for (ob in this) {
                 if (!isMapProperty(ob)) {
                     var f = arguments[0];
-                    if (f.length==1) {
-                        if (closure({key:ob, value:this[ob]})) {
+                    if (f.length == 1) {
+                        if (closure({key:ob, value: this[ob]})) {
                             return true;
                         }
                     }
-                    if (f.length==2) {
-                        if (closure(ob,this[ob])) {
+                    if (f.length == 2) {
+                        if (closure(ob, this[ob])) {
                             return true;
                         }
                     }
@@ -476,13 +468,13 @@
             for (ob in this) {
                 if (!isMapProperty(ob)) {
                     var f = arguments[0];
-                    if (f.length==1) {
-                        if (!closure({key:ob, value:this[ob]})) {
+                    if (f.length == 1) {
+                        if (!closure({key: ob, value: this[ob]})) {
                             return false;
                         }
                     }
-                    if (f.length==2) {
-                        if (!closure(ob,this[ob])) {
+                    if (f.length == 2) {
+                        if (!closure(ob, this[ob])) {
                             return false;
                         }
                     }
@@ -496,15 +488,15 @@
             for (ob in this) {
                 if (!isMapProperty(ob)) {
                     var f = arguments[0];
-                    if (f.length==1) {
-                        var entry = {key:ob, value:this[ob]};
+                    if (f.length == 1) {
+                        var entry = {key: ob, value: this[ob]};
                         if (closure(entry)) {
                             return entry;
                         }
                     }
-                    if (f.length==2) {
-                        if (closure(ob,this[ob])) {
-                            return {key:ob, value:this[ob]};
+                    if (f.length == 2) {
+                        if (closure(ob, this[ob])) {
+                            return {key: ob, value: this[ob]};
                         }
                     }
                 }
@@ -519,12 +511,12 @@
                     var entry = {key: ob, value: this[ob]};
 
                     var f = arguments[0];
-                    if (f.length==1) {
+                    if (f.length == 1) {
                         if (!closure(entry)) {
                             result.add(entry.key, entry.value);
                         }
                     }
-                    if (f.length==2) {
+                    if (f.length == 2) {
                         if (!closure(entry.key, entry.value)) {
                             result.add(entry.key, entry.value);
                         }
@@ -757,7 +749,7 @@
     Array.prototype.get = function(pos) {
 
         //Maybe comes a second parameter with default value
-        if (arguments.length==2) {
+        if (arguments.length == 2) {
             if (this[pos] === null || this[pos] === undefined) {
                 return arguments[1];
             } else {
@@ -848,7 +840,7 @@
 
     Array.prototype.containsAll = function(list) {
         var i, numberEq = 0;
-        for (i=0; i < list.length; i++) {
+        for (i = 0; i < list.length; i++) {
             if (this.contains(list[i])) {
                 numberEq++;
             }
@@ -862,7 +854,7 @@
 
     Array.prototype.each = function(closure) {
         var i;
-        for (i=0;i<this.length;i++) {
+        for (i = 0; i < this.length; i++) {
             //TODO Beware this change, have to apply to all closure calls
             interceptClosureCall(closure, this[i]);
         }
@@ -871,22 +863,22 @@
 
     Array.prototype.reverseEach = function(closure) {
         var i;
-        for (i=this.length-1;i>=0;i--) {
+        for (i = this.length - 1; i >= 0; i--) {
             interceptClosureCall(closure, this[i]);
         }
         return this;
     };
 
     Array.prototype.eachWithIndex = function(closure,index) {
-        for (index=0;index<this.length;index++) {
-            closure(this[index],index);
+        for (index=0; index < this.length; index++) {
+            closure(this[index], index);
         }
         return this;
     };
 
     Array.prototype.any = function(closure) {
         var i;
-        for (i=0;i<this.length;i++) {
+        for (i = 0;i < this.length; i++) {
             if (closure(this[i])) {
                 return true;
             }
@@ -895,9 +887,8 @@
     };
 
     Array.prototype.values = function() {
-        var result = [];
-        var i;
-        for (i=0;i<this.length;i++) {
+        var i, result = [];
+        for (i = 0; i < this.length; i++) {
             result[i]=this[i];
         }
         return result;
@@ -914,8 +905,8 @@
                 result = true;
             }
         }
-        if (index>=0) {
-            this.splice(index,1);
+        if (index >= 0) {
+            this.splice(index, 1);
         }
         return result;
     };
@@ -941,7 +932,7 @@
             }
         } else if (typeof data === "function") {
             var i;
-            for (i=this.length-1;i>=0;i--) {
+            for (i = this.length - 1; i >= 0; i--) {
                 if (data(this[i])) {
                     this.remove(i);
                 }
@@ -951,27 +942,24 @@
     };
 
     Array.prototype.collect = function(closure) {
-        var result = gs.list([]);
-        var i;
-        for (i=0;i<this.length;i++) {
+        var i, result = gs.list([]);
+        for (i = 0; i < this.length; i++) {
             result[i] = closure(this[i]);
         }
         return result;
     };
 
     Array.prototype.collectMany = function(closure) {
-        var result = gs.list([]);
-        var i;
-        for (i=0;i<this.length;i++) {
+        var i, result = gs.list([]);
+        for (i = 0;i < this.length; i++) {
             result.addAll(closure(this[i]));
         }
         return result;
     };
 
     Array.prototype.takeWhile = function(closure) {
-        var result = gs.list([]);
-        var i;
-        for (i=0;i<this.length;i++) {
+        var i, result = gs.list([]);
+        for (i = 0; i < this.length; i++) {
             if (closure(this[i])) {
                 result[i] = this[i];
             } else {
@@ -983,7 +971,7 @@
 
     Array.prototype.dropWhile = function(closure) {
         var result = gs.list([]);
-        var i,j=0, insert = false;
+        var i, j=0, insert = false;
         for (i = 0; i < this.length; i++) {
             if (!closure(this[i])) {
                 insert=true;
@@ -996,7 +984,7 @@
     };
 
     Array.prototype.drop = function(number) {
-        var result = gs.list([]);
+        var i, result = gs.list([]);
         for (i = number; i < this.length; i++) {
             result[result.length] = this[i];
         }
@@ -1009,8 +997,8 @@
     };
 
     Array.prototype.find = function(closure) {
-        var result,i;
-        for (i=0;!result && i<this.length;i++) {
+        var result, i;
+        for (i = 0; !result && i < this.length; i++) {
             if (closure(this[i])) {
                 result = this[i];
             }
@@ -1027,7 +1015,7 @@
     };
 
     Array.prototype.last = function() {
-        return this[this.length-1];
+        return this[this.length - 1];
     };
 
     Array.prototype.sum = function() {
@@ -1035,14 +1023,14 @@
         var i, result = 0;
         //can pass a closure to sum
         if (arguments.length == 1) {
-            for (i=0;i<this.length;i++) {
+            for (i = 0; i < this.length; i++) {
                 result = result + arguments[0](this[i]);
             }
         } else {
-            if (this.length>0 && this[0].plus) {
+            if (this.length > 0 && this[0].plus) {
                 var item = this[0];
-                for (i=0;i+1<this.length;i++) {
-                    item = item.plus(this[i+1]);
+                for (i = 0; i + 1 < this.length; i++) {
+                    item = item.plus(this[i + 1]);
                 }
                 return item;
             } else {
@@ -1081,9 +1069,8 @@
     };
 
     Array.prototype.intersect = function(otherList) {
-        var result = gs.list([]);
-        var i;
-        for (i=0;i<this.length;i++) {
+        var i, result = gs.list([]);
+        for (i = 0;i < this.length; i++) {
             if (otherList.contains(this[i])) {
                 result.add(this[i]);
             }
@@ -1092,9 +1079,8 @@
     };
 
     Array.prototype.max = function() {
-        var result = null;
-        var i;
-        for (i=0;i<this.length;i++) {
+        var i, result = null;
+        for (i = 0; i < this.length; i++) {
             if (result === null || this[i] > result) {
                 result = this[i];
             }
@@ -1103,9 +1089,8 @@
     };
 
     Array.prototype.min = function() {
-        var result = null;
-        var i;
-        for (i=0;i<this.length;i++) {
+        var i, result = null;
+        for (i = 0; i < this.length; i++) {
             if (result === null || this[i] < result) {
                 result = this[i];
             }
@@ -1113,14 +1098,17 @@
         return result;
     };
 
+    Array.prototype.oldToString = Array.prototype.toString;
+
     Array.prototype.toString = function() {
-        if (this.length>0) {
-            var i;
-            var result = '[';
-            for (i=0;i<this.length-1;i++) {
+        if (this['clazz'] === undefined) {
+            return this.oldToString();
+        } else if (this.length > 0) {
+            var i, result = '[';
+            for (i = 0; i < this.length - 1; i++) {
                 result = result + this[i] + ', ';
             }
-            result = result + this[this.length-1] + ']';
+            result = result + this[this.length - 1] + ']';
             return result;
         } else {
             return '[]';
@@ -1159,9 +1147,8 @@
         if (!(other instanceof Array) || other.length!=this.length) {
             return false;
         } else {
-            var i;
-            var result = true;
-            for (i=0;i<this.length && result;i++) {
+            var i, result = true;
+            for (i = 0;i < this.length && result; i++) {
                 if (!gs.equals(this[i],other[i])) {
                     result = false;
                 }
@@ -1175,11 +1162,10 @@
         if (arguments.length == 1) {
             separator = arguments[0];
         }
-        var i, result;
-        result = '';
-        for (i=0;i<this.length;i++) {
+        var i, result = '';
+        for (i = 0; i < this.length; i++) {
             result = result + this[i];
-            if ((i+1)<this.length) {
+            if ((i + 1) < this.length) {
                 result = result + separator;
             }
         }
@@ -1272,10 +1258,9 @@
     };
 
     Array.prototype.take = function(number) {
-        var result = [];
-        var i;
-        for (i=0;i<number;i++) {
-            if (i<this.length) {
+        var i, result = [];
+        for (i = 0; i < number; i++) {
+            if (i < this.length) {
                 result[i] = this[i];
             }
         }
@@ -1284,8 +1269,8 @@
 
     Array.prototype.takeWhile = function(closure) {
         var result = [];
-        var i,exit=false;
-        for (i=0;!exit && i<this.length;i++) {
+        var i, exit=false;
+        for (i = 0; !exit && i < this.length; i++) {
             if (closure(this[i])) {
                 result[i] = this[i];
             } else {
@@ -1335,6 +1320,20 @@
         return result;
     };
 
+    Array.prototype.groupBy = function(closure) {
+        var i, result = gs.map();
+        for (i=0;i<this.length;i++) {
+            var r = closure(this[i]);
+            var l = result[r];
+            if (l) {
+                l.add(this[i]);
+            } else {
+                result.add(r, gs.list().add(this[i]));
+            }
+        }
+        return result;
+    };
+
     Array.prototype.putAt = function(position, value) {
         this[position] = value;
     };
@@ -1350,19 +1349,19 @@
 
         var data = [];
 
-        if (value && value.length>0) {
+        if (value && value.length > 0) {
             var i;
-            for (i=0;i<value.length;i++) {
+            for (i = 0; i < value.length; i++) {
                 if (value[i] instanceof gs.spread) {
                     var values = value[i].values;
-                    if (values.length>0) {
+                    if (values.length > 0) {
                         var j;
-                        for (j=0;j<values.length;j++) {
-                            data[data.length]=values[j];
+                        for (j = 0; j < values.length; j++) {
+                            data[data.length] = values[j];
                         }
                     }
                 } else {
-                    data[data.length]=value[i];
+                    data[data.length] = value[i];
                 }
             }
         }
@@ -1378,7 +1377,7 @@
         list.each(function (it) {
             if (it instanceof Array) {
                 if (it.length>0) {
-                    gs.flatten(result,it);
+                    gs.flatten(result, it);
                 }
             } else {
                 result.add(it);
@@ -1413,7 +1412,7 @@
         }
 
         var result,number,count;
-        for (result=[], number=start, count=0 ; number<=finish ; number++,count++) {
+        for (result=[], number = start, count = 0 ; number <= finish ; number++, count++) {
             if (areChars) {
                 result[count] = String.fromCharCode(number);
             } else {
@@ -1600,7 +1599,7 @@
             var i = 0;
 
             while (data) {
-                if (data instanceof Array && data.length<2) {
+                if (data instanceof Array && data.length < 2) {
                     list[i] = data[0];
                 } else {
                     list[i] = gs.list(data);
@@ -1611,17 +1610,17 @@
             object = gs.inherit(list, 'RegExp');
         }
 
-        createClassNames(object,['java.util.regex.Matcher']);
+        createClassNames(object, ['java.util.regex.Matcher']);
 
         object.pattern = patt;
         object.text = text;
 
         object.replaceFirst = function(data) {
-            return this.text.replaceFirst(this[0],data);
+            return this.text.replaceFirst(this[0], data);
         };
 
         object.replaceAll = function(data) {
-            return this.text.replaceAll(this.pattern,data);
+            return this.text.replaceAll(this.pattern, data);
         };
 
         object.reset = function() {
@@ -1635,9 +1634,9 @@
     //Pattern
     /////////////////////////////////////////////////////////////////
     gs.pattern = function(pattern) {
-        var object = gs.inherit(gs.baseClass,'Pattern');
+        var object = gs.inherit(gs.baseClass, 'Pattern');
 
-        createClassNames(object,['java.util.regex.Pattern']);
+        createClassNames(object, ['java.util.regex.Pattern']);
 
         object.value = pattern;
         return object;
@@ -1669,23 +1668,23 @@
     /////////////////////////////////////////////////////////////////
     Number.prototype.times = function(closure) {
         var i;
-        for (i=0; i<this; i++) {
+        for (i = 0; i < this; i++) {
             closure(i);
         }
     };
 
-    Number.prototype.upto = function(number,closure) {
+    Number.prototype.upto = function(number, closure) {
         var i;
-        for (i=this.value; i<=number; i++) {
+        for (i = this.value; i <= number; i++) {
             closure(i);
         }
     };
 
-    Number.prototype.step = function(number,jump,closure) {
+    Number.prototype.step = function(number, jump, closure) {
         var i;
-        for (i=this.value; i<number;) {
+        for (i = this.value; i < number;) {
             closure(i);
-            i=i+jump;
+            i = i + jump;
         }
     };
 
@@ -1710,7 +1709,7 @@
     //String functions
     /////////////////////////////////////////////////////////////////
     String.prototype.contains = function(value) {
-        return this.indexOf(value)>=0;
+        return this.indexOf(value) >= 0;
     };
 
     String.prototype.startsWith = function(value) {
@@ -1718,11 +1717,11 @@
     };
 
     String.prototype.endsWith = function(value) {
-        return this.indexOf(value)==(this.length - value.length);
+        return this.indexOf(value) == (this.length - value.length);
     };
 
     String.prototype.count = function(value) {
-        var reg = new RegExp(value,'g');
+        var reg = new RegExp(value, 'g');
         var result = this.match(reg);
         if (result) {
             return result.length;
@@ -1735,18 +1734,18 @@
         return this.length;
     };
 
-    String.prototype.replaceAll = function(oldValue,newValue) {
+    String.prototype.replaceAll = function(oldValue, newValue) {
         var reg;
         if (oldValue instanceof RegExp) {
-            reg = new RegExp(oldValue.source,'g');
+            reg = new RegExp(oldValue.source, 'g');
         } else {
-            reg = new RegExp(oldValue,'g');
+            reg = new RegExp(oldValue, 'g');
         }
-        return this.replace(reg,newValue);
+        return this.replace(reg, newValue);
     };
 
-    String.prototype.replaceFirst = function(oldValue,newValue) {
-        return this.replace(oldValue,newValue);
+    String.prototype.replaceFirst = function(oldValue, newValue) {
+        return this.replace(oldValue, newValue);
     };
 
 
@@ -1764,10 +1763,10 @@
     };
 
     String.prototype.multiply = function(value) {
-        if (typeof(value)=='number') {
+        if (typeof(value) == 'number') {
             var result = '';
             var i;
-            for (i=0;i<(value | 0);i++) {
+            for (i=0; i < (value | 0); i++) {
                 result = result + this;
             }
             return result;
@@ -1790,20 +1789,19 @@
 
     function getItemsMultiline(text) {
         var items = text.split('\n');
-        if (items.length > 1 && items[items.length-1] === '') {
+        if (items.length > 1 && items[items.length - 1] === '') {
             items.splice(items.length - 1, 1);
         }
         return items;
     }
 
     String.prototype.eachLine = function(closure) {
-        var items = getItemsMultiline(this);
-        var i;
-        for (i=0;i<items.length;i++) {
+        var i, items = getItemsMultiline(this);
+        for (i = 0; i < items.length; i++) {
             var item = items[i];
             //Closure with 2 arguments, line and count
             if (closure.length == 2) {
-                closure(item,i);
+                closure(item, i);
             } else {
                 closure(item);
             }
@@ -1821,7 +1819,7 @@
             sep = arguments[1];
         }
         var item = this;
-        while (item.length<number) {
+        while (item.length < number) {
             item = item + sep;
         }
         return item;
@@ -1829,11 +1827,11 @@
 
     String.prototype.padLeft = function(number) {
         var sep = ' ';
-        if (arguments.length==2) {
+        if (arguments.length == 2) {
             sep = arguments[1];
         }
         var item = this;
-        while (item.length<number) {
+        while (item.length < number) {
             item = sep + item;
         }
         return item;
@@ -1875,8 +1873,8 @@
         var result = null;
         try {
             var pos = name.indexOf(".");
-            while (pos>=0) {
-                name = name.substring(pos+1);
+            while (pos >= 0) {
+                name = name.substring(pos + 1);
                 pos = name.indexOf(".");
             }
             result = eval(name);
@@ -1971,12 +1969,14 @@
         if (item && item.isEmpty !== undefined) {
             return !item.isEmpty();
         } else {
-            if (typeof(item) == 'number' && item === 0) {
-                return false;
-            } else if (typeof(item) == 'string' && item === '') {
-                return false;
-            } else if (typeof(item) == 'string' && item !== '') {
-                return true;
+            if (item) {
+                if (item['asBoolean']) {
+                    return item['asBoolean']();
+                } else if (typeof(item) == 'number' && item === 0) {
+                    return false;
+                } else if (typeof(item) == 'string') {
+                    return item !== '';
+                }
             }
             return item;
         }
@@ -2007,7 +2007,7 @@
     gs.instanceOf = function(item, name) {
         var gotIt = false;
 
-        if (name=="String")  {
+        if (name == "String")  {
             return typeof(item) == 'string';
         } else if (name == "Number") {
             return typeof(item) == 'number';
@@ -2051,14 +2051,36 @@
     // * operator
     gs.multiply = function(a, b) {
         if (!hasFunc(a, 'multiply')) {
-            if (!hasFunc(b, 'multiply')) {
-                return a * b;
-            } else {
-                return b.multiply(a);
-            }
-
+            return a * b;
         } else {
             return a.multiply(b);
+        }
+    };
+
+    // / operator
+    gs.div = function(a, b) {
+        if (!hasFunc(a, 'div')) {
+            return a / b;
+        } else {
+            return a.div(b);
+        }
+    };
+
+    // ** operator
+    gs.power = function(a, b) {
+        if (!hasFunc(a, 'power')) {
+            return Math.pow(a, b);
+        } else {
+            return a.power(b);
+        }
+    };
+
+    // mod operator
+    gs.mod = function(a, b) {
+        if (!hasFunc(a, 'mod')) {
+            return a % b;
+        } else {
+            return a.mod(b);
         }
     };
 
@@ -2135,8 +2157,9 @@
             item[nameProperty] = value;
             item.gSparent[nameProperty] = value;
         } else {
-
-            if (!item['setProperty']) {
+            if (nameProperty === 'methodMissing' && value) {
+                item[nameProperty] = value;
+            } else if (!item['setProperty']) {
                 var nameFunction = 'set' + nameProperty.charAt(0).toUpperCase() + nameProperty.slice(1);
 
                 if (!item[nameFunction]) {
@@ -2169,58 +2192,63 @@
         }
 
         if (!item['getProperty']) {
-            var nameFunction = 'get' + nameProperty.charAt(0).toUpperCase() + nameProperty.slice(1);
-            if (!item[nameFunction]) {
-                if (nameProperty == 'size' && typeof item[nameProperty] === "function") {
-                    return item[nameProperty]();
+            return propFromObject(item, nameProperty, inDelegates);
+        } else {
+            var res = item.getProperty(nameProperty);
+            return (res !== undefined ? res : propFromObject(item, nameProperty, inDelegates))
+        }
+    };
+
+    function propFromObject(item, nameProperty, inDelegates) {
+        var nameFunction = 'get' + nameProperty.charAt(0).toUpperCase() + nameProperty.slice(1);
+        if (!item[nameFunction]) {
+            if (nameProperty == 'size' && typeof item[nameProperty] === "function") {
+                return item[nameProperty]();
+            } else {
+                if (item[nameProperty] !== undefined) {
+                    return item[nameProperty];
                 } else {
-                    if (item[nameProperty] !== undefined) {
-                        return item[nameProperty];
-                    } else {
-                        //Lets check gp in @Delegate
-                        if (item.clazz !== undefined) {
-                            var addDelegate = mapAddDelegate[item.clazz.simpleName];
-                            if (addDelegate !== null && addDelegate !== undefined) {
-                                var i;
-                                for (i = 0; i < addDelegate.length; i++) {
-                                    var prop = addDelegate[i];
-                                    var target = item[prop][nameProperty];
-                                    if (target !== undefined) {
-                                        return item[prop][nameProperty];
-                                    }
+                    //Lets check gp in @Delegate
+                    if (item.clazz !== undefined) {
+                        var addDelegate = mapAddDelegate[item.clazz.simpleName];
+                        if (addDelegate !== null && addDelegate !== undefined) {
+                            var i;
+                            for (i = 0; i < addDelegate.length; i++) {
+                                var prop = addDelegate[i];
+                                var target = item[prop][nameProperty];
+                                if (target !== undefined) {
+                                    return item[prop][nameProperty];
                                 }
                             }
                         }
-                        //Default value of a map
-                        if (item.gSdefaultValue !== undefined && (typeof item.gSdefaultValue === "function")) {
-                            item[nameProperty] = item.gSdefaultValue();
+                    }
+                    //Default value of a map
+                    if (item.gSdefaultValue !== undefined && (typeof item.gSdefaultValue === "function")) {
+                        item[nameProperty] = item.gSdefaultValue();
+                    }
+                    //Maybe in categories
+                    if (categories.length > 0 && item[nameProperty] === undefined) {
+                        var whereExecutes = categorySearching(nameFunction);
+                        if (whereExecutes !== null) {
+                            return whereExecutes[nameFunction].apply(item, [item]);
                         }
-                        //Maybe in categories
-                        if (categories.length > 0 && item[nameProperty] === undefined) {
-                            var whereExecutes = categorySearching(nameFunction);
-                            if (whereExecutes !== null) {
-                                return whereExecutes[nameFunction].apply(item, [item]);
-                            }
-                        }
+                    }
 
-                        if (item.propertyMissing !== undefined && typeof item.propertyMissing === "function") {
-                            return item.propertyMissing(nameProperty);
+                    if (item.propertyMissing !== undefined && typeof item.propertyMissing === "function") {
+                        return item.propertyMissing(nameProperty);
+                    } else {
+                        if (!inDelegates && delegates.length > 0) {
+                            return findPropertyInDelegates(nameProperty, item);
                         } else {
-                            if (!inDelegates && delegates.length > 0) {
-                                return findPropertyInDelegates(nameProperty, item);
-                            } else {
-                                return item[nameProperty];
-                            }
+                            return item[nameProperty];
                         }
                     }
                 }
-            } else {
-                return item[nameFunction]();
             }
         } else {
-            return item.getProperty(nameProperty);
+            return item[nameFunction]();
         }
-    };
+    }
 
     function findPropertyInDelegates(nameProperty, item) {
         var i = delegates.length;
@@ -2352,13 +2380,13 @@
                 //Lets check mc in @Delegate
                 if (item.clazz !== undefined) {
                     var addDelegate = mapAddDelegate[item.clazz.simpleName];
-                    if (addDelegate !== null && addDelegate !== undefined) {
+                    if (addDelegate) {
                         var i;
                         for (i = 0; i < addDelegate.length; i++) {
                             var prop = addDelegate[i];
                             var target = item[prop][methodName];
                             if (target !== undefined) {
-                                return exFn(item[prop], methodName, item, values);
+                                return exFn(item[prop], methodName, item[prop], values);
                             }
                         }
                     }
@@ -2449,7 +2477,7 @@
         }
     };
 
-    function getProtoypeOfClass(className) {
+    function getPrototypeOfClass(className) {
         if (className == 'String') {
             return String.prototype;
         }
@@ -2463,7 +2491,7 @@
     }
 
     function addFunctionToClassIfPrototyped(name, func, className) {
-        var proto = getProtoypeOfClass(className);
+        var proto = getPrototypeOfClass(className);
         if  (proto !== null) {
             if (proto[name] === undefined) {
                 proto[name] = func;
@@ -2472,7 +2500,7 @@
     }
 
     function removeFunctionToClass(name, func, className) {
-        var proto = getProtoypeOfClass(className);
+        var proto = getPrototypeOfClass(className);
         if  (proto !== null) {
             if (proto[name] == func) {
                 proto[name] = null;
@@ -2481,8 +2509,7 @@
     }
 
     function categorySearching(methodName) {
-        var result = null;
-        var i;
+        var i, result = null;
         for (i = categories.length - 1; i >= 0 && result === null; i--) {
             var itemClass = categories[i];
             if (itemClass[methodName]) {
@@ -2510,8 +2537,8 @@
         var gotIt = false;
         if (mixins.length > 0) {
             var i;
-            for (i=0; i < mixins.length && !gotIt; i++) {
-                if (mixins[i].name==item) {
+            for (i = 0; i < mixins.length && !gotIt; i++) {
+                if (mixins[i].name == item) {
                     var j;
                     for (j=0; j < classes.length; j++) {
                         mixins[i].items[mixins[i].items.length] = classes[j];
@@ -2530,10 +2557,10 @@
         var gotIt = false;
         if (mixinsObjects.length > 0) {
             var i;
-            for (i=0; i < mixinsObjects.length && !gotIt; i++) {
+            for (i = 0; i < mixinsObjects.length && !gotIt; i++) {
                 if (mixinsObjects[i].item == item) {
                     var j;
-                    for (j=0; j < classes.length; j++) {
+                    for (j = 0; j < classes.length; j++) {
                         mixinsObjects[i].items[mixinsObjects[i].items.length] = classes[j];
                     }
                     gotIt = true;
@@ -2541,14 +2568,13 @@
             }
         }
         if (!gotIt) {
-            mixinsObjects[mixinsObjects.length] = { item:item, items:classes};
+            mixinsObjects[mixinsObjects.length] = { item: item, items: classes};
         }
         //TODO make any kinda cleanup if mixinsObjects growing
     };
 
     function mixinSearching(item, methodName) {
-        var result = null;
-        var className = null;
+        var result = null, className = null;
         if (typeof(item) == 'string') {
             className = 'String';
         }
@@ -2585,8 +2611,7 @@
 
     function mixinObjectsSearching(item, methodName) {
 
-        var result = null;
-        var i, ourMixin=null;
+        var result = null, i, ourMixin = null;
         for (i = mixinsObjects.length - 1; i >= 0 && ourMixin === null; i--) {
             var data = mixinsObjects[i];
             if (data.item == item) {
@@ -2612,7 +2637,7 @@
         var object = gs.inherit(gs.baseClass,'StringBuffer');
         object.value = '';
 
-        if (arguments.length==1 && typeof arguments[0] === 'string') {
+        if (arguments.length == 1 && typeof arguments[0] === 'string') {
             object.value = arguments[0];
         }
 
@@ -2654,18 +2679,22 @@
     ////////////////////////////////////////////////////////////
     // Delegate
     ////////////////////////////////////////////////////////////
-    gs.applyDelegate = function(func, delegate, params) {
+    function applyDelegate (func, delegate, params) {
         delegates[delegates.length] = delegate;
         var result = func.apply(delegate, params);
         delegates.pop();
         return result;
-    };
+    }
 
     gs.execCall = function (func, thisObject, params) {
-        if (func['call'] !== undefined && typeof func === 'object') {
-            return func['call'].apply(func, params);
+        if (func.delegate !== undefined) {
+            return applyDelegate(func, func.delegate, params);
         } else {
-            return func.apply(thisObject, params);
+            if (func['call'] !== undefined && typeof func === 'object') {
+                return func['call'].apply(func, params);
+            } else {
+                return func.apply(thisObject, params);
+            }
         }
     };
 
@@ -2750,7 +2779,7 @@
                         result = {};
                         var ob;
                         for (ob in obj) {
-                            if (!isMapProperty(ob)) {
+                            if (!isMapProperty(ob) && typeof(obj[ob]) !== "function") {
                                 result[ob] = gs.toJavascript(obj[ob]);
                             }
                         }

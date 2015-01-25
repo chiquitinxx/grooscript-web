@@ -1,0 +1,413 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+	<title>Robots fighting!</title>
+
+    <link href="css/robot.css" rel="stylesheet">
+      <link href='http://fonts.googleapis.com/css?family=Roboto:100,400' rel='stylesheet' type='text/css'>
+      <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/grooscript.min.js"></script>
+    <script type="text/javascript" src="js/robot.js"></script>
+
+    <script>
+
+        var game;
+
+        function startGame() {
+
+            document.getElementById('visible-canvas').style.visibility='visible';
+
+            var robot1 = Robot('Crazy');
+            var robot2 = Robot('Downy');
+            var robot3 = Robot('Righty');
+            var robot4 = Robot('Lefty');
+            var robot5 = Robot('Static');
+            var stupidShoot = "if (this.getRadar().size()>0 && this.getTemperature()<60) { var target = this.getRadar().values().get(0); this.shoot(target.x,target.y);}";
+            robot5.actions = Function(stupidShoot);
+            robot1.actions = Function("if (this.getRadar().size() > 0 && (this.getTemperature() < 60)) {"+
+                "var pos = this.getRadar().values() [ 0]; this.shoot(pos.x, pos.y); }; "+
+                "this.data.numberShoots = ((this.data.numberShoots ? this.data.numberShoots : 0) + 1);"+
+                "var a = gs.random().nextInt(4);"+
+                "if (gs.equals(a, 0)) { this.move(this.north); };"+
+                "if (gs.equals(a, 1)) { this.move(this.south); };"+
+                "if (gs.equals(a, 2)) { this.move(this.east);  };"+
+                "if (gs.equals(a, 3)) { this.move(this.west);  }; ");
+            robot2.actions = Function("this.move(this.south);"+stupidShoot);
+            robot3.actions = Function("this.move(this.east);"+stupidShoot);
+            robot4.actions = Function("this.move(this.west);"+stupidShoot);
+
+            game = RobotGame();
+            game.addRobotToGame(robot1);
+            game.addRobotToGame(robot2);
+            game.addRobotToGame(robot3);
+            game.addRobotToGame(robot4);
+            game.addRobotToGame(robot5);
+            game.maxSize.x = 550;
+            game.maxSize.y = 400;
+            game.sameTime = 4;
+            game.shootDistance = 150;
+
+            game.start();
+
+            gameLoop();
+        }
+
+        function gameLoop() {
+
+            var phase = 1;
+            game.processRadars();
+            game.processActions();
+            game.addRobotShoots();
+            game.processShoots(phase);
+            game.processHotRobots();
+            game.moveRobots();
+
+            drawRobots(phase++);
+
+            game.processUselessRobots();
+            game.processShoots(phase++);
+            game.processShoots(phase);
+            game.cleanTurn();
+
+            drawRobots(phase);
+            setTimeout(gameLoop, 50);
+        }
+
+        function drawRobots(phase){
+
+            // Primero se recupera el objeto canvas a modificar
+            var canvas = document.getElementById('visible-canvas');
+
+            var buffer;
+
+            if (document.getElementById('not-visible')=='undefined' || document.getElementById('not-visible')==null) {
+                buffer = document.createElement('canvas');
+                buffer.id = 'not-visible';
+                buffer.width = canvas.width;
+                buffer.height = canvas.height;
+                buffer.style.visibility='hidden';
+                canvas.appendChild(buffer);
+            } else {
+                buffer = document.getElementById('not-visible');
+            }
+
+            var context = canvas.getContext('2d');
+            var buffer_context = buffer.getContext('2d');
+
+            buffer_context.fillStyle = "rgb(255,255,255)";
+            buffer_context.fillRect (0, 0, canvas.width, canvas.height);
+
+            game.players.each(function(robot) {
+                if (robot.rXActive) {
+                    buffer_context.fillStyle = robot.rXColor;
+                    buffer_context.fillRect (robot.rXPosition.x-2, robot.rXPosition.y-2, 5, 5);
+                };
+            });
+
+            buffer_context.fillStyle = "rgb(0,0,0)";
+            game.shoots.each(function(shoot) {
+                if (!shoot.finished) {
+                    var xx = shoot.origin.x + ((shoot.turns * 3) + phase)*(shoot.incx);
+                    var yy = shoot.origin.y +((shoot.turns * 3) + phase)*(shoot.incy);
+                    buffer_context.fillRect (xx-1, yy-1, 3, 3);
+                };
+            });
+
+            context.drawImage(buffer, 0, 0);
+            var tableData = game.toTable();
+            $('#results').html(tableData);
+        }
+
+        $(document).ready(function() {
+            startGame();
+        });
+
+        function addRobot(name,dsl) {
+
+            var robot = Robot(name);
+            //console.log('dsl->'+dsl);
+            robot.actions = Function("gSobject", dsl);
+            //robot.actions = Function(dsl);
+            //alert('Add Robot '+name);
+            game.addRobotToGame(robot);
+            game.sameTime++;
+
+            if (game.robots.size() > 7) {
+                $("#buttonCheck").hide();
+                $("#sdiButton").hide();
+            }
+        }
+
+        function addSdi() {
+        	var datos = {name:"sdi"};
+        	$.ajax({
+                url: 'http://frameworks-groovygs.rhcloud.com/sdiRobot',
+                type: 'POST',
+                dataType: 'json',
+                //data: datos,
+                success: function(datosRecibidos) {
+                    addRobot(datosRecibidos.name, datosRecibidos.data);
+                },
+                error: function(xhr) {
+                     alert('Error!  Status = ' + xhr.status);
+                }
+            });
+        }
+
+    </script>
+	
+  </head>
+  <body>
+    <header>
+        <h1>Robots fighting, create your own robot with groovy Dsl!</h1>
+    </header>
+    <section>
+        <table id="fightTable">
+            <tr>
+                <td style="padding-right: 20px;">
+                    <div style="width:552px; height:402px; background-color: black;">
+                    <canvas style="padding: 1px;" width="550" height="400" id="visible-canvas">
+                        There is supposed to be an example drawing here, but it\'s not important.
+                    </canvas>
+                    </div>
+                </td>
+                <td>
+                    <button class="btn" id="sdiButton" onclick="addSdi();">SDI Robot</button>
+                    <!--button class="btn" onclick="showGameInfo();">Game Info</button>
+                    <!--button class="btn" id="buttonCreateRobot" onclick="createRobot();">Create your own Robot</button-->
+                    <div id="results"></div>
+                    <p>Max. 8 robots.</p>
+                </td>
+            </tr>
+        </table>
+    </section>
+    <section id="addRobotSection">
+        <script>
+
+            var robotDsl = '';
+
+            function processData() {
+
+                robotDsl = '';
+
+                $("#exceptionArea").hide();
+                $("#processArea").hide();
+                $("#okArea").hide();
+                var datos = {name:$("#titleName").val(), actions:$('textarea[name="code"]').val()};
+                $("#buttonFight").hide();
+
+                $.ajax({
+                    url: 'http://frameworks-groovygs.rhcloud.com/checkRobot',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: datos,
+                    success: function(datosRecibidos) {
+                        var exception = datosRecibidos.exception;
+                        var data = datosRecibidos.data;
+
+                        if (exception) {
+                            $("#exceptionArea").html("Error:" + exception.values);
+                            $("#exceptionArea").show();
+                        } else {
+                            robotDsl = data;
+                            $("#buttonFight").show();
+
+                            //All ok
+                            $("#okArea").html('All ok, ready to Fight!');
+                            $("#okArea").show();
+                        }
+                        $("#processArea").show();
+                    },
+                    error: function(xhr) {
+                        $("#processArea").visible = true;
+                        alert('Error!  Status = ' + xhr.status);
+                    }
+                });
+                //return result;
+            }
+
+            function sendData() {
+
+                var name = $("#titleName").val();
+
+                if (!name || name == '') {
+                    alert("Please define unique name.");
+                } else {
+                    $("#titleName").val('');
+                    $("#buttonFight").hide();
+                    addRobot(name, robotDsl);
+                }
+            }
+
+            $(document).ready(function() {
+                $("#buttonFight").hide();
+                $('#groovyScript').change(function () {
+                    $("#buttonFight").hide();
+                });
+                $("#exceptionArea").hide();
+                $("#okArea").hide();
+                $('textarea[name="code"]').val("//Example robot\n" +
+                "if (data.direction) {\n" +
+                "    if (getPosition().x < 5) {\n" +
+                "        data.direction = east\n" +
+                "    }\n" +
+                "    if (getPosition().x > (getMaxPosition().x - 5)) {\n" +
+                "        data.direction = west\n" +
+                "    }\n" +
+                "    move data.direction\n" +
+                "} else {\n" +
+                "    data.direction = east\n" +
+                "}\n" +
+                "move data.direction\n" +
+                "if (getTemperature() < 70) {\n" +
+                "    def radar = getRadar()\n" +
+                "    def maxDistance = 999\n" +
+                "    if (radar.size() > 0) {\n" +
+                "        radar.each { name, position ->\n" +
+                "            def distan = distance getPosition(), position\n" +
+                "            if (canShoot(position.x, position.y) && \n" +
+                "                  distan < maxDistance) {\n" +
+                "                maxDistance = distan\n" +
+                "                //Only will do last shoot\n" +
+                "                shoot position.x, position.y\n" +
+                "            }\n" +
+                "        }\n" +
+                "    }\n" +
+                "}");
+            });
+        </script>
+        <div id="dslZone">
+
+            <p>Name of the Robot (unique):</p>
+            <input type="text" id="titleName" size="30"/>
+            <p>Groovy Robot Dsl:</p>
+            <textarea name="code" class="script" style="width: 500px;" rows="28" cols="70"></textarea>
+
+            <div id="processArea">
+                <button id="buttonCheck" onclick="processData();">Check DSL</button>
+                <button id="buttonFight" onclick="sendData();" class="green">Fight!</button>
+            </div>
+
+            <div id="exceptionArea" class="alert alert-error">
+            </div>
+            <div id="okArea" class="alert alert-success">
+            </div>
+        </div>
+
+        <div id="instructions">
+            <h3>Instructions</h3>
+
+            <ul>
+                <li>It's a turn game. You define Dsl with actions of the robot.</li>
+                <li>Played in a rectangular area, walls around.</li>
+                <li>You can get max size with getMaxPosition(). Something like x=600 and y=400.</li>
+                <li>You can get your position with getPosition().</li>
+                <li>Each robot has an unique name.</li>
+                <li>Each turn, you can move to a direction and / or shot.</li>
+                <li>All actions defined in dsl executed at start of turn.</li>
+                <li>Can move to 4 directions, north, south, east, west.</li>
+                <li>Each move is one unit. Ex: move east -> increase your position.x in one.</li>
+                <li>You can shoot to a point with shoot x,y. There's a maximum range of shoot. Can check with canShoot x,y.</li>
+                <li>The speed of your shoot is 3 times your move speed.</li>
+                <li>Each time you shoot, increase your temperature in 24º</li>
+                <li>If your temperature is greater than 99º then explodes.</li>
+                <li>If you recive a shoot, your life decreased by 30. Starts at 100, below than 0 means you die.</li>
+                <li>Each turn you dont shoot, your temperature decreases 5º.</li>
+                <li>If touch wall or other robot you die.</li>
+                <li>You can access radar data with getRadar().</li>
+                <li>Range of radar is bigger than shoot range.</li>
+                <li>You can use data variable, for whatever. Created as a map, but you can change. Use for store any info.</li>
+            </ul>
+
+
+            <p>Position, it's a coordinate, an object with property x and property y.</p>
+
+            <p><img src="img/robot.png"/></p>
+
+            <table>
+                <thead>
+                <tr>
+                    <th>Function </th>
+                    <th> Returns </th>
+                    <th> Info</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>move [direction] </td>
+                    <td> -  </td>
+                    <td> north, south, east or west. Only 1 move each turn</td>
+                </tr>
+                <tr>
+                    <td>shoot [x],[y] </td>
+                    <td> -  </td>
+                    <td> Only one shoot each turn.</td>
+                </tr>
+                <tr>
+                    <td>getRadar() </td>
+                    <td> [:] name:position   </td>
+                    <td> One entry for each robot in range.</td>
+                </tr>
+                <tr>
+                    <td>getLife() </td>
+                    <td> 0-100  </td>
+                    <td> 0 or less your dead.</td>
+                </tr>
+                <tr>
+                    <td>getMaxPosition() </td>
+                    <td> position  </td>
+                    <td> Size of play area.</td>
+                </tr>
+                <tr>
+                    <td>getPosition() </td>
+                    <td> position  </td>
+                    <td> Robot position.</td>
+                </tr>
+                <tr>
+                    <td>getTemperature()  </td>
+                    <td> 0 - 100  </td>
+                    <td> Greater than 99 you die.</td>
+                </tr>
+                <tr>
+                    <td>canShoot [x],[y] </td>
+                    <td> true or false </td>
+                    <td> Shoot position in range.</td>
+                </tr>
+                <tr>
+                    <td>cancelShoot()  </td>
+                    <td> -  </td>
+                    <td> Cancel your shoot this turn.</td>
+                </tr>
+                <tr>
+                    <td>distance [position],[position]  </td>
+                    <td> 0 - 999 </td>
+                    <td> Distance between two positions.</td>
+                </tr>
+                </tbody>
+            </table>
+
+
+            <p>Tips:</p>
+
+            <pre><code>* Dont suicide your robot :p
+* Sort not working yet, don't use it. (Radar)
+* Dont be evil, don't try hack DSL.
+* Try use easy groovy, grooscript is starting.
+            </code></pre>
+
+        </div>
+    </section>
+    <script>
+        //Google Analytics info
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-37511810-1']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+  </body>
+</html>
