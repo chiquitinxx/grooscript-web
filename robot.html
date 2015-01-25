@@ -8,6 +8,7 @@
       <script type="text/javascript" src="js/jquery.min.js"></script>
     <script type="text/javascript" src="js/grooscript.min.js"></script>
     <script type="text/javascript" src="js/robot.js"></script>
+      <script type="text/javascript" src="js/ace.js"></script>
 
     <script>
 
@@ -159,7 +160,7 @@
   </head>
   <body>
     <header>
-        <h1>Robots fighting, create your own robot with groovy Dsl!</h1>
+        <h1>Robots shooting, create your own robot with groovy Dsl!</h1>
     </header>
     <section>
         <table id="fightTable">
@@ -185,6 +186,7 @@
         <script>
 
             var robotDsl = '';
+            var dslEditor;
 
             function processData() {
 
@@ -193,7 +195,7 @@
                 $("#exceptionArea").hide();
                 $("#processArea").hide();
                 $("#okArea").hide();
-                var datos = {name:$("#titleName").val(), actions:$('textarea[name="code"]').val()};
+                var datos = {name:$("#titleName").val(), actions: dslEditor.getValue()};
                 $("#buttonFight").hide();
 
                 $.ajax({
@@ -240,13 +242,16 @@
             }
 
             $(document).ready(function() {
+                dslEditor = ace.edit("editor");
+                dslEditor.setTheme("ace/theme/textmate");
+                dslEditor.getSession().setMode("ace/mode/groovy");
                 $("#buttonFight").hide();
                 $('#groovyScript').change(function () {
                     $("#buttonFight").hide();
                 });
                 $("#exceptionArea").hide();
                 $("#okArea").hide();
-                $('textarea[name="code"]').val("//Example robot\n" +
+                dslEditor.setValue("//Example robot\n" +
                 "if (data.direction) {\n" +
                 "    if (getPosition().x < 5) {\n" +
                 "        data.direction = east\n" +
@@ -273,7 +278,8 @@
                 "            }\n" +
                 "        }\n" +
                 "    }\n" +
-                "}");
+                "}", 1);
+                $('#titleName').focus();
             });
         </script>
         <div id="dslZone">
@@ -281,7 +287,7 @@
             <p>Name of the Robot (unique):</p>
             <input type="text" id="titleName" size="30"/>
             <p>Groovy Robot Dsl:</p>
-            <textarea name="code" class="script" style="width: 500px;" rows="28" cols="70"></textarea>
+            <div id="editor"></div>
 
             <div id="processArea">
                 <button id="buttonCheck" onclick="processData();">Check DSL</button>

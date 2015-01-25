@@ -81,6 +81,12 @@ button {
     padding: 20px;
 }
 
+#editor {
+    height: 450px;
+    line-height: 16px;
+    position: relative;
+}
+
 .red {background-color:Red;}
 .blue {background-color:Blue;color: white;}
 .yellow {background-color:Yellow;}
