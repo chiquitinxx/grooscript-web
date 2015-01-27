@@ -1,0 +1,42 @@
+= Grooscript 1.0.0 is here
+:author: Jorge Franco
+:imagesdir: ./img
+
+image::logo.png[Logo, 240, 240, link="http://grooscript.org",float="right"]
+
+For me, it is a pleasure to announce link:index.html[grooscript] release 1.0.0 final. Grooscript is an open source
+project, licensed under Apache-2, part of the amazing ecosystem around http://beta.groovy-lang.org/[Groovy] language.
+Source code of the project is available on https://github.com/chiquitinxx/grooscript[Github].
+
+Grooscript is a library that convert groovy or java code to javascript. You can explore main site for more
+info or take a look at the link:doc.html[documentation]. You can get the library from
+https://search.maven.org/#search%7Cga%7C1%7Ca%3A%22grooscript%22[maven] or
+https://bintray.com/chiquitinxx/grooscript/org.grooscript%3Agrooscript/view[bintray], adding it to
+your project as any other jar library. There are also a gradle
+http://plugins.gradle.org/plugin/org.grooscript.conversion[plugin], a grails
+http://grails.org/plugin/grooscript[plugin] and a https://www.npmjs.com/package/grooscript[npm module] that
+will improve your grooscript experience.
+
+This project started around august 2012, around 1000 commits after, we are here. Is a little project,
+with a few users, but we want moving forward with more people using it.
+Each day more people show interest, more contributors adding, and there is nice stuff to do for next releases. Please,
+spread grooscript around the world, we want to grow up, and improve the library each day.
+
+Use groovy to create code that will run in your browser or in http://nodejs.org/[Node.js] is a new
+experience. I invite you to try it, there are some guides in website to start with. I have created nice demos in
+https://github.com/chiquitinxx/grooscript-demos[Github], don't be lazy and make your own. Explore javascript
+with groovy is very fun, and it improves your skills in both worlds. Use DSL's, traits, AST's,
+metaprogramming, ... will improve a lot your quality of life working with javascript.
+
+I want to thank #groovylang and #grailsfw teams for all the help and time, without them grooscript would not exist.
+Thank you to Guillaume and Jacob for include this project in their weeklies. Thank you
+http://greachconf.com/[Greach] and http://gr8conf.eu/[Gr8Conf EU] for allowing me to show my english skills
+at amazing conferences in 2014. Thank you all groovy community, all emails, all comments, ... every little bit helps
+when you are working alone in an open source project. Special thanks to René, Mario, Serge, Abel and Alberto for time
+spent on grooscript, I hope they continue contributing.
+
+*It has been an awesome experience and I hope you enjoy it!*
+
+https://twitter.com/grooscript[@grooscript]
+
+http://grooscript.org
