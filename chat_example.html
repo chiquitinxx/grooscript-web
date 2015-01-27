@@ -442,7 +442,7 @@ the chat, write messages and see messages from other logged users.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="chat.png" alt="Chat">
+<img src="img/chat.png" alt="Chat">
 </div>
 </div>
 </div>
@@ -451,9 +451,10 @@ the chat, write messages and see messages from other logged users.</p>
 <h3 id="_server_side">Server side</h3>
 <div class="paragraph">
 <p>The server is a node.js app, starting a web server with <a href="http://expressjs.com/">express</a>, and websocket server
-with socket.io. To run all this you need Node.js installed, grooscript, express and socket.io
-<a href="https://www.npmjs.org/">npm modules</a>. The server just serves <code>index.html</code> page and process chat commands comming
-from websockets. I have created a groovy dsl to start the server:</p>
+with socket.io. To run all this you need Node.js installed, and run <code>&gt;npm install</code> to install all node.js
+modules needed. The server just serves
+<code>index.html</code> page and process chat commands coming from websockets. I have created a groovy dsl to start
+the server:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -482,7 +483,7 @@ from websockets. I have created a groovy dsl to start the server:</p>
             <span class="tok-n">socket</span><span class="tok-o">.</span><span class="tok-na">broadcast</span><span class="tok-o">.</span><span class="tok-na">emit</span> <span class="tok-s1">&#39;off&#39;</span><span class="tok-o">,</span> <span class="tok-o">[</span><span class="tok-nl">name:</span> <span class="tok-n">socket</span><span class="tok-o">.</span><span class="tok-na">login</span><span class="tok-o">]</span>
         <span class="tok-o">}</span>
     <span class="tok-o">}</span>
-<span class="tok-o">}.</span><span class="tok-na">start</span><span class="tok-o">(</span><span class="tok-mi">3000</span><span class="tok-o">)</span>
+<span class="tok-o">}.</span><span class="tok-na">start</span><span class="tok-o">()</span>
 </code></pre>
 </div>
 </div>
@@ -491,26 +492,25 @@ from websockets. I have created a groovy dsl to start the server:</p>
 <h3 id="_groovy_templates">Groovy templates</h3>
 <div class="paragraph">
 <p>I have created a little helper, in the grooscript gradle plugin, to process groovy templates. Is a incubating
-feature, with some limitations, that dunno if people is interested in use it. At the moment, only available
-in snapshot version.</p>
+feature, with some limitations, but is the best time to try it :).</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code class="groovy language-groovy"><span class="tok-n">task</span> <span class="tok-nf">chatTemplates</span><span class="tok-o">(</span><span class="tok-nl">type:</span> <span class="tok-n">org</span><span class="tok-o">.</span><span class="tok-na">grooscript</span><span class="tok-o">.</span><span class="tok-na">gradle</span><span class="tok-o">.</span><span class="tok-na">TemplatesTask</span><span class="tok-o">)</span> <span class="tok-o">{</span>
     <span class="tok-n">templatesPath</span> <span class="tok-o">=</span> <span class="tok-s1">&#39;src/main/webapp/templates&#39;</span>
     <span class="tok-n">templates</span> <span class="tok-o">=</span> <span class="tok-o">[</span><span class="tok-s1">&#39;join.gtpl&#39;</span><span class="tok-o">,</span> <span class="tok-s1">&#39;left.gtpl&#39;</span><span class="tok-o">,</span> <span class="tok-s1">&#39;message.gtpl&#39;</span><span class="tok-o">,</span> <span class="tok-s1">&#39;index.gtpl&#39;</span><span class="tok-o">]</span>
-    <span class="tok-n">destinationPath</span> <span class="tok-o">=</span> <span class="tok-s1">&#39;src/main/webapp/js&#39;</span>
+    <span class="tok-n">destinationFile</span> <span class="tok-o">=</span> <span class="tok-s1">&#39;src/main/webapp/js/gstemplates.js&#39;</span>
 <span class="tok-o">}</span>
 </code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The templates are converted to javascript and added to a file called <code>gstemplates.js</code>, that file has a class
-that you can use in javascript, you can use in javascript / groovy:</p>
+<p>The templates are converted to javascript, saved in the javascript file <code>destinationFile</code>. Adding that file,
+you can apply templates with a model, returning text html code.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code class="groovy language-groovy"><span class="tok-n">Templates</span><span class="tok-o">.</span><span class="tok-na">applyTemplate</span><span class="tok-o">(</span><span class="tok-s1">&#39;join.gtpl&#39;</span><span class="tok-o">,</span> <span class="tok-o">[</span><span class="tok-nl">name:</span> <span class="tok-n">data</span><span class="tok-o">.</span><span class="tok-na">name</span><span class="tok-o">])</span>
+<pre class="pygments highlight"><code class="groovy language-groovy"><span class="tok-kt">def</span> <span class="tok-n">html</span> <span class="tok-o">=</span> <span class="tok-n">Templates</span><span class="tok-o">.</span><span class="tok-na">applyTemplate</span><span class="tok-o">(</span><span class="tok-s1">&#39;join.gtpl&#39;</span><span class="tok-o">,</span> <span class="tok-o">[</span><span class="tok-nl">name:</span> <span class="tok-n">data</span><span class="tok-o">.</span><span class="tok-na">name</span><span class="tok-o">])</span>
 </code></pre>
 </div>
 </div>
@@ -555,19 +555,34 @@ from a pirate user:</p>
     <span class="tok-o">}</span>
 
     <span class="tok-n">body</span> <span class="tok-o">{</span>
-        <span class="tok-n">div</span> <span class="tok-o">(</span><span class="tok-nl">id:</span> <span class="tok-s1">&#39;loginArea&#39;</span><span class="tok-o">)</span> <span class="tok-o">{</span>
-            <span class="tok-n">input</span> <span class="tok-o">(</span><span class="tok-nl">id:</span> <span class="tok-s1">&#39;login&#39;</span><span class="tok-o">,</span> <span class="tok-nl">autocomplete:</span> <span class="tok-s1">&#39;off&#39;</span><span class="tok-o">)</span> <span class="tok-o">{</span>
-                <span class="tok-n">button</span> <span class="tok-o">(</span><span class="tok-nl">id:</span> <span class="tok-s1">&#39;loginButton&#39;</span><span class="tok-o">)</span> <span class="tok-o">{</span>
-                    <span class="tok-n">yield</span> <span class="tok-s1">&#39;Login&#39;</span>
+        <span class="tok-n">header</span> <span class="tok-o">{</span>
+            <span class="tok-n">h2</span> <span class="tok-o">{</span>
+                <span class="tok-n">a</span><span class="tok-o">(</span><span class="tok-nl">href:</span> <span class="tok-s1">&#39;http://grooscript.org&#39;</span><span class="tok-o">)</span> <span class="tok-o">{</span>
+                    <span class="tok-n">yield</span> <span class="tok-s1">&#39;grooscript&#39;</span>
+                <span class="tok-o">}</span>
+                <span class="tok-n">yield</span> <span class="tok-s1">&#39; chat demo&#39;</span>
+            <span class="tok-o">}</span>
+            <span class="tok-n">h4</span> <span class="tok-o">{</span>
+                <span class="tok-n">a</span><span class="tok-o">(</span><span class="tok-nl">href:</span> <span class="tok-s1">&#39;https://github.com/chiquitinxx/grooscript-demos&#39;</span><span class="tok-o">)</span> <span class="tok-o">{</span>
+                    <span class="tok-n">yield</span> <span class="tok-s1">&#39;GitHub source demos&#39;</span>
                 <span class="tok-o">}</span>
             <span class="tok-o">}</span>
         <span class="tok-o">}</span>
-        <span class="tok-n">div</span> <span class="tok-o">(</span><span class="tok-nl">id:</span> <span class="tok-s1">&#39;chatArea&#39;</span><span class="tok-o">)</span> <span class="tok-o">{</span>
-            <span class="tok-n">ul</span> <span class="tok-nl">id:</span> <span class="tok-s1">&#39;messages&#39;</span>
-            <span class="tok-n">div</span> <span class="tok-o">(</span><span class="tok-nl">id:</span> <span class="tok-s1">&#39;message&#39;</span><span class="tok-o">)</span> <span class="tok-o">{</span>
-                <span class="tok-n">input</span> <span class="tok-o">(</span><span class="tok-nl">id:</span> <span class="tok-s1">&#39;chat&#39;</span><span class="tok-o">,</span> <span class="tok-nl">autocomplete:</span> <span class="tok-s1">&#39;off&#39;</span><span class="tok-o">)</span> <span class="tok-o">{</span>
-                    <span class="tok-n">button</span> <span class="tok-o">(</span><span class="tok-nl">id:</span> <span class="tok-s1">&#39;sendMessage&#39;</span><span class="tok-o">)</span> <span class="tok-o">{</span>
-                        <span class="tok-n">yield</span> <span class="tok-s1">&#39;Send&#39;</span>
+        <span class="tok-n">section</span> <span class="tok-o">{</span>
+            <span class="tok-n">div</span> <span class="tok-o">(</span><span class="tok-nl">id:</span> <span class="tok-s1">&#39;loginArea&#39;</span><span class="tok-o">)</span> <span class="tok-o">{</span>
+                <span class="tok-n">input</span> <span class="tok-o">(</span><span class="tok-nl">id:</span> <span class="tok-s1">&#39;login&#39;</span><span class="tok-o">,</span> <span class="tok-nl">autocomplete:</span> <span class="tok-s1">&#39;off&#39;</span><span class="tok-o">,</span> <span class="tok-nl">autofocus:</span> <span class="tok-s2">&quot;true&quot;</span><span class="tok-o">)</span> <span class="tok-o">{</span>
+                    <span class="tok-n">button</span> <span class="tok-o">(</span><span class="tok-nl">id:</span> <span class="tok-s1">&#39;loginButton&#39;</span><span class="tok-o">)</span> <span class="tok-o">{</span>
+                        <span class="tok-n">yield</span> <span class="tok-s1">&#39;Login&#39;</span>
+                    <span class="tok-o">}</span>
+                <span class="tok-o">}</span>
+            <span class="tok-o">}</span>
+            <span class="tok-n">div</span> <span class="tok-o">(</span><span class="tok-nl">id:</span> <span class="tok-s1">&#39;chatArea&#39;</span><span class="tok-o">)</span> <span class="tok-o">{</span>
+                <span class="tok-n">ul</span> <span class="tok-nl">id:</span> <span class="tok-s1">&#39;messages&#39;</span>
+                <span class="tok-n">div</span> <span class="tok-o">(</span><span class="tok-nl">id:</span> <span class="tok-s1">&#39;message&#39;</span><span class="tok-o">)</span> <span class="tok-o">{</span>
+                    <span class="tok-n">input</span> <span class="tok-o">(</span><span class="tok-nl">id:</span> <span class="tok-s1">&#39;chat&#39;</span><span class="tok-o">,</span> <span class="tok-nl">autocomplete:</span> <span class="tok-s1">&#39;off&#39;</span><span class="tok-o">)</span> <span class="tok-o">{</span>
+                        <span class="tok-n">button</span> <span class="tok-o">(</span><span class="tok-nl">id:</span> <span class="tok-s1">&#39;sendMessage&#39;</span><span class="tok-o">)</span> <span class="tok-o">{</span>
+                            <span class="tok-n">yield</span> <span class="tok-s1">&#39;Send&#39;</span>
+                        <span class="tok-o">}</span>
                     <span class="tok-o">}</span>
                 <span class="tok-o">}</span>
             <span class="tok-o">}</span>
@@ -617,11 +632,12 @@ application running in the browser is in <code>Client.groovy</code>. Just with <
         <span class="tok-o">}</span>
         <span class="tok-n">gQuery</span><span class="tok-o">(</span><span class="tok-s1">&#39;#chatArea&#39;</span><span class="tok-o">).</span><span class="tok-na">hide</span><span class="tok-o">()</span>
         <span class="tok-n">gQuery</span><span class="tok-o">(</span><span class="tok-s1">&#39;#loginArea&#39;</span><span class="tok-o">).</span><span class="tok-na">show</span><span class="tok-o">()</span>
+        <span class="tok-n">bindEvents</span><span class="tok-o">()</span>
     <span class="tok-o">}</span>
 
     <span class="tok-nd">@GsNative</span>
     <span class="tok-kt">void</span> <span class="tok-nf">socketInit</span><span class="tok-o">()</span> <span class="tok-o">{</span><span class="tok-cm">/*</span>
-<span class="tok-cm">        this.socket = io(&#39;http://localhost:3000&#39;);</span>
+<span class="tok-cm">        this.socket = io(window.location.hostname);</span>
 <span class="tok-cm">    */</span><span class="tok-o">}</span>
 
     <span class="tok-kt">def</span> <span class="tok-nf">sendMessageClick</span><span class="tok-o">()</span> <span class="tok-o">{</span>
@@ -637,6 +653,7 @@ application running in the browser is in <code>Client.groovy</code>. Just with <
     <span class="tok-kt">void</span> <span class="tok-nf">chatMode</span><span class="tok-o">(</span><span class="tok-n">login</span><span class="tok-o">)</span> <span class="tok-o">{</span>
         <span class="tok-n">gQuery</span><span class="tok-o">(</span><span class="tok-s1">&#39;#chatArea&#39;</span><span class="tok-o">).</span><span class="tok-na">show</span><span class="tok-o">()</span>
         <span class="tok-n">gQuery</span><span class="tok-o">(</span><span class="tok-s1">&#39;#loginArea&#39;</span><span class="tok-o">).</span><span class="tok-na">hide</span><span class="tok-o">()</span>
+        <span class="tok-n">gQuery</span><span class="tok-o">(</span><span class="tok-s1">&#39;#chat&#39;</span><span class="tok-o">).</span><span class="tok-na">focus</span><span class="tok-o">()</span>
         <span class="tok-n">gQuery</span><span class="tok-o">(</span><span class="tok-s1">&#39;title&#39;</span><span class="tok-o">).</span><span class="tok-na">text</span> <span class="tok-s2">&quot;Chat - $login&quot;</span>
     <span class="tok-o">}</span>
 
@@ -646,6 +663,19 @@ application running in the browser is in <code>Client.groovy</code>. Just with <
             <span class="tok-kt">def</span> <span class="tok-n">client</span> <span class="tok-o">=</span> <span class="tok-k">new</span> <span class="tok-n">Client</span><span class="tok-o">(</span><span class="tok-n">gQuery</span><span class="tok-o">)</span>
             <span class="tok-n">gQuery</span><span class="tok-o">.</span><span class="tok-na">bindAllProperties</span><span class="tok-o">(</span><span class="tok-n">client</span><span class="tok-o">)</span>
             <span class="tok-n">gQuery</span><span class="tok-o">.</span><span class="tok-na">attachMethodsToDomEvents</span><span class="tok-o">(</span><span class="tok-n">client</span><span class="tok-o">)</span>
+        <span class="tok-o">}</span>
+    <span class="tok-o">}</span>
+
+    <span class="tok-kd">private</span> <span class="tok-nf">bindEvents</span><span class="tok-o">()</span> <span class="tok-o">{</span>
+        <span class="tok-n">gQuery</span><span class="tok-o">(</span><span class="tok-s1">&#39;#chat&#39;</span><span class="tok-o">).</span><span class="tok-na">keypress</span> <span class="tok-o">{</span> <span class="tok-n">event</span> <span class="tok-o">-&gt;</span>
+            <span class="tok-k">if</span> <span class="tok-o">(</span><span class="tok-n">event</span><span class="tok-o">.</span><span class="tok-na">which</span> <span class="tok-o">==</span> <span class="tok-mi">13</span><span class="tok-o">)</span> <span class="tok-o">{</span>
+                <span class="tok-n">sendMessageClick</span><span class="tok-o">()</span>
+            <span class="tok-o">}</span>
+        <span class="tok-o">}</span>
+        <span class="tok-n">gQuery</span><span class="tok-o">(</span><span class="tok-s1">&#39;#login&#39;</span><span class="tok-o">).</span><span class="tok-na">keypress</span> <span class="tok-o">{</span> <span class="tok-n">event</span> <span class="tok-o">-&gt;</span>
+            <span class="tok-k">if</span> <span class="tok-o">(</span><span class="tok-n">event</span><span class="tok-o">.</span><span class="tok-na">which</span> <span class="tok-o">==</span> <span class="tok-mi">13</span><span class="tok-o">)</span> <span class="tok-o">{</span>
+                <span class="tok-n">loginButtonClick</span><span class="tok-o">()</span>
+            <span class="tok-o">}</span>
         <span class="tok-o">}</span>
     <span class="tok-o">}</span>
 <span class="tok-o">}</span>
@@ -661,7 +691,7 @@ listeners,&#8230; As you can see, all logic is in one groovy file.</p>
 <div class="sect2">
 <h3 id="_run_all">Run all</h3>
 <div class="paragraph">
-<p>To run this, created <code>startChat.js</code> file, only have to do <code>node startChat.js</code> to run the server:</p>
+<p>To run this, created <code>startChat.js</code> file, only have to do <code>&gt;node startChat.js</code> to run the server:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -679,9 +709,7 @@ listeners,&#8230; As you can see, all logic is in one groovy file.</p>
 <p>Now open your browser in <code><a href="http://localhost:3000/">http://localhost:3000/</a></code> and the login div appears.</p>
 </div>
 <div class="paragraph">
-<p>All the code is on <a href="https://github.com/chiquitinxx/grooscript-demos">github</a>. I use some snapshots from grooscript
-and grooscript gradle plugin, with grooscript 0.6.2 and gradle plugin 0.7 all will be updated and will work
-if you clone it.</p>
+<p>All the code is on <a href="https://github.com/chiquitinxx/grooscript-demos">github</a>. Go, clone and play with it.</p>
 </div>
 </div>
 <div class="sect2">
@@ -700,9 +728,10 @@ future, also can find more documentation in <a href="http://grooscript.org">groo
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2014-11-02 00:44:49 CET
+Last updated 2015-01-27 22:34:01 CET
 </div>
 </div>
+</body>
 <script>
     //Google Analytics info
     var _gaq = _gaq || [];
@@ -715,5 +744,4 @@ Last updated 2014-11-02 00:44:49 CET
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
     })();
 </script>
-</body>
 </html>
