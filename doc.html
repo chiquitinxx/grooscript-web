@@ -498,6 +498,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 of awesome <a href="http://groovy.codehaus.org/">Groovy</a> ecosystem. If you want to contribute, help or support the project,
 you&#8217;re welcome, can contact in <a href="http://github.com/chiquitinxx/grooscript">Github</a> or via email.</p>
 </div>
+<div class="paragraph">
+<p>Project started Aug 26, 2012 with one contributor. Now, we are four contributors, and we have nice ideas to move
+on. Project is starting, and all the feedback is more than welcome, we want keep on groovy&#8217;ing javascript!</p>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -550,7 +554,7 @@ groovy dependencies:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'org.grooscript:grooscript:1.0.0-rc-2', {
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'org.grooscript:grooscript:1.0.0', {
     exclude module: "groovy"
     exclude module: "groovy-json"
 }</code></pre>
@@ -569,7 +573,7 @@ groovy dependencies:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@Grab('org.grooscript:grooscript:1.0.0-rc-2')
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@Grab('org.grooscript:grooscript:1.0.0')
 
 import org.grooscript.GrooScript
 
@@ -581,8 +585,8 @@ println result</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>If you want to make conversions in your groovy / java project, you need <a href="jars/grooscript-1.0.0-rc-2.jar">grooscript.jar</a>.
-You can get from mavenCentral or bintray <code>org.grooscript:grooscript:1.0.0-rc-2</code> in your project&#8217;s dependencies. Also need <code>grooscript.js</code>,
+<p>If you want to make conversions in your groovy / java project, you need <a href="jars/grooscript-1.0.0.jar">grooscript.jar</a>.
+You can get from mavenCentral or bintray <code>org.grooscript:grooscript:1.0.0</code> in your project&#8217;s dependencies. Also need <code>grooscript.js</code>,
 inside the jar or download from <a href="downloads.html">here</a> to run the converted code in your javascript environment.</p>
 </div>
 <div class="paragraph">
@@ -870,14 +874,14 @@ assert value == 3</code></pre>
 of java stuff. If you need any specific java type, other than a basic type, please before check if is supported.
 Grooscript convert your code to javascript, but the normal use of a normal programming language, not specific
 types or modules. You can expect variables, arrays, data types, operators, control flow, classes and objects you
-create, basic inheritance, numbers, string, dates, collections, maps &#8230;&#8203; are supported. But Thread, XML,
+create, basic inheritance, numbers, string, dates, collections, maps, &#8230;&#8203; are supported. But Thread, XML,
 Reflection, &#8230;&#8203; are not supported.</p>
 </div>
 <div class="sect3">
 <h4 id="_primitives">Primitives</h4>
 <div class="paragraph">
 <p>Basic types are ignored, they are just used in javascript. No differences between float, int, &#8230;&#8203; just numbers
-are 'numbers' and String are javascript String&#8217;s. Integer, Float, Double,&#8230;&#8203; types are not supported, just
+are 'numbers' and String are javascript String&#8217;s. Integer, Float, Double, &#8230;&#8203; types are not supported, just
 Integer.parseInt and Float.parseFloat are supported. Basic operations are supported: <code>+, -, *, /, %, **</code></p>
 </div>
 </div>
@@ -1032,7 +1036,7 @@ def (feature1, feature2) = groovy.twoNiceFeatures()
 <div class="sect3">
 <h4 id="_operators">Operators</h4>
 <div class="paragraph">
-<p><code>&lt;=&gt;</code>, <code>.@</code>, <code>*.</code>, <code>in</code>, <code>is</code>, <code>?.</code> and <code>?:</code> are supported.</p>
+<p><code>&lt;=&gt;</code>, <code>.@</code>, <code>*.</code>, <code>&#8230;&#8203;</code>, <code>in</code>, <code>is</code>, <code>?.</code> and <code>?:</code> are supported.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1063,6 +1067,9 @@ assert !(item.is(otherItem))
 assert item?.config?.other == null
 assert 5 == item?.config?.data ?: 5</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p><code>*</code> is not supported in *list, to divide a list in parameters for a function / method.</p>
 </div>
 <div class="paragraph">
 <p>Also you can overload this operators in your classes:</p>
@@ -1450,6 +1457,12 @@ assert p instanceof Greetable</code></pre>
 </div>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_module_extensions">Module extensions</h4>
+<div class="paragraph">
+<p>Not supported.</p>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -1560,7 +1573,7 @@ mandatory step, but with this variable you don&#8217;t have to define that syste
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@GrabConfig(systemClassLoader=true)
-@Grab('org.grooscript:grooscript:1.0.0-rc-2') <i class="conum" data-value="1"></i><b>(1)</b>
+@Grab('org.grooscript:grooscript:1.0.0') <i class="conum" data-value="1"></i><b>(1)</b>
 
 import org.grooscript.asts.PhantomJsTest
 
@@ -1990,7 +2003,7 @@ finder, like <code>gQuery('body').append('Hello!')</code>. See in action:</p>
 def result = new Result()
 def gQuery = new GQueryImpl()
 gQuery.onReady {
-    gQuery.doRemoteCall('${JSON_ADRESS}', 'GET', null, { res -&gt;
+    gQuery.doRemoteCall('${JSON_ADDRESS}', 'GET', null, { res -&gt;
         gQuery('.result').html('OK')
         result = res
     }, {
@@ -2049,10 +2062,22 @@ gQuery.onReady {
 <p>If you use @GsNative, keep that code in isolated classes, that can be easy to mock them.</p>
 </li>
 <li>
+<p>Don&#8217;t abuse @GsNative, is code untested. Better write it in javascript and keep that code tested.</p>
+</li>
+<li>
 <p>Grooscript doesn&#8217;t support all groovy and java, use <a href="conversions.html">online</a> convert before use it, to check support.</p>
 </li>
 <li>
 <p>You can activate <code>debug</code> console info in javascript with <code>gs.consoleInfo = true;</code>.</p>
+</li>
+<li>
+<p>Remember import <code>grooscript-tools.js</code> if you use Observable, HtmlBuilder or GQuery.</p>
+</li>
+<li>
+<p>Use grooscript gradle plugin daemon task to do groovy changes, and see immediately in your browser.</p>
+</li>
+<li>
+<p>You can test dom manipulation with <a href="http://jsoup.org/">jsoup</a></p>
 </li>
 </ul>
 </div>
@@ -2132,7 +2157,7 @@ Is hard put names of people that helped me this years, sure I forget someone.</p
 </div>
 <div class="paragraph">
 <p>Special thanks to <strong>@glaforge</strong>, <strong>@marioggar</strong> and <strong>René</strong>, they
-spent time at the beginning of this project. Also thanks to @burtbeckwith, @graemerocher for grails help, only
+spent time at the beginning of this project. Also thanks to @burtbeckwith and @graemerocher for grails help, only
 good things to say about all groovy and grails teams.</p>
 </div>
 <div class="paragraph">
@@ -2148,8 +2173,10 @@ All that people that sent me emails, commented me something, asked me about the 
 </div>
 </div>
 <div class="paragraph">
-<p>Finally thanks to last contributors in github, first pull request by <strong>yellowsnow</strong>, nice suggestions from <strong>pioneer</strong>, <strong>abelsromero</strong>
-improving build and <strong>alnavart</strong> giving feedback. We have nice stuff to do after 1.0 release.</p>
+<p>Finally thanks to last contributors in <a href="https://github.com/chiquitinxx/grooscript">github</a>.
+First pull request by <strong>yellowsnow</strong>. Nice suggestions from <strong>pioneer</strong> pushing package support.
+<strong>abelsromero</strong> has done amazing job improving build. <strong>alnavart</strong> giving feedback and nice suggestions.
+We have nice stuff to do after 1.0 release.</p>
 </div>
 </div>
 </div>

@@ -8,7 +8,7 @@ For me, it is a pleasure to announce link:index.html[grooscript] release 1.0.0 f
 project, licensed under Apache-2, part of the amazing ecosystem around http://beta.groovy-lang.org/[Groovy] language.
 Source code of the project is available on https://github.com/chiquitinxx/grooscript[Github].
 
-Grooscript is a library that convert groovy or java code to javascript. You can explore main site for more
+Grooscript is a library that converts groovy or java code to javascript. You can explore main site for more
 info or take a look at the link:doc.html[documentation]. You can get the library from
 https://search.maven.org/#search%7Cga%7C1%7Ca%3A%22grooscript%22[maven] or
 https://bintray.com/chiquitinxx/grooscript/org.grooscript%3Agrooscript/view[bintray], adding it to
@@ -25,7 +25,7 @@ spread grooscript around the world, we want to grow up, and improve the library 
 Use groovy to create code that will run in your browser or in http://nodejs.org/[Node.js] is a new
 experience. I invite you to try it, there are some guides in website to start with. I have created nice demos in
 https://github.com/chiquitinxx/grooscript-demos[Github], don't be lazy and make your own. Explore javascript
-with groovy is very fun, and it improves your skills in both worlds. Use DSL's, traits, AST's,
+with groovy is very fun, and it improves your skills in both worlds. Working with DSL's, traits, AST's,
 metaprogramming, ... will improve a lot your quality of life working with javascript.
 
 I want to thank #groovylang and #grailsfw teams for all the help and time, without them grooscript would not exist.
@@ -40,3 +40,7 @@ spent on grooscript, I hope they continue contributing.
 https://twitter.com/grooscript[@grooscript]
 
 http://grooscript.org
+
+++++
+include::analytics.info[]
+++++
