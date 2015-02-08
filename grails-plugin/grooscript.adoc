@@ -4,7 +4,7 @@
 
 This little framework is the engine of the plugin. It converts Groovy code to javascript.
 You don't need to know Grooscript, the plugin do the work for you. But you can
-take a look to http://grooscript.org/ to get more info. Grooscript compile the code,
+take a look to http://grooscript.org/doc.html to get more info. Grooscript compile the code,
 inspect the AST tree, and generate the javascript code.
 
 Just remember you need +grooscript-grails.js+ to run converted code. Add +<asset:javascript src="grooscript-grails.js"/+ to your gsp.
@@ -21,48 +21,9 @@ class MyController {
 
     def index() {
         def jsCode = grooscriptConverter.toJavascript('any groovy code')
+        def jsCode = grooscriptConverter.toJavascript('any groovy code', conversionOptions)
     }
 }
 --
 
 All conversion done with bean or tags, use classPath +''src/groovy''+ by default.
-
-== Conversion daemon
-
-You can activate the conversion daemon to convert groovy files to javascript while your application is up
-in *development*. Each time you change observed groovy files, javascript file will be converted. To activate
-this daemon have to configure in your +Config.groovy+:
-
-[source,groovy]
---
-grooscript {
-    daemon {
-        source = ['src/groovy/MyScript.groovy'] //<1>
-        destination = 'grails-app/assets/javascripts/app' //<2>
-        conversionOptions { //<3>
-            initialText = '//Converted file'
-        }
-        doAfter = { list -> //<4>
-            if (list)
-                println "************ Converted files: ${list}"
-        }
-    }
-}
---
-<1> List of groovy files or folders that will be converted to javascript.
-<2> Destination folder of the javascript files.
-<3> Can configure any grooscript conversion option
-<4> doAfter is a closure that receive the list of file names that changed and have been converted to javascript.
-
-[TIP]
---
-doAfter is executed 2 times each second, and the list usually is empty. AnyFile.groovy is converted to AnyFile.js
---
-
-== Conversion options
-
-Is very important understand grooscript conversion options.
-
-source:: Files or folders with files to be converted. If you put a folder, all groovy files inside will be converted. For example: +[''src/grooscript'', ''MyGroovyFile.groovy'']+
-destination:: The folder or .js file where javascript files are generated, and no folders inside will be created. For example: +''web-app/js''+
-include::../conversion_options.adoc[]

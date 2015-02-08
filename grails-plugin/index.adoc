@@ -1,5 +1,5 @@
 = Grooscript Grails Plugin
-:plugin-version: 0.7
+:plugin-version: 0.8
 :author: Jorge Franco
 :revnumber: {plugin-version}
 :revremark: Grails plugin to convert groovy code to javascript in your grails application

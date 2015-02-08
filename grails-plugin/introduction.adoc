@@ -16,8 +16,8 @@ You can see in action in this link:rest-demo.html[guide].
 I want to say thank you to @graemerocher, @marioggar and @burtbeckwith for helping at some point with this plugin. Also thanks
 for feedback at @gr8conf. I have to learn a lot about Grails, any help is always welcome.
 
-I have a lot of ideas to improve this plugin, as manage events between the server and the client using websockets, add groovy files
-to your gsp's and convert them, compile static your templates, improve phantomJs tests or domain classes options,... but I don't know if people use or
+I have a lot of ideas to improve this plugin, compile static your templates, improve phantomJs tests or domain classes options,...
+but I don't know if people use or
 is interested in this plugin. So, if you want or need something, just *open the issue or improvement* in
 https://github.com/chiquitinxx/grails-grooscript/issues[Github] or grooscript@gmail.com
 
@@ -33,6 +33,12 @@ It requires Grails 2.4+, assets pipeline and cache plugin.
 - Work with domain classes still experimental, don't use in production.
 
 == What is new in {plugin-version}
+
+- Upgrade to grooscript 1.0.0
+- Helper classes are now HtmlBuilder, GQuery and Observable, removed binder
+- Remove daemon, now convert files or use daemons is managed by gradle http://plugins.gradle.org/plugin/org.grooscript.conversion[plugin]
+
+== What is new in 0.7
 
 - Upgrade to last changes in grooscript 0.6.2
 
