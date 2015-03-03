@@ -2,6 +2,12 @@
 :author: Jorge Franco
 :source-highlighter: pygments
 
+=== What's new in 1.0.1
+
+* Fix phantomjs tests in windows
+* Improve traits support
+* Fixes
+
 === What's new in 1.0.0
 
 * More improvements in traits and static support
@@ -12,7 +18,6 @@
 * Improve @GsNative
 * Upgrades in libs and plugins in gradle build
 * Improve try / catch / finally support
-* A lot fixes
 
 === What's new in 0.6.3
 

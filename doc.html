@@ -554,7 +554,7 @@ groovy dependencies:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'org.grooscript:grooscript:1.0.0', {
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'org.grooscript:grooscript:1.0.1', {
     exclude module: "groovy"
     exclude module: "groovy-json"
 }</code></pre>
@@ -573,7 +573,7 @@ groovy dependencies:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@Grab('org.grooscript:grooscript:1.0.0')
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@Grab('org.grooscript:grooscript:1.0.1')
 
 import org.grooscript.GrooScript
 
@@ -585,8 +585,8 @@ println result</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>If you want to make conversions in your groovy / java project, you need <a href="jars/grooscript-1.0.0.jar">grooscript.jar</a>.
-You can get from mavenCentral or bintray <code>org.grooscript:grooscript:1.0.0</code> in your project&#8217;s dependencies. Also need <code>grooscript.js</code>,
+<p>If you want to make conversions in your groovy / java project, you need <a href="jars/grooscript-1.0.1.jar">grooscript.jar</a>.
+You can get from mavenCentral or bintray <code>org.grooscript:grooscript:1.0.1</code> in your project&#8217;s dependencies. Also need <code>grooscript.js</code>,
 inside the jar or download from <a href="downloads.html">here</a> to run the converted code in your javascript environment.</p>
 </div>
 <div class="paragraph">
@@ -970,7 +970,10 @@ compilation of the conversion will fail, as groovy fails.</p>
 <h3 id="_groovy_support">Groovy support</h3>
 <div class="paragraph">
 <p>In general groovy features are supported, except advanced metaprogramming techniques and AST&#8217;s applied in phases
-after semantic analysis. <code>as</code> is supported only at specific situations. Let&#8217;s see examples of some conversions.</p>
+after semantic analysis. <code>as</code> is supported only at specific situations. Owner is totally ignored.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s see examples of some conversions.</p>
 </div>
 <div class="sect3">
 <h4 id="_gstrings">GStrings</h4>
@@ -1333,8 +1336,8 @@ assert res == 0</code></pre>
 <h4 id="_closures">Closures</h4>
 <div class="paragraph">
 <p>Closures are converted to javascript functions. call, curry, rcurry, ncurry, leftShift are supported. If you
-set delegate of a closure, it will be used. Also support closures as last argument in methods, and closure
-composition.</p>
+set delegate of a closure, it will be used. dehydrate and rehydrate are not supported. Support closures
+as last argument in methods, and closure composition.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1573,7 +1576,7 @@ mandatory step, but with this variable you don&#8217;t have to define that syste
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@GrabConfig(systemClassLoader=true)
-@Grab('org.grooscript:grooscript:1.0.0') <i class="conum" data-value="1"></i><b>(1)</b>
+@Grab('org.grooscript:grooscript:1.0.1') <i class="conum" data-value="1"></i><b>(1)</b>
 
 import org.grooscript.asts.PhantomJsTest
 
@@ -2183,7 +2186,7 @@ We have nice stuff to do after 1.0 release.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-01-17 15:37:12 CET
+Last updated 2015-02-02 00:47:45 CET
 </div>
 </div>
 <script>

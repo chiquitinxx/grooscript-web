@@ -573,6 +573,7 @@ class TemplatesExtension {
     List&lt;String&gt; templates
     String destinationFile = 'src/main/webapp/js/lib/Templates.js'
     List&lt;String&gt; classPath = ['src/main/groovy']
+    String customTypeChecker
 }
 
 //Example:
@@ -581,6 +582,23 @@ templates {
     templates = ['main.gtpl', 'little/small.tpl'] //Files from templatesPath
     destinationFile = 'js/Templates.js'
     classPath = ['src/groovy']
+    customTypeChecker = 'aCustomTypeCheckerFile.groovy'
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can type check your templates with custom type checker, more info
+<a href="http://docs.codehaus.org/display/GROOVY/Type+checking+extensions">here</a>. Example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import org.codehaus.groovy.ast.expr.MethodCallExpression
+
+beforeMethodCall { call -&gt;
+    if (call instanceof MethodCallExpression) {
+        //Not allowing use p tag in templates
+        handled = (call.method.text != 'p')
+    }
 }</code></pre>
 </div>
 </div>
@@ -680,7 +698,7 @@ server a reload message.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-01-24 01:17:35 CET
+Last updated 2015-02-18 22:16:26 CET
 </div>
 </div>
 <script>
