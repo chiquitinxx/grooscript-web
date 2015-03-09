@@ -370,52 +370,35 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>The project started August 2012. Roadmap updated October 2014.</p>
+<p>The project started August 2012. Roadmap updated March 2015.</p>
 </div>
 <div class="paragraph">
-<p>Final name of the project is <strong>grooscript</strong> or <strong>Grooscript</strong>. Logo is javascript logo with groovy style:</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="img/logo.png" alt="grooscript" width="150" height="150">
-</div>
+<p>In 2015, will be working in this stuff:</p>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_1_0_release">1.0 Release</h3>
-<div class="paragraph">
-<p>Stable release 1.0, expected in December 2014 / January 2015.</p>
-</div>
-<div class="paragraph">
-<p>You can expect very good support on Groovy language. Almost all the things you love in groovy-core will be translated to
-javascript. A closed list of Java types availables, with Java supported by Groovy. Some limitations on inheritance support,
-in special the use of <em>super</em> keyword.</p>
-</div>
-<div class="paragraph">
-<p>Javascript converted code <em>easy</em> to follow, tested on Node.js and modern browsers. Friendly javascript code, that
-you can use directly from javascript.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_grooscript_vert_x_grails_plugin">Grooscript Vert.x Grails plugin</h3>
+<h3 id="_next_major_release_1_1">Next major release 1.1</h3>
 <div class="ulist">
 <ul>
 <li>
-<p>Deprecated.</p>
+<p>At the moment, you have to convert files, folders or both. Target in this release is support package system, in javascript,
+using <a href="http://requirejs.org/">require.js</a>. Grooscript will manage dependencies, convert necessary files, and generate
+require.js modules to use them in web or node.js.</p>
+</li>
+<li>
+<p>Continue improving groovy support.</p>
 </li>
 </ul>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_grooscript_grails_plugin">Grooscript Grails plugin</h3>
+<h3 id="_grails_plugin">Grails plugin</h3>
 <div class="ulist">
 <ul>
 <li>
-<p>Upgrade to last versions of grooscript.</p>
-</li>
-<li>
-<p>Improve model and remoteModel support.</p>
+<p>Version 1.0 with support for Grails 3. Support on tags and remote domain classes will be improved. Files conversion
+and daemon support moved to gradle plugin. You can use both plugins in your grails 3 applications.</p>
 </li>
 </ul>
 </div>
@@ -425,7 +408,7 @@ you can use directly from javascript.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Add support to convert groovy templates in the client side.</p>
+<p>Improve daemons to detect new created files and support require.js conversions.</p>
 </li>
 </ul>
 </div>
@@ -448,7 +431,7 @@ you can use directly from javascript.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2014-10-12 16:25:45 CEST
+Last updated 2015-03-09 21:54:23 CET
 </div>
 </div>
 </body>

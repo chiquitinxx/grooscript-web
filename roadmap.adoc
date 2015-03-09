@@ -2,35 +2,26 @@
 :author: Jorge Franco
 :email: grooscript@gmail.com
 
-The project started August 2012. Roadmap updated October 2014.
+The project started August 2012. Roadmap updated March 2015.
 
-Final name of the project is *grooscript* or *Grooscript*. Logo is javascript logo with groovy style:
+In 2015, will be working in this stuff:
 
-image::img/logo.png[grooscript,150,150]
+=== Next major release 1.1
 
-=== 1.0 Release
+- At the moment, you have to convert files, folders or both. Target in this release is support package system, in javascript,
+using http://requirejs.org/[require.js]. Grooscript will manage dependencies, convert necessary files, and generate
+require.js modules to use them in web or node.js.
 
-Stable release 1.0, expected in December 2014 / January 2015.
+- Continue improving groovy support.
 
-You can expect very good support on Groovy language. Almost all the things you love in groovy-core will be translated to
-javascript. A closed list of Java types availables, with Java supported by Groovy. Some limitations on inheritance support,
-in special the use of 'super' keyword.
+=== Grails plugin
 
-Javascript converted code 'easy' to follow, tested on Node.js and modern browsers. Friendly javascript code, that
-you can use directly from javascript.
-
-=== Grooscript Vert.x Grails plugin
-
-- Deprecated.
-
-=== Grooscript Grails plugin
-
-- Upgrade to last versions of grooscript.
-- Improve model and remoteModel support.
+- Version 1.0 with support for Grails 3. Support on tags and remote domain classes will be improved. Files conversion
+and daemon support moved to gradle plugin. You can use both plugins in your grails 3 applications.
 
 === Gradle plugin
 
-- Add support to convert groovy templates in the client side.
+- Improve daemons to detect new created files and support require.js conversions.
 
 As usual, you can contact me if you need something, ask questions or give me feedback.
 
