@@ -4,6 +4,11 @@
 
 === What's new in 1.0.1
 
+* Improve functions to work between groovy generated code and js code
+* Upgrade dependencies
+
+=== What's new in 1.0.1
+
 * Fix phantomjs tests in windows
 * Improve traits support
 * Fixes

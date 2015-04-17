@@ -554,7 +554,7 @@ groovy dependencies:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'org.grooscript:grooscript:1.0.1', {
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'org.grooscript:grooscript:1.0.2', {
     exclude module: "groovy"
     exclude module: "groovy-json"
 }</code></pre>
@@ -573,7 +573,7 @@ groovy dependencies:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@Grab('org.grooscript:grooscript:1.0.1')
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@Grab('org.grooscript:grooscript:1.0.2')
 
 import org.grooscript.GrooScript
 
@@ -585,8 +585,8 @@ println result</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>If you want to make conversions in your groovy / java project, you need <a href="jars/grooscript-1.0.1.jar">grooscript.jar</a>.
-You can get from mavenCentral or bintray <code>org.grooscript:grooscript:1.0.1</code> in your project&#8217;s dependencies. Also need <code>grooscript.js</code>,
+<p>If you want to make conversions in your groovy / java project, you need <a href="jars/grooscript-1.0.2.jar">grooscript.jar</a>.
+You can get from mavenCentral or bintray <code>org.grooscript:grooscript:1.0.2</code> in your project&#8217;s dependencies. Also need <code>grooscript.js</code>,
 inside the jar or download from <a href="downloads.html">here</a> to run the converted code in your javascript environment.</p>
 </div>
 <div class="paragraph">
@@ -1548,6 +1548,31 @@ def goodData = toGroovy(point.info()) // [GOOD] goodData will be a 'groovy' obje
 var goodData = gs.toGroovy(point.info());</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>Apart from @GsNative, you can put javascript code directly when you want to, with:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import static org.grooscript.GrooScript.nativeJs
+
+nativeJs('console.log(this)')</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ToJavascript function only pass properties to the new javascript object. I have detected, that some frameworks
+as React.js has methods that expect a javascript object that can contains functions. To solve this, I have created
+a new function that converts a groovy map to a javascript object, including closure entries.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import static org.grooscript.GrooScript.toJsObj
+
+def map = [a: 1, double: { number -&gt; number * 2}]
+toJsObj(map)
+
+//It will create the following js object: {a: 1, double: function(number) { return number * 2 }}</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -1576,7 +1601,7 @@ mandatory step, but with this variable you don&#8217;t have to define that syste
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@GrabConfig(systemClassLoader=true)
-@Grab('org.grooscript:grooscript:1.0.1') <i class="conum" data-value="1"></i><b>(1)</b>
+@Grab('org.grooscript:grooscript:1.0.2') <i class="conum" data-value="1"></i><b>(1)</b>
 
 import org.grooscript.asts.PhantomJsTest
 
@@ -2186,9 +2211,10 @@ We have nice stuff to do after 1.0 release.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-02-02 00:47:45 CET
+Last updated 2015-04-17 18:00:05 CET
 </div>
 </div>
+</body>
 <script>
     //Google Analytics info
     var _gaq = _gaq || [];
@@ -2201,5 +2227,4 @@ Last updated 2015-02-02 00:47:45 CET
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
     })();
 </script>
-</body>
 </html>
