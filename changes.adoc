@@ -2,7 +2,7 @@
 :author: Jorge Franco
 :source-highlighter: pygments
 
-=== What's new in 1.0.1
+=== What's new in 1.0.2
 
 * Improve functions to work between groovy generated code and js code
 * Upgrade dependencies
