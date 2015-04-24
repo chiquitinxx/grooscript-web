@@ -11,7 +11,7 @@ your groovy files to javascript and use in your browser.
 
 
 The source code of this demo is available in https://github.com/chiquitinxx/ratpack-grooscript-demo[github]. A similar
-application done with http://projects.spring.io/spring-boot/[Spring Boot] is deployed in http://frameworks-groovygs.rhcloud.com/, and
+application done with http://projects.spring.io/spring-boot/[Spring Boot] is deployed in http://ecosystem-gr8.rhcloud.com/, and
 the source code also https://github.com/chiquitinxx/springboot-rest-demo[here]. This is my first application using
 Ratpack, any pull request to improve it is more than welcome. I don't use any database, only a little static class
 with the frameworks added.
