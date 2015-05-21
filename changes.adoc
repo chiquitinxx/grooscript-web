@@ -2,6 +2,13 @@
 :author: Jorge Franco
 :source-highlighter: pygments
 
+=== What's new in 1.1.0
+
+* Generate require.js modules from groovy or java classes. http://grooscript.org/doc.html#_require_js_modules[Info]
+* Improve daemons
+* Upgrade dependencies
+* Fixes
+
 === What's new in 1.0.2
 
 * Improve functions to work between groovy generated code and js code
@@ -11,7 +18,6 @@
 
 * Fix phantomjs tests in windows
 * Improve traits support
-* Fixes
 
 === What's new in 1.0.0
 

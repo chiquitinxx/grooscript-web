@@ -472,6 +472,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_npm_package">Npm package</a></li>
 </ul>
 </li>
+<li><a href="#_require_js_modules">Require.js modules</a>
+<ul class="sectlevel2">
+<li><a href="#_start_with_one_javascript_file">Start with one javascript file</a></li>
+<li><a href="#_using_it">Using it</a></li>
+</ul>
+</li>
 <li><a href="#_more_links">More links</a></li>
 <li><a href="#_acknowledgements">Acknowledgements</a></li>
 </ul>
@@ -554,7 +560,7 @@ groovy dependencies:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'org.grooscript:grooscript:1.0.2', {
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'org.grooscript:grooscript:1.1.0', {
     exclude module: "groovy"
     exclude module: "groovy-json"
 }</code></pre>
@@ -573,7 +579,7 @@ groovy dependencies:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@Grab('org.grooscript:grooscript:1.0.2')
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@Grab('org.grooscript:grooscript:1.1.0')
 
 import org.grooscript.GrooScript
 
@@ -585,8 +591,8 @@ println result</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>If you want to make conversions in your groovy / java project, you need <a href="jars/grooscript-1.0.2.jar">grooscript.jar</a>.
-You can get from mavenCentral or bintray <code>org.grooscript:grooscript:1.0.2</code> in your project&#8217;s dependencies. Also need <code>grooscript.js</code>,
+<p>If you want to make conversions in your groovy / java project, you need <a href="jars/grooscript-1.1.0.jar">grooscript.jar</a>.
+You can get from mavenCentral or bintray <code>org.grooscript:grooscript:1.1.0</code> in your project&#8217;s dependencies. Also need <code>grooscript.js</code>,
 inside the jar or download from <a href="downloads.html">here</a> to run the converted code in your javascript environment.</p>
 </div>
 <div class="paragraph">
@@ -1601,7 +1607,7 @@ mandatory step, but with this variable you don&#8217;t have to define that syste
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@GrabConfig(systemClassLoader=true)
-@Grab('org.grooscript:grooscript:1.0.2') <i class="conum" data-value="1"></i><b>(1)</b>
+@Grab('org.grooscript:grooscript:1.1.0') <i class="conum" data-value="1"></i><b>(1)</b>
 
 import org.grooscript.asts.PhantomJsTest
 
@@ -1736,6 +1742,19 @@ void testReturnMap() {
     assert result == [ list: [1,2], str: 'string', number: 9, dec: 8.34, jq: 'Welcome']
 }</code></pre>
 </div>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+In windows systems, there is a limit in data size. The result can be shorter than expected. See github
+<a href="https://github.com/chiquitinxx/grooscript/issues/45">issue</a> for details.
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect2">
@@ -2005,7 +2024,7 @@ interface GQuery {
     //Atach methods of an object to dom elements with that id (Click, Submit, Change)
     void attachMethodsToDomEvents(target)
     //Launch closure on input change event, closure receive a param with the new value
-    void onChange(String id, Closure closure)
+    void onChange(String selector, Closure closure)
     //Focus dom object, on input put cursor at the end
     void focusEnd(String selector)
     //Bind all properties of an object to dom elements, find dom elements by id or name
@@ -2105,7 +2124,13 @@ gQuery.onReady {
 <p>Use grooscript gradle plugin daemon task to do groovy changes, and see immediately in your browser.</p>
 </li>
 <li>
-<p>You can test dom manipulation with <a href="http://jsoup.org/">jsoup</a></p>
+<p>You can test dom manipulation with <a href="http://jsoup.org/">jsoup</a>.</p>
+</li>
+<li>
+<p>Try develop functional, don&#8217;t abuse this or variables from other contexts.</p>
+</li>
+<li>
+<p>Curry functions to inject variables better than expect to be available after callbacks hell.</p>
 </li>
 </ul>
 </div>
@@ -2150,6 +2175,89 @@ eval(fs.readFileSync('aConvertedFile.js')+'');</code></pre>
 </div>
 <div class="paragraph">
 <p>Little <a href="nodejs_example.html">guide</a></p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_require_js_modules">Require.js modules</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>From version 1.1, you can generate <a href="http://requirejs.org/">Require.js</a> modules. Require.js is a javascript modules loader,
+like a package manager in javascript. In javascript, there isn&#8217;t package manager, so if your project grows you have to
+start to think in a solution to manage all javascript files and dependencies. I have chosen Require.js because is a
+mature utility, used by a lot of projects and compatible with other frameworks like Node.js.</p>
+</div>
+<div class="sect2">
+<h3 id="_start_with_one_javascript_file">Start with one javascript file</h3>
+<div class="paragraph">
+<p>To convert a groovy file to require.js modules, you have to set one groovy file and a destination path. If you set any
+classpath for the conversions, that classpath will be used to find groovy files.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import org.grooscript.GrooScript
+
+GrooScript.setConversionProperty('classPath', 'src/main/groovy')
+GrooScript.convertRequireJs('src/main/groovy/Initial.groovy', 'jsModules')</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you run this, a file <code><strong>jsModules/Initial.js</strong></code> will be generated. The source files has to be inside the classPath folder.</p>
+</div>
+<div class="paragraph">
+<p>This conversion is clever, and if Initial.groovy use other source files, that files also will be converted to modules. A
+file in <code><strong>src/main/groovy/util/Data.groovy</strong></code> will be converted to a require.js module in <code><strong>jsModules/util/Data.js</strong></code>. Also that
+dependency will be added in <code><strong>Initial.js</strong></code> module.</p>
+</div>
+<div class="paragraph">
+<p>Then, you don&#8217;t have to take care about all the files and dependencies, each time that you convert <code><strong>Initial.groovy</strong></code>, all
+groovy files will be converted to modules, and all dependencies will be include in that modules.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_using_it">Using it</h3>
+<div class="paragraph">
+<p>You have all that javascript modules, now you can use in your require.js application. You have to be sure that
+you include <code><strong>grooscript.js</strong></code> in your require.js dependencies. All require.js modules that you have generated are converted
+groovy code that needs <code><strong>grooscript.js</strong></code> to run.</p>
+</div>
+<div class="paragraph">
+<p>This is an example require.js initial file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-javascript" data-lang="javascript">requirejs.config({
+    baseUrl: 'jsModules',
+    paths: {
+        lib: 'js/lib'
+    }
+});
+
+requirejs(['lib/grooscript.min'], function() {
+    requirejs(['Initial']);
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And that&#8217;s all, you don&#8217;t have to worry about more groovy files, just add javascript dependencies in your project.</p>
+</div>
+<div class="paragraph">
+<p>For more info about this, can take a look at this <a href="https://github.com/chiquitinxx/grooscript/issues/38">github improvement</a>. Also
+the books <a href="https://github.com/chiquitinxx/books-demo">demo</a> will be updated soon to use this feature.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+The grooscript gradle plugin has task to generate require.js modules, and listen for changes to speed up your development
+experience.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -2211,10 +2319,9 @@ We have nice stuff to do after 1.0 release.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-04-17 18:00:05 CET
+Last updated 2015-05-20 20:04:46 CEST
 </div>
 </div>
-</body>
 <script>
     //Google Analytics info
     var _gaq = _gaq || [];
@@ -2227,4 +2334,5 @@ Last updated 2015-04-17 18:00:05 CET
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
     })();
 </script>
+</body>
 </html>
