@@ -695,10 +695,57 @@ server a reload message.</p>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_require_js_tasks">Require.js tasks</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>There are 2 tasks:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>requireJs</strong> (org.grooscript.gradle.RequireJsTask) to generate require.js modules from a groovy file</p>
+</li>
+<li>
+<p><strong>requireJsThread</strong> (org.grooscript.gradle.RequireJsThreadTask) to listen changes in groovy files to generate require.js modules</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>There is an extension to configure this task:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">package org.grooscript.gradle
+
+class RequireJsExtension {
+    String sourceFile
+    List&lt;String&gt; classPath = ['src/main/groovy']
+    String destinationFolder
+    Closure customization
+    String initialText
+    String finalText
+    List&lt;String&gt; mainContextScope
+}
+
+Example:
+requireJs {
+    sourceFile = 'src/main/groovy/MyApp.groovy'
+    // classPath by default is ['src/main/groovy']
+    destinationFolder = 'src/main/resources/web/js/app'
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <strong>requireJsThread</strong> task, has a parameter <code>blockExecution</code>, by default false. If you set to true, the task will
+continue forever, like a daemon task.</p>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-04-17 18:33:17 CET
+Last updated 2015-05-21 23:17:53 CEST
 </div>
 </div>
 <script>
