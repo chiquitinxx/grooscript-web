@@ -2,12 +2,17 @@
 :author: Jorge Franco
 :source-highlighter: pygments
 
+=== What's new in 1.1.1
+
+* New AST to include js require.js modules. http://localhost:63342/grooscript/build/asciidoc/html5/doc.html#_add_javascript_dependencies[Info]
+* Reduce waiting time in files daemon
+* Fixes
+
 === What's new in 1.1.0
 
 * Generate require.js modules from groovy or java classes. http://grooscript.org/doc.html#_require_js_modules[Info]
 * Improve daemons
 * Upgrade dependencies
-* Fixes
 
 === What's new in 1.0.2
 

@@ -475,6 +475,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_require_js_modules">Require.js modules</a>
 <ul class="sectlevel2">
 <li><a href="#_start_with_one_javascript_file">Start with one javascript file</a></li>
+<li><a href="#_add_javascript_dependencies">Add javascript dependencies</a></li>
 <li><a href="#_using_it">Using it</a></li>
 </ul>
 </li>
@@ -560,7 +561,7 @@ groovy dependencies:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'org.grooscript:grooscript:1.1.0', {
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'org.grooscript:grooscript:1.1.1', {
     exclude module: "groovy"
     exclude module: "groovy-json"
 }</code></pre>
@@ -579,7 +580,7 @@ groovy dependencies:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@Grab('org.grooscript:grooscript:1.1.0')
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@Grab('org.grooscript:grooscript:1.1.1')
 
 import org.grooscript.GrooScript
 
@@ -591,8 +592,8 @@ println result</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>If you want to make conversions in your groovy / java project, you need <a href="jars/grooscript-1.1.0.jar">grooscript.jar</a>.
-You can get from mavenCentral or bintray <code>org.grooscript:grooscript:1.1.0</code> in your project&#8217;s dependencies. Also need <code>grooscript.js</code>,
+<p>If you want to make conversions in your groovy / java project, you need <a href="jars/grooscript-1.1.1.jar">grooscript.jar</a>.
+You can get from mavenCentral or bintray <code>org.grooscript:grooscript:1.1.1</code> in your project&#8217;s dependencies. Also need <code>grooscript.js</code>,
 inside the jar or download from <a href="downloads.html">here</a> to run the converted code in your javascript environment.</p>
 </div>
 <div class="paragraph">
@@ -1607,7 +1608,7 @@ mandatory step, but with this variable you don&#8217;t have to define that syste
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@GrabConfig(systemClassLoader=true)
-@Grab('org.grooscript:grooscript:1.1.0') <i class="conum" data-value="1"></i><b>(1)</b>
+@Grab('org.grooscript:grooscript:1.1.1') <i class="conum" data-value="1"></i><b>(1)</b>
 
 import org.grooscript.asts.PhantomJsTest
 
@@ -2216,6 +2217,47 @@ groovy files will be converted to modules, and all dependencies will be include 
 </div>
 </div>
 <div class="sect2">
+<h3 id="_add_javascript_dependencies">Add javascript dependencies</h3>
+<div class="paragraph">
+<p>If you want to include dependencies to other external require.js modules, you can use AST @RequireJsModule. For example,
+in this class we are going to use data from a require.js module in <code><strong>lib/data.js</strong></code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">package files
+
+import org.grooscript.asts.RequireJsModule
+
+class Require {
+    @RequireJsModule(path = 'lib/data')
+    def data
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The javascript result of this conversion is:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-javascript" data-lang="javascript">define(['lib/data'], function (data) {
+
+  function Require() {
+    //..
+    gSobject.data = data;
+    //..
+
+    return gSobject;
+  };
+
+  return Require;
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In groovy you can use and test <code><strong>data</strong></code> field as a normal field.</p>
+</div>
+</div>
+<div class="sect2">
 <h3 id="_using_it">Using it</h3>
 <div class="paragraph">
 <p>You have all that javascript modules, now you can use in your require.js application. You have to be sure that
@@ -2223,7 +2265,7 @@ you include <code><strong>grooscript.js</strong></code> in your require.js depen
 groovy code that needs <code><strong>grooscript.js</strong></code> to run.</p>
 </div>
 <div class="paragraph">
-<p>This is an example require.js initial file:</p>
+<p>Some examples require.js initial file:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2237,6 +2279,22 @@ groovy code that needs <code><strong>grooscript.js</strong></code> to run.</p>
 requirejs(['lib/grooscript.min'], function() {
     requirejs(['Initial']);
 });</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-javascript" data-lang="javascript">requirejs.config({
+    baseUrl: 'js/app',
+    paths: {
+        lib: '../lib',
+        jquery: '../lib/jquery'
+    },
+    shim: {
+        'bookDemo': ['lib/grooscript.min', 'lib/grooscript-tools']
+    }
+});
+
+requirejs(['jquery', 'bookDemo']);</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2319,7 +2377,7 @@ We have nice stuff to do after 1.0 release.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-05-20 20:04:46 CEST
+Last updated 2015-05-23 18:01:21 CEST
 </div>
 </div>
 <script>
