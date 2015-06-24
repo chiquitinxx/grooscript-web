@@ -13,7 +13,7 @@ body {
 
 header, section, footer {
     width: 100%;
-    padding: 68px 0;
+    padding: 52px 0;
     text-align: center;
 }
 
@@ -40,7 +40,7 @@ header a {
 
 .why li {
     width: 100%;
-    font-size: 26px;
+    font-size: 1.1em;
     padding-top: 14px;
 }
 
@@ -54,7 +54,7 @@ header a {
 }
 
 #todos {
-    margin-left: -200px;
+    margin-left: -350px;
     height: 103px;
     width: 567px;
 }
@@ -209,4 +209,75 @@ h3 {
     font-size: 18px;
     color: #000000;
     background-color: #ffffff;
+}
+
+
+.editbox {
+     margin: auto;
+     display: block;
+     font-family: "Consolas", "Monaco", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace !important;
+     font-size: 1em;
+     color: black;
+ }
+
+.editbox div {
+    display:inline-block;
+    margin:auto;
+    text-align: left;
+}
+
+#component {
+    margin: auto;
+    font-family: "Consolas", "Monaco", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace !important;
+    font-size: 18px;
+    color: black;
+    text-align: left;
+}
+
+pre.code, .editbox {
+    color: #666666;
+}
+
+.editbox p {
+    margin: 0;
+}
+
+span.js-punctuation {
+    color: #666666;
+}
+
+span.js-operator {
+    color: #666666;
+}
+
+span.js-keyword {
+    color: #770088;
+}
+
+span.js-atom {
+    color: #228811;
+}
+
+span.js-variable {
+    color: black;
+}
+
+span.js-variabledef {
+    color: #0000FF;
+}
+
+span.js-localvariable {
+    color: #004499;
+}
+
+span.js-property {
+    color: black;
+}
+
+span.js-comment {
+    color: #AA7700;
+}
+
+span.js-string {
+    color: #AA2222;
 }
