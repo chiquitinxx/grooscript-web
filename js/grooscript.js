@@ -1,4 +1,4 @@
-//Grooscript Version 1.1.1 Apache 2 License
+//Grooscript Version 1.1.2 Apache 2 License
 (function() {
     var gs = function(obj) {
         if (obj instanceof gs) return obj;
@@ -143,7 +143,8 @@
         },
         getMetaClass : function() {
             return gs.metaClass(this);
-        }
+        },
+        clazz: {}
     };
 
     function applyBaseClassFunctions(item) {
@@ -1509,7 +1510,7 @@
             if (pos >= 0) {
                 var newMonth = text.substr(pos, 2) - 1;
                 while (gSobject.getMonth() != newMonth) {
-                    gSobject.setMonth(newMonth, gSobject.getUTCDate());
+                    gSobject.setMonth(newMonth);
                 }
             }
             pos = rule.indexOf('dd');
@@ -2309,14 +2310,18 @@
     }
 
     //Control all method calls
-    gs.mc = function(item, methodName, values, objectVar) {
+    gs.mc = function(item, methodName, values, objectVar, isSafe) {
 
         if (gs.consoleInfo && console) {
             console.log('[INFO] gs.mc (' + item + ').' + methodName + ' params:' + values);
         }
 
         if (item === null || item === undefined) {
-            throw 'gs.mc Calling method: ' + methodName + ' on null or undefined object.';
+            if (isSafe) {
+                return null;
+            } else {
+                throw 'gs.mc Calling method: ' + methodName + ' on null or undefined object.';
+            }
         }
 
         if (methodName == 'split' && typeof(item) == 'string') {
@@ -2656,7 +2661,7 @@
     ////////////////////////////////////////////////////////////
     gs.stringBuffer = function() {
 
-        var object = gs.inherit(gs.baseClass,'StringBuffer');
+        var object = gs.inherit(gs.baseClass, 'StringBuffer');
         object.value = '';
 
         if (arguments.length == 1 && typeof arguments[0] === 'string') {
@@ -2860,11 +2865,7 @@
     };
 
     gs.isGroovyObj = function(maybeGroovyObject) {
-        return maybeGroovyObject !== null &&
-                (maybeGroovyObject.withz !== undefined &&
-                typeof(maybeGroovyObject.withz) === "function") ||
-            (maybeGroovyObject.clazz !== undefined &&
-                maybeGroovyObject.clazz.name == 'java.util.LinkedHashMap');
+        return maybeGroovyObject !== null && maybeGroovyObject !== undefined && maybeGroovyObject.clazz !== undefined;
     };
 
     gs.execStatic = function(obj, methodName, thisObject, params) {

@@ -2,11 +2,15 @@
 :author: Jorge Franco
 :source-highlighter: pygments
 
+=== What's new in 1.1.2
+
+* Moved gpars stuff to gradle plugin, so no more gpars as dependencies of the project
+* Fixes
+
 === What's new in 1.1.1
 
 * New AST to include js require.js modules. http://localhost:63342/grooscript/build/asciidoc/html5/doc.html#_add_javascript_dependencies[Info]
 * Reduce waiting time in files daemon
-* Fixes
 
 === What's new in 1.1.0
 
@@ -218,11 +222,11 @@ testCountLinks()
 
 === What's new in 0.2.1
 
-* Now you can add methods and variables to classes (static functions too). <i>MyClass.metaClass.myFunction = { ... }</i>
+* Now you can add methods and variables to classes (static functions too). *_MyClass.metaClass.myFunction = { ... }_*
 * Basic support Class.forName().
-* Multiple assignment allowed. <i>(x,y) = { -> [1,2]}</i>
-* Method pointer to class methods. <i>myClosure = someObject.&someMethod</i>
-* Safe expressions. <i>object?.property</i>
+* Multiple assignment allowed. *_(x,y) = { -> [1,2]}_*
+* Method pointer to class methods. <i>myClosure = someObject.&someMethod_*
+* Safe expressions. *_object?.property_*
 * Starting categories support.
 * Added a new compilation option for don't convert dependencies. By default, if you convert a class with some imports, that files are converted too in the result.
 
