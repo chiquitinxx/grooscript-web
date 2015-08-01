@@ -2,11 +2,11 @@
 :author: Jorge Franco
 :email: grooscript@gmail.com
 
-The project started August 2012. Roadmap updated July 2015.
+The project started August 2012. Roadmap updated August 2015. 3rd year anniversary 26th August.
 
 In last 2015 months, will be working in this stuff:
 
-=== Next major release 1.2
+=== Next major release 1.3
 
 - Improve http://requirejs.org/[require.js] support and module generation.
 
@@ -18,14 +18,6 @@ In last 2015 months, will be working in this stuff:
 
 - No more grails 2 plugin support. Open issue if you need something.
 
-- In grails 3 plugin, improve rest support.
-
-=== Gradle plugin
-
-- Improve daemons to detect new created files.
+- Focus in grails 3 plugin, improve rest support.
 
 As usual, you can contact me if you need something, ask questions or give me feedback.
-
-++++
-include::analytics.info[]
-++++

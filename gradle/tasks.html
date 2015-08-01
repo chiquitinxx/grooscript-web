@@ -437,7 +437,7 @@ In folders or files options, you can&#8217;t use wildcards as * or **, just put 
 <h2 id="_convert_files">Convert files</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>There are 3 tasks:</p>
+<p>There are 2 tasks:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -445,10 +445,7 @@ In folders or files options, you can&#8217;t use wildcards as * or **, just put 
 <p><strong>convert</strong> (org.grooscript.gradle.ConvertTask) to convert groovy files to javascript</p>
 </li>
 <li>
-<p><strong>daemon</strong> (org.grooscript.gradle.DaemonTask) standalone task, listen changes in groovy files and convert them to javascript</p>
-</li>
-<li>
-<p><strong>thread</strong> (org.grooscript.gradle.ThreadTask) same that daemon task, but don&#8217;t stop execution, must be used with other tasks</p>
+<p><strong>convertThread</strong> (org.grooscript.gradle.ConvertThreadTask) listen changes in groovy files and convert them to javascript</p>
 </li>
 </ul>
 </div>
@@ -462,13 +459,14 @@ In folders or files options, you can&#8217;t use wildcards as * or **, just put 
 class ConversionExtension {
     def source = ['src/main/groovy']
     String destination = 'src/main/webapp/js/app'
-    List&lt;String&gt; classPath = ['src/main/groovy']
+    List&lt;String&gt; classpath = ['src/main/groovy']
     Closure customization
     String initialText
     String finalText
     boolean recursive = false
     List&lt;String&gt; mainContextScope
     String addGsLib
+    boolean includeDependencies = false
 }
 
 //Example:
@@ -483,10 +481,10 @@ grooscript {
 be saved in <code>./js</code> folder.</p>
 </div>
 <div class="paragraph">
-<p>If you execute <strong>daemon</strong> task, gradle will be running forever doing conversions if files in <code>src/main/groovy</code> change.</p>
+<p>You will use <strong>convertThread</strong> task when other task keeps gradle up, like a web application server.</p>
 </div>
 <div class="paragraph">
-<p>You will use <strong>thread</strong> task when other task keeps gradle up, like a web application server.</p>
+<p>If you execute <strong>convertThread</strong> task with <strong>blockExecution=true</strong> option, gradle will be running forever doing conversions if files in <code>src/main/groovy</code> change.</p>
 </div>
 <div class="paragraph">
 <p>Apart from <code>source</code> and <code>destination</code>, mandatory properties, you can define conversion options:</p>
@@ -496,7 +494,7 @@ be saved in <code>./js</code> folder.</p>
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">grooscript {
     source = ['src/main/groovy/presenters'] //Sources to be converted
     destination = 'js' //Target directory or js file
-    classPath = ['src/groovy'] //Needed classpath to compile source files
+    classpath = ['src/groovy'] //Needed classpath to compile source files
     customization = null //Customization in files, for example { -&gt; ast(groovy.transform.TypeChecked) }
     initialText = '//Grooscript converted file'
     initialText = '//End converted file'
@@ -572,7 +570,7 @@ class TemplatesExtension {
     String templatesPath = 'src/main/webapp/templates'
     List&lt;String&gt; templates
     String destinationFile = 'src/main/webapp/js/lib/Templates.js'
-    List&lt;String&gt; classPath = ['src/main/groovy']
+    List&lt;String&gt; classpath = ['src/main/groovy']
     String customTypeChecker
 }
 
@@ -581,7 +579,7 @@ templates {
     templatesPath = 'templates'
     templates = ['main.gtpl', 'little/small.tpl'] //Files from templatesPath
     destinationFile = 'js/Templates.js'
-    classPath = ['src/groovy']
+    classpath = ['src/groovy']
     customTypeChecker = 'aCustomTypeCheckerFile.groovy'
 }</code></pre>
 </div>
@@ -622,6 +620,10 @@ class Templates {
     }
 }</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>The <strong>templatesThread</strong> task, has a parameter <code>blockExecution</code>, by default false. If you set to true, the task will
+continue forever, blocking execution.</p>
 </div>
 </div>
 </div>
@@ -720,7 +722,7 @@ server a reload message.</p>
 
 class RequireJsExtension {
     String sourceFile
-    List&lt;String&gt; classPath = ['src/main/groovy']
+    List&lt;String&gt; classpath = ['src/main/groovy']
     String destinationFolder
     Closure customization
     String initialText
@@ -731,34 +733,22 @@ class RequireJsExtension {
 Example:
 requireJs {
     sourceFile = 'src/main/groovy/MyApp.groovy'
-    // classPath by default is ['src/main/groovy']
+    // classpath by default is ['src/main/groovy']
     destinationFolder = 'src/main/resources/web/js/app'
 }</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>The <strong>requireJsThread</strong> task, has a parameter <code>blockExecution</code>, by default false. If you set to true, the task will
-continue forever, like a daemon task.</p>
+continue forever, blocking execution.</p>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-07-04 23:17:53 CEST
+Last updated 2015-08-01 13:11:38 CEST
 </div>
 </div>
-<script>
-    //Google Analytics info
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-37511810-1']);
-    _gaq.push(['_trackPageview']);
-
-    (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-</script>
 </body>
 </html>

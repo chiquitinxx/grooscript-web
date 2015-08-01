@@ -170,7 +170,3 @@ listen to websocket events in groovy. Never was so easy add websockets to your g
 You can combine websocket support with other grooscript tags to create dynamic applications in the client side.
 
 If you missing something, or need more features, add to http://github.com/chiquitinxx/grails-grooscript/issues[Github]
-
-++++
-include::../analytics.info[]
-++++

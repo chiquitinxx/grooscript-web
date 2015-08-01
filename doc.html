@@ -561,7 +561,7 @@ groovy dependencies:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'org.grooscript:grooscript:1.1.2', {
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'org.grooscript:grooscript:1.2.0', {
     exclude module: "groovy"
     exclude module: "groovy-json"
 }</code></pre>
@@ -580,7 +580,7 @@ groovy dependencies:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@Grab('org.grooscript:grooscript:1.1.2')
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@Grab('org.grooscript:grooscript:1.2.0')
 
 import org.grooscript.GrooScript
 
@@ -592,8 +592,8 @@ println result</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>If you want to make conversions in your groovy / java project, you need <a href="jars/grooscript-1.1.2.jar">grooscript.jar</a>.
-You can get from mavenCentral or bintray <code>org.grooscript:grooscript:1.1.2</code> in your project&#8217;s dependencies. Also need <code>grooscript.js</code>,
+<p>If you want to make conversions in your groovy / java project, you need <a href="jars/grooscript-1.2.0.jar">grooscript.jar</a>.
+You can get from mavenCentral or bintray <code>org.grooscript:grooscript:1.2.0</code> in your project&#8217;s dependencies. Also need <code>grooscript.js</code>,
 inside the jar or download from <a href="downloads.html">here</a> to run the converted code in your javascript environment.</p>
 </div>
 <div class="paragraph">
@@ -607,7 +607,10 @@ inside the jar or download from <a href="downloads.html">here</a> to run the con
 GrooScript.convert('path/to/file/or/folder', 'path/to/destination/folder')
 GrooScript.convert(['file', 'folder', ...], 'path/to/destination/folder')
 //Also can convert all source files to one javascript file
-GrooScript.convert('any/number/of/sources', 'path/file.js')</code></pre>
+GrooScript.convert('any/number/of/sources', 'path/file.js')
+//You can set conversionOptions, is an optional parameter
+Map conversionOptions = [anyConversionOption: value]
+GrooScript.convert('source', 'destionation', conversionOptions)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -634,21 +637,42 @@ You can activate a daemon to automatically convert groovy code when files are mo
 <div class="sect2">
 <h3 id="_options">Options</h3>
 <div class="paragraph">
-<p>To help in conversion process, you can set some conversion options. To set conversion options:</p>
+<p>To help or improve conversion process, you can set some conversion options when you convert groovy code. There is an
+enum with available conversion options:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">//Set a conversion property
-GrooScript.setConversionProperty('recursive', true)
-GrooScript.setConversionProperty('customization', {
-    ast(CompileStatic)
-})
-//Applied to next conversions</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">package org.grooscript.convert
+
+enum ConversionOptions {
+
+    CLASSPATH('classpath', null),
+    CUSTOMIZATION('customization', null),
+    MAIN_CONTEXT_SCOPE('mainContextScope', null),
+    INITIAL_TEXT('initialText', null),
+    FINAL_TEXT('finalText', null),
+    RECURSIVE('recursive', false),
+    ADD_GS_LIB('addGsLib', null),
+    REQUIRE_JS_MODULE('requireJsModule', false),
+    CONSOLE_INFO('consoleInfo', false),
+    INCLUDE_DEPENDENCIES('includeDependencies', false)
+
+    String text
+    def defaultValue
+
+    ConversionOptions(String text, defaultValue) {
+        this.text = text
+        this.defaultValue = defaultValue
+    }
+}</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>More info about conversion options:</p>
 </div>
 <div class="dlist">
 <dl>
-<dt class="hdlist1">classPath</dt>
+<dt class="hdlist1">classpath</dt>
 <dd>
 <p>List of folders or jar&#8217;s to find dependencies. Before groovy code is converted to javascript, that code have to be successfully compiled. For example: [''src/groovy'']</p>
 </dd>
@@ -675,6 +699,18 @@ GrooScript.setConversionProperty('customization', {
 <dt class="hdlist1">addGsLib</dt>
 <dd>
 <p>you can add a grooscript js lib at the beginning of the converted file. For example you can add grooscript.js to the result, and then you don&#8217;t have to worry about include that dependency in javascript ''grooscript''</p>
+</dd>
+<dt class="hdlist1">requireJsModule</dt>
+<dd>
+<p>the result javascript code will be as a require.js module.</p>
+</dd>
+<dt class="hdlist1">consoleInfo</dt>
+<dd>
+<p>you get info in console about conversion process setting to true. Is mainly a debug option.</p>
+</dd>
+<dt class="hdlist1">includeDependencies</dt>
+<dd>
+<p>in the result javascript file, will be added conversion of dependencies. You can&#8217;t set both includeDependencies and requireJsModule to true.</p>
 </dd>
 </dl>
 </div>
@@ -1005,6 +1041,9 @@ assert multilineDouble == '''
 things: "bread","apple","egg"
 '''</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>Lazy evaluation with <code>${&#8594; resource}</code> is not supported.</p>
 </div>
 </div>
 <div class="sect3">
@@ -1608,7 +1647,7 @@ mandatory step, but with this variable you don&#8217;t have to define that syste
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@GrabConfig(systemClassLoader=true)
-@Grab('org.grooscript:grooscript:1.1.2') <i class="conum" data-value="1"></i><b>(1)</b>
+@Grab('org.grooscript:grooscript:1.2.0') <i class="conum" data-value="1"></i><b>(1)</b>
 
 import org.grooscript.asts.PhantomJsTest
 
@@ -2199,8 +2238,8 @@ classpath for the conversions, that classpath will be used to find groovy files.
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import org.grooscript.GrooScript
 
-GrooScript.setConversionProperty('classPath', 'src/main/groovy')
-GrooScript.convertRequireJs('src/main/groovy/Initial.groovy', 'jsModules')</code></pre>
+Map conversionOptions = [classpath: 'src/main/groovy']
+GrooScript.convertRequireJs('src/main/groovy/Initial.groovy', 'jsModules', conversionOptions)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2377,7 +2416,7 @@ We have nice stuff to do after 1.0 release.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-07-04 18:01:21 CEST
+Last updated 2015-08-01 10:24:29 CEST
 </div>
 </div>
 <script>

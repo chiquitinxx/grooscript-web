@@ -228,7 +228,3 @@ You can continue exploring grooscript grails plugin support of rest domain class
 - Grails issues deleting or getting _list()_ with parameters.
 
 If you missing something, or need more features, add to http://github.com/chiquitinxx/grails-grooscript/issues[Github]
-
-++++
-include::../analytics.info[]
-++++

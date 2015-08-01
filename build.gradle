@@ -1,6 +1,6 @@
 plugins {
     id "org.asciidoctor.convert" version "1.5.2"
-    id "org.grooscript.conversion" version "1.1.2"
+    id "org.grooscript.conversion" version '1.2.0'
 }
 
 apply plugin: 'groovy'
@@ -13,7 +13,7 @@ grooscript {
               '../rest/src/main/groovy/robot/Direction.groovy',
     ]
     destination = 'js/robot.js'
-    classPath = ['../rest/src/main/groovy']
+    classpath = ['../rest/src/main/groovy']
 }
 
 task wrapper(type: Wrapper) {
@@ -22,8 +22,11 @@ task wrapper(type: Wrapper) {
 
 asciidoctor {
     sourceDir = project.file 'doc'
-    sources { include 'changes.adoc', 'downloads.adoc', 'roadmap.adoc' }
-    attributes 'grooscript-version': '1.1.2',
+    sources { include 'changes.adoc', 'downloads.adoc',
+            'roadmap.adoc', 'ratpack-demo.adoc' }
+    attributes 'grooscript-version': '1.2.0',
+            'gradle-plugin-version': '1.2.0',
+            'gradle-version': '2.5',
             author: 'Jorge Franco',
             email: 'grooscript@gmail.com',
             'source-highlighter': 'prettify',

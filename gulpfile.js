@@ -5,10 +5,9 @@ var gulp = require('gulp'),
 
 gulp.task('default', function() {
   // place code for your default task here
-  return gulp.src(['demo/js/jquery.min.js',
-      'demo/js/grooscript.min.js',
-      'demo/js/grooscript-tools.js',
-      'demo/js/TodoApp.js',
+  return gulp.src(['js/jquery.min.js',
+      'js/grooscript.min.js',
+      'js/grooscript-tools.js',
       'demo/js/react.js',
       'js/slick.min.js'])
       .pipe(uglify())
@@ -18,7 +17,7 @@ gulp.task('default', function() {
 
 gulp.task('conversion', function() {
     // place code for your default task here
-    return gulp.src(['demo/js/jquery.min.js',
+    return gulp.src(['js/jquery.min.js',
         'js/grooscript.min.js',
         'js/grooscript-tools.js',
         'js/ace.js',

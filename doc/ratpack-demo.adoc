@@ -1,14 +1,7 @@
 = Using link:index.html[grooscript] gradle plugin with http://ratpack.io[Ratpack]
-:plugin-version: 0.5
-:author: Jorge Franco
-:revnumber: {plugin-version}
-:imagesdir: ./img
-:source-highlighter: pygments
-:icons: font
 
 There is no special integration support for Ratpack applications, just with the link:starting_gradle.html[gradle plugin] you can convert
 your groovy files to javascript and use in your browser.
-
 
 The source code of this demo is available in https://github.com/chiquitinxx/ratpack-grooscript-demo[github]. A similar
 application done with http://projects.spring.io/spring-boot/[Spring Boot] is deployed in http://ecosystem-gr8.rhcloud.com/, and
@@ -18,7 +11,7 @@ with the frameworks added.
 
 Is a single page, you can add groovy frameworks, and see the list of all the frameworks:
 
-image::frameworks.png[Demo]
+image::img/frameworks.png[Demo]
 
 == Setup
 
@@ -32,8 +25,8 @@ buildscript {
     jcenter()
   }
   dependencies {
-    classpath "io.ratpack:ratpack-gradle:0.9.7"
-    classpath "org.grooscript:grooscript-gradle-plugin:{plugin-version}"
+    classpath "io.ratpack:ratpack-gradle:0.9.18"
+    classpath "org.grooscript:grooscript-gradle-plugin:{gradle-plugin-version}"
   }
 }
 
@@ -42,22 +35,22 @@ apply plugin: "org.grooscript.conversion"
 
 dependencies {
     ...
-    compile 'org.grooscript:grooscript:0.5.2'
+    compile 'org.grooscript:grooscript:{grooscript-version}'
     ...
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.0'
+    gradleVersion = '{gradle-version}'
 }
 
 grooscript {
     source = ['src/main/groovy/frameworks/FrameworksPresenter.groovy'] //<1>
     destination = 'src/ratpack/public/scripts' //<2>
-    classPath = ['src/main/groovy'] //<3>
-    convertDependencies = true //<4>
+    classpath = ['src/main/groovy'] //<3>
+    includeDependencies = true //<4>
 }
 
-run.dependsOn thread //<5>
+run.dependsOn convertThread //<5>
 --
 <1> The groovy file that will be converted to javascript.
 <2> Folder where FrameworksPresenter.js will be saved.
@@ -65,8 +58,8 @@ run.dependsOn thread //<5>
 <4> If you use any other groovy class in FrameworksPresenter.groovy, that classes will be converted too, and added to .js file.
 <5> While Ratpack application is running in development, any modification done in FrameworksPresenter.groovy, will convert a new .js file.
 
-To play with grooscript, clone the source code and run with +> ./gradlew run+. Now you can modify the file FrameworksPresenter.groovy,
-each time you update that file, the .js file will be generated again, and you can reload the page +http://localhost:5050/+ to see the changes.
+To play with grooscript, clone the source code and run with `> ./gradlew run`. Now you can modify the file FrameworksPresenter.groovy,
+each time you update that file, the .js file will be generated again, and you can reload the page `http://localhost:5050/` to see the changes.
 
 == Hybrid render
 
@@ -74,19 +67,19 @@ One interesting feature of this demo, is the render of the framework list, that 
 framework is added, the same code is used to draw the new framework at the end of the list. Using the grooscript html
 builder, you can create html code with usual groovy dsl syntax, and will run in the server and in the client.
 
-In the server +Ratpack.groovy+:
+In the server `Ratpack.groovy`:
 
 [source,groovy]
 --
 import static frameworks.FrameworksPresenter
 
 get {
-    render groovyTemplate("index.html",
-            frameworks: FrameworksPresenter.htmlFrameworks(FrameworksDb.listFrameworks))
+    def list = FrameworksPresenter.htmlFrameworks(FrameworksDb.listFrameworks)
+    render groovyMarkupTemplate([frameworks: list], "index.gtpl")
 }
 --
 
-And in the client +FrameworksPresenter.groovy+:
+And in the client `FrameworksPresenter.groovy`:
 
 [source,groovy]
 --
@@ -138,7 +131,3 @@ You can explore grooscript features in link:doc.html[documentation], also downlo
 
 Please, if you have comments, suggestions, problems,... don't hesitate to contact me at grooscript@gmail.com, or open
 an issue or feature in http://github.com/chiquitinxx/grooscript/issues?state=open[Github].
-
-++++
-include::analytics.info[]
-++++

@@ -424,14 +424,33 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="content">
 <div class="sect2">
+<h3 id="_what_s_new_in_1_2_0">What&#8217;s new in 1.2.0</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Mainly changes in conversion options.</p>
+</li>
+<li>
+<p>Remove static methods to set conversion options. Now there is an optional parameter to set conversion options in conversions (org.grooscript.GrooScript).</p>
+</li>
+<li>
+<p>Renamed conversion options, classPath &#8594; classpath and requireJs &#8594; requireJsModule</p>
+</li>
+<li>
+<p>Add new conversion option includeDependencies. With this option, when you convert a file, dependency files will be converted and added to javascript result file.</p>
+</li>
+<li>
+<p>Fixes</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
 <h3 id="_what_s_new_in_1_1_2">What&#8217;s new in 1.1.2</h3>
 <div class="ulist">
 <ul>
 <li>
 <p>Moved gpars stuff to gradle plugin, so no more gpars as dependencies of the project</p>
-</li>
-<li>
-<p>Fixes</p>
 </li>
 </ul>
 </div>
@@ -959,23 +978,11 @@ testCountLinks()</code></pre>
 </li>
 </ul>
 </div>
-<script>
-    //Google Analytics info
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-37511810-1']);
-    _gaq.push(['_trackPageview']);
-
-    (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-</script>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-07-04 15:44:11 CEST
+Last updated 2015-08-01 18:15:39 CEST
 </div>
 </div>
 </body>

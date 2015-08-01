@@ -25,7 +25,3 @@ include::templates.adoc[]
 include::domain.adoc[]
 include::remoteDomain.adoc[]
 include::testing.adoc[]
-
-++++
-include::../analytics.info[]
-++++

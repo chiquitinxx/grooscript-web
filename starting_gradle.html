@@ -446,7 +446,7 @@ groovy 2.0+ and we will use new plugin system in this demo. After install gradle
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">plugins {
-  id "org.grooscript.conversion" version "1.1.2"
+  id "org.grooscript.conversion" version "1.2.0"
 }
 
 task wrapper(type: Wrapper) {
@@ -614,7 +614,7 @@ has some default conversion options. What files have to be converted? Where .js 
 <dd>
 <p>The folder or .js file where javascript files are generated, and no folders inside will be created. For example: <code>'web-app/js'</code></p>
 </dd>
-<dt class="hdlist1">classPath</dt>
+<dt class="hdlist1">classpath</dt>
 <dd>
 <p>List of folders or jar&#8217;s to find dependencies. Before groovy code is converted to javascript, that code have to be successfully compiled. For example: [''src/groovy'']</p>
 </dd>
@@ -642,6 +642,18 @@ has some default conversion options. What files have to be converted? Where .js 
 <dd>
 <p>you can add a grooscript js lib at the beginning of the converted file. For example you can add grooscript.js to the result, and then you don&#8217;t have to worry about include that dependency in javascript ''grooscript''</p>
 </dd>
+<dt class="hdlist1">requireJsModule</dt>
+<dd>
+<p>the result javascript code will be as a require.js module.</p>
+</dd>
+<dt class="hdlist1">consoleInfo</dt>
+<dd>
+<p>you get info in console about conversion process setting to true. Is mainly a debug option.</p>
+</dd>
+<dt class="hdlist1">includeDependencies</dt>
+<dd>
+<p>in the result javascript file, will be added conversion of dependencies. You can&#8217;t set both includeDependencies and requireJsModule to true.</p>
+</dd>
 </dl>
 </div>
 <div class="paragraph">
@@ -651,7 +663,7 @@ has some default conversion options. What files have to be converted? Where .js 
 <div class="content">
 <pre>source = ['src/main/groovy']
 destination = 'src/main/webapp/js/app'
-classPath = ['src/main/groovy']
+classpath = ['src/main/groovy']
 convertDependencies = false</pre>
 </div>
 </div>
@@ -663,7 +675,7 @@ convertDependencies = false</pre>
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">grooscript {
     source = ['src/main/groovy/presenters']
     destination = 'js'
-    classPath = ['src/groovy']
+    classpath = ['src/groovy']
     convertDependencies = true
     mainContextScope = ['$', 'window', 'Handlebars']
     initialText = '//Grooscript converted file'
@@ -725,7 +737,7 @@ class Draw {
 }
 
 dependencies {
-    compile 'org.grooscript:grooscript:1.1.2'
+    compile 'org.grooscript:grooscript:1.2.0'
 }</code></pre>
 </div>
 </div>
@@ -756,20 +768,8 @@ site.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-07-04 19:28:47 CET
+Last updated 2015-08-01 12:15:39 CEST
 </div>
 </div>
-<script>
-    //Google Analytics info
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-37511810-1']);
-    _gaq.push(['_trackPageview']);
-
-    (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-</script>
 </body>
 </html>

@@ -1,12 +1,6 @@
 = link:index.html[Grooscript] downloads
-:grooscript-version: 1.1.2
-:author: Jorge Franco
 
-* Grooscript {grooscript-version} jar: link:jars/grooscript-{grooscript-version}.jar[grooscript-{grooscript-version}.jar] 540kb
+* Grooscript {grooscript-version} jar: link:jars/grooscript-{grooscript-version}.jar[grooscript-{grooscript-version}.jar] 545kb
 * Main js: link:js/grooscript.js[grooscript.js] 87kb
 * Minified js: link:js/grooscript.min.js[grooscript.min.js] 34kb
 * Tools js (html builder + gQuery + observable): link:js/grooscript-tools.js[grooscript-tools.js] 14kb
-
-++++
-include::analytics.info[]
-++++
