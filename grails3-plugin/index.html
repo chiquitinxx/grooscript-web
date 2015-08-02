@@ -420,7 +420,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Jorge Franco</span><br>
 <span id="email" class="email"><a href="mailto:grooscript@gmail.com">grooscript@gmail.com</a></span><br>
-<span id="revnumber">version 1.0.0</span>
+<span id="revnumber">version 1.1.0</span>
 <br><span id="revremark">Grails plugin to convert groovy code to javascript in your gsp's</span>
 </div>
 <div id="toc" class="toc2">
@@ -430,7 +430,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_important">Important</a></li>
 <li><a href="#_requisites">Requisites</a></li>
-<li><a href="#_what_is_new_in_1_0_0">What is new in 1.0.0</a></li>
+<li><a href="#_what_is_new_in_1_1_0">What is new in 1.1.0</a></li>
+<li><a href="#_changes_version_1_0_0">Changes version 1.0.0</a></li>
 </ul>
 </li>
 <li><a href="#_grooscript">Grooscript</a>
@@ -459,11 +460,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_using_remote_domain_classes_demo">Using remote domain classes demo</a>
 <ul class="sectlevel2">
 <li><a href="#_starting">Starting</a></li>
-<li><a href="#_grooscript_list">Grooscript list</a></li>
+<li><a href="#_grooscript_remote_domain_classes">Grooscript remote domain classes</a></li>
 <li><a href="#_add_books">Add books</a></li>
+<li><a href="#_use_in_production">Use in production</a></li>
 </ul>
 </li>
-<li><a href="#_feedback_and_help">Feedback and help</a></li>
+<li><a href="#_feedback">Feedback</a></li>
 </ul>
 </div>
 </div>
@@ -535,14 +537,27 @@ but I don&#8217;t know if people use or is interested in this plugin. So, if you
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dependencies {
     ...
-    compile "org.grails.plugins:grooscript:1.0.0"
+    compile "org.grails.plugins:grooscript:1.1.0"
     ...
 }</code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_what_is_new_in_1_0_0">What is new in 1.0.0</h3>
+<h3 id="_what_is_new_in_1_1_0">What is new in 1.1.0</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Generation of remote domain classes code for production.</p>
+</li>
+<li>
+<p>Use grooscript version 1.2.0</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_changes_version_1_0_0">Changes version 1.0.0</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -884,7 +899,7 @@ use the <a href="http://grails.org/plugin/spring-websocket">websocket plugin</a>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dependencies {
     ...
-    compile "org.grails.plugins:grooscript:1.0.0"
+    compile "org.grails.plugins:grooscript:1.1.0"
     ...
 }</code></pre>
 </div>
@@ -1094,7 +1109,7 @@ browser at http://localhost:8080/rest-demo. You must see the two book added in t
 </div>
 </div>
 <div class="sect2">
-<h3 id="_grooscript_list">Grooscript list</h3>
+<h3 id="_grooscript_remote_domain_classes">Grooscript remote domain classes</h3>
 <div class="paragraph">
 <p>Now let&#8217;s add grooscript grails support for rest domain classes. Then, we can work with our domain classes
 from the client, and save data in our server just saving our classes in the client side. First let&#8217;s change our
@@ -1276,18 +1291,38 @@ that the book is added with the url of the list of books http://localhost:8080/r
 </table>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_use_in_production">Use in production</h3>
+<div class="paragraph">
+<p>The remote domain classes feature is still experimental, but if you want to use in production you have to generate
+remote domain classes files. When this feature is used in development, it search for your domain classes in
+your filesystem, convert them to javascript, and added js code to your gsp.</p>
+</div>
+<div class="paragraph">
+<p>In production you have to generate files that will be added to your ./build/resources dir. You have to execute
+a script to do that conversion:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-shell" data-lang="shell">&gt; grails generate-remote-domain example.Book
+
+or
+
+&gt; grails generate-remote-domain example.Book example.Library ...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And later generate the war / jar.</p>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_feedback_and_help">Feedback and help</h2>
+<h2 id="_feedback">Feedback</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Please, if you have ideas to improve the plugin, or find bugs, please open issues in
 <a href="https://github.com/chiquitinxx/grooscript-grails3-plugin/issues">Github</a>.</p>
-</div>
-<div class="paragraph">
-<p>Also, to finish rest support available in production I need your help. I need to create files when
-jar / war is generated. So please contact me if you know how to do that in a grails 3 plugin.</p>
 </div>
 <div class="paragraph">
 <p>Thank you!</p>
@@ -1297,8 +1332,8 @@ jar / war is generated. So please contact me if you know how to do that in a gra
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.0.0<br>
-Last updated 2015-06-27 15:40:23 CEST
+Version 1.1.0<br>
+Last updated 2015-08-03 01:16:08 CEST
 </div>
 </div>
 </body>
