@@ -9,6 +9,7 @@ gulp.task('default', function() {
       'js/grooscript.min.js',
       'js/grooscript-tools.js',
       'demo/js/react.js',
+      'js/anijs-min.js',
       'js/slick.min.js'])
       .pipe(uglify())
       .pipe(concat('index.js'))
