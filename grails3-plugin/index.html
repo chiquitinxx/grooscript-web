@@ -420,7 +420,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Jorge Franco</span><br>
 <span id="email" class="email"><a href="mailto:grooscript@gmail.com">grooscript@gmail.com</a></span><br>
-<span id="revnumber">version 1.1.0</span>
+<span id="revnumber">version 1.1.1</span>
 <br><span id="revremark">Grails plugin to convert groovy code to javascript in your gsp's</span>
 </div>
 <div id="toc" class="toc2">
@@ -430,6 +430,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_important">Important</a></li>
 <li><a href="#_requisites">Requisites</a></li>
+<li><a href="#_what_is_new_in_1_1_1">What is new in 1.1.1</a></li>
 <li><a href="#_what_is_new_in_1_1_0">What is new in 1.1.0</a></li>
 <li><a href="#_changes_version_1_0_0">Changes version 1.0.0</a></li>
 </ul>
@@ -537,10 +538,20 @@ but I don&#8217;t know if people use or is interested in this plugin. So, if you
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dependencies {
     ...
-    compile "org.grails.plugins:grooscript:1.1.0"
+    compile "org.grails.plugins:grooscript:1.1.1"
     ...
 }</code></pre>
 </div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_what_is_new_in_1_1_1">What is new in 1.1.1</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Little fixes</p>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect2">
@@ -652,6 +663,19 @@ class GrooscriptGrails {
 <div class="sect1">
 <h2 id="_tags">Tags</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>Remember, when using tags, you have to add grooscript lib, and maybe jquery. Asset pipeline plugin is used.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;asset:javascript src="grooscript-grails.js"/&gt;
+&lt;asset:javascript src="jquery.js"/&gt;
+
+    ... your grooscript tags here ...
+
+&lt;asset:deferredScripts/&gt;</code></pre>
+</div>
+</div>
 <div class="sect2">
 <h3 id="_groovyCode">&lt;grooscript:code&gt;</h3>
 <div class="paragraph">
@@ -748,7 +772,7 @@ is available inside the template tag, that is the param used in the template fun
 
 &lt;grooscript:code&gt;
     $(document).ready {
-        refreshList [[id: 1, title:'Groovy in Action'], [id: 2, title:'Grails in Action']]
+        refreshList([[id: 1, title:'Groovy in Action'], [id: 2, title:'Grails in Action']])
     }
 &lt;/grooscript:code&gt;</code></pre>
 </div>
@@ -899,7 +923,7 @@ use the <a href="http://grails.org/plugin/spring-websocket">websocket plugin</a>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dependencies {
     ...
-    compile "org.grails.plugins:grooscript:1.1.0"
+    compile "org.grails.plugins:grooscript:1.1.1"
     ...
 }</code></pre>
 </div>
@@ -1332,8 +1356,8 @@ or
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.1.0<br>
-Last updated 2015-08-03 01:16:08 CEST
+Version 1.1.1<br>
+Last updated 2015-08-11 19:02:38 CEST
 </div>
 </div>
 </body>
