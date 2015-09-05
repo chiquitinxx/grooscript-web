@@ -420,7 +420,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Jorge Franco</span><br>
 <span id="email" class="email"><a href="mailto:grooscript@gmail.com">grooscript@gmail.com</a></span><br>
-<span id="revnumber">version 1.1.1</span>
+<span id="revnumber">version 1.1.2</span>
 <br><span id="revremark">Grails plugin to convert groovy code to javascript in your gsp's</span>
 </div>
 <div id="toc" class="toc2">
@@ -430,7 +430,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_important">Important</a></li>
 <li><a href="#_requisites">Requisites</a></li>
-<li><a href="#_what_is_new_in_1_1_1">What is new in 1.1.1</a></li>
+<li><a href="#_what_is_new_in_1_1_2_and_1_1_1">What is new in 1.1.2 and 1.1.1</a></li>
 <li><a href="#_what_is_new_in_1_1_0">What is new in 1.1.0</a></li>
 <li><a href="#_changes_version_1_0_0">Changes version 1.0.0</a></li>
 </ul>
@@ -538,18 +538,18 @@ but I don&#8217;t know if people use or is interested in this plugin. So, if you
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dependencies {
     ...
-    compile "org.grails.plugins:grooscript:1.1.1"
+    compile "org.grails.plugins:grooscript:1.1.2"
     ...
 }</code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_what_is_new_in_1_1_1">What is new in 1.1.1</h3>
+<h3 id="_what_is_new_in_1_1_2_and_1_1_1">What is new in 1.1.2 and 1.1.1</h3>
 <div class="ulist">
 <ul>
 <li>
-<p>Little fixes</p>
+<p>Fixes</p>
 </li>
 </ul>
 </div>
@@ -867,9 +867,9 @@ A variable called <em>event</em> is available inside with the data of the event.
 <div class="paragraph">
 <p>With this tag you can use your domain classes in the browser / client. The domain class is available in
 your groovy code and actions on that domain will be performed asynchronous in your server. You have to annotate
-your domain class as a REST resource with @Resource(uri='/anyUrl'). The access to
+your domain class as a REST resource with @Resource(uri='/anyUrl', formats=['json']). The access to
 the data is controlled by grails, you can use <a href="http://grails.org/plugin/spring-security-rest">spring secure rest plugin</a>
-to secure access to your data.</p>
+to secure access to your data. Only supports json results.</p>
 </div>
 <div class="paragraph">
 <p><strong>This tag is still experimental, don&#8217;t use in production.</strong></p>
@@ -923,7 +923,7 @@ use the <a href="http://grails.org/plugin/spring-websocket">websocket plugin</a>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dependencies {
     ...
-    compile "org.grails.plugins:grooscript:1.1.1"
+    compile "org.grails.plugins:grooscript:1.1.2"
     ...
 }</code></pre>
 </div>
@@ -987,7 +987,7 @@ class ExamplesController {
 </div>
 <div class="paragraph">
 <p>The connection between server and the client uses sockjs and stomp, see
-<a href="http://grails.org/plugin/spring-websocket">websocket plugin</a> for more info. In javascript there is a variable called
+<a href="https://github.com/zyro23/grails-spring-websocket">websocket plugin</a> for more info. In javascript there is a variable called
 <strong>websocketClient</strong> with the stomp client object. You can send websocket messages to the server with:</p>
 </div>
 <div class="listingblock">
@@ -1356,8 +1356,8 @@ or
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.1.1<br>
-Last updated 2015-08-11 19:02:38 CEST
+Version 1.1.2<br>
+Last updated 2015-09-06 19:02:38 +02:00
 </div>
 </div>
 </body>
