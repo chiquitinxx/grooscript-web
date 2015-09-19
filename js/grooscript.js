@@ -1,4 +1,16 @@
-//Grooscript Version 1.2.0 Apache 2 License
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 (function() {
     var gs = function(obj) {
         if (obj instanceof gs) return obj;
@@ -60,7 +72,7 @@
 
     //Function that used for print and println in groovy
     gs.println = function(value) {
-        if (gs.consoleOutput && console) {
+        if (gs.consoleOutput) {
             console.log(value);
         } else {
             if (gs.consoleData !== "") {
@@ -68,6 +80,10 @@
             }
             gs.consoleData = gs.consoleData + value;
         }
+    };
+
+    gs.printNashorn = function(value) {
+        print(value);
     };
 
     //TODO We don't know if a function is constructor, atm if function name starts with uppercase, it is
@@ -1109,12 +1125,7 @@
         if (this['clazz'] === undefined) {
             return this.oldToString();
         } else if (this.length > 0) {
-            var i, result = '[';
-            for (i = 0; i < this.length - 1; i++) {
-                result = result + this[i] + ', ';
-            }
-            result = result + this[this.length - 1] + ']';
-            return result;
+            return '[' + this.join(', ') + ']';
         } else {
             return '[]';
         }
@@ -1273,8 +1284,7 @@
     };
 
     Array.prototype.takeWhile = function(closure) {
-        var result = [];
-        var i, exit=false;
+        var result = [], i, exit=false;
         for (i = 0; !exit && i < this.length; i++) {
             if (closure(this[i])) {
                 result[i] = this[i];
@@ -1363,6 +1373,22 @@
             }
         }
         return result;
+    };
+
+    Array.prototype.tail = function() {
+        var i, result = [];
+        for (i = 1; i < this.length; i++) {
+            result.push(this[i]);
+        }
+        return gs.list(result);
+    };
+
+    Array.prototype.init = function() {
+        var i, result = [];
+        for (i = 0; i < this.length - 1; i++) {
+            result.push(this[i]);
+        }
+        return gs.list(result);
     };
 
     /////////////////////////////////////////////////////////////////
@@ -2774,6 +2800,10 @@
         return function () {
             return func(that.apply(null, arguments));
         };
+    };
+
+    Function.prototype.run = function() {
+        return this();
     };
 
     //MISC Find scope of a var

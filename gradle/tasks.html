@@ -467,6 +467,8 @@ class ConversionExtension {
     List&lt;String&gt; mainContextScope
     String addGsLib
     boolean includeDependencies = false
+    boolean consoleInfo = false
+    boolean nashornConsole = false
 }
 
 //Example:
@@ -501,6 +503,7 @@ be saved in <code>./js</code> folder.</p>
     recursive = true
     mainContextScope = ['$'] //Variables available in main scope
     addGsLib = 'grooscript, grooscript-tools' //Include libs (comma separated) from grooscript ('grooscript', 'grooscript.min', 'grooscript-tools' or 'jquery.min')
+    nashornConsole = true //Use 'print' and not 'console.log'
 }</code></pre>
 </div>
 </div>
@@ -728,6 +731,7 @@ class RequireJsExtension {
     String initialText
     String finalText
     List&lt;String&gt; mainContextScope
+    boolean nashornConsole = false
 }
 
 Example:
@@ -747,7 +751,7 @@ continue forever, blocking execution.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-08-01 13:11:38 CEST
+Last updated 2015-09-19 19:18:10 +02:00
 </div>
 </div>
 </body>

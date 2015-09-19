@@ -470,6 +470,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_gradle_plugin">Gradle plugin</a></li>
 <li><a href="#_grails_plugin">Grails plugin</a></li>
 <li><a href="#_npm_package">Npm package</a></li>
+<li><a href="#_bower_package">Bower package</a></li>
 </ul>
 </li>
 <li><a href="#_require_js_modules">Require.js modules</a>
@@ -561,7 +562,7 @@ groovy dependencies:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'org.grooscript:grooscript:1.2.0', {
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'org.grooscript:grooscript:1.2.1', {
     exclude module: "groovy"
     exclude module: "groovy-json"
 }</code></pre>
@@ -580,7 +581,7 @@ groovy dependencies:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@Grab('org.grooscript:grooscript:1.2.0')
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@Grab('org.grooscript:grooscript:1.2.1')
 
 import org.grooscript.GrooScript
 
@@ -592,8 +593,8 @@ println result</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>If you want to make conversions in your groovy / java project, you need <a href="jars/grooscript-1.2.0.jar">grooscript.jar</a>.
-You can get from mavenCentral or bintray <code>org.grooscript:grooscript:1.2.0</code> in your project&#8217;s dependencies. Also need <code>grooscript.js</code>,
+<p>If you want to make conversions in your groovy / java project, you need <a href="jars/grooscript-1.2.1.jar">grooscript.jar</a>.
+You can get from mavenCentral or bintray <code>org.grooscript:grooscript:1.2.1</code> in your project&#8217;s dependencies. Also need <code>grooscript.js</code>,
 inside the jar or download from <a href="downloads.html">here</a> to run the converted code in your javascript environment.</p>
 </div>
 <div class="paragraph">
@@ -655,7 +656,8 @@ enum ConversionOptions {
     ADD_GS_LIB('addGsLib', null),
     REQUIRE_JS_MODULE('requireJsModule', false),
     CONSOLE_INFO('consoleInfo', false),
-    INCLUDE_DEPENDENCIES('includeDependencies', false)
+    INCLUDE_DEPENDENCIES('includeDependencies', false),
+    NASHORN_CONSOLE('nashornConsole', false)
 
     String text
     def defaultValue
@@ -711,6 +713,10 @@ enum ConversionOptions {
 <dt class="hdlist1">includeDependencies</dt>
 <dd>
 <p>in the result javascript file, will be added conversion of dependencies. You can&#8217;t set both includeDependencies and requireJsModule to true.</p>
+</dd>
+<dt class="hdlist1">nashornConsole</dt>
+<dd>
+<p>when you set to true, then in javascript will be used 'print' function to write in console. 'console.log()' in sot supported by Nashorn.</p>
 </dd>
 </dl>
 </div>
@@ -1647,7 +1653,7 @@ mandatory step, but with this variable you don&#8217;t have to define that syste
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@GrabConfig(systemClassLoader=true)
-@Grab('org.grooscript:grooscript:1.2.0') <i class="conum" data-value="1"></i><b>(1)</b>
+@Grab('org.grooscript:grooscript:1.2.1') <i class="conum" data-value="1"></i><b>(1)</b>
 
 import org.grooscript.asts.PhantomJsTest
 
@@ -2046,8 +2052,8 @@ import org.grooscript.rx.Observable
 
 interface GQuery {
     //Bind a selector to a property of an object
-    def bind(String selector, target, String nameProperty)
-    def bind(String selector, target, String nameProperty, Closure closure)
+    GQueryList bind(String selector, target, String nameProperty)
+    GQueryList bind(String selector, target, String nameProperty, Closure closure)
     //Exist dom element with id
     boolean existsId(String id)
     //Exist dom element with name
@@ -2055,7 +2061,7 @@ interface GQuery {
     //Exist dom radio group with that name
     boolean existsGroup(String name)
     //Launch closure on dom event, closure not receive params
-    void onEvent(String selector, String nameEvent, Closure func)
+    GQueryList onEvent(String selector, String nameEvent, Closure func)
     //Remote call to server to receive JSON
     void doRemoteCall(String url, String type, params, Closure onSuccess, Closure onFailure)
     void doRemoteCall(String url, String type, params, Closure onSuccess, Closure onFailure, objectResult)
@@ -2064,9 +2070,9 @@ interface GQuery {
     //Atach methods of an object to dom elements with that id (Click, Submit, Change)
     void attachMethodsToDomEvents(target)
     //Launch closure on input change event, closure receive a param with the new value
-    void onChange(String selector, Closure closure)
+    GQueryList onChange(String selector, Closure closure)
     //Focus dom object, on input put cursor at the end
-    void focusEnd(String selector)
+    GQueryList focusEnd(String selector)
     //Bind all properties of an object to dom elements, find dom elements by id or name
     void bindAllProperties(target)
     //Bind all
@@ -2180,8 +2186,9 @@ gQuery.onReady {
 <h2 id="_tools">Tools</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Grooscript itself is just a Java library. We have created some tools to improve the experience using it, in your
-<a href="http://gradle.org/">Gradle</a> projects, using it in <a href="http://grails.org/">Grails</a> and with your <a href="http://nodejs.org/">Node.js</a> projects.</p>
+<p>Grooscript itself is just a Java/Groovy library. We have created some tools to improve the experience using it, in your
+<a href="http://gradle.org/">Gradle</a> projects, using it in <a href="http://grails.org/">Grails</a> 2 or 3, in <a href="http://nodejs.org/">Node.js</a> projects or
+adding javascript lib dependencies with <a href="http://bower.io/">Bower</a>.</p>
 </div>
 <div class="sect2">
 <h3 id="_gradle_plugin">Gradle plugin</h3>
@@ -2199,6 +2206,9 @@ gradle plugin <a href="http://plugins.gradle.org/plugin/org.grooscript.conversio
 classes in the client, websocket support or put groovy code in your gsp&#8217;s that will be run in javascript. Take a look
 at the <a href="grails-plugin/index.html">documentation</a> for more info. Github <a href="https://github.com/chiquitinxx/grails-grooscript">source code</a>.</p>
 </div>
+<div class="paragraph">
+<p>Also, it exists a Grails 3 plugin, you can take a look at <a href="http://grooscript.org/grails3-plugin/">documentation</a> or source code in <a href="https://github.com/chiquitinxx/grooscript-grails3-plugin">github</a></p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_npm_package">Npm package</h3>
@@ -2215,6 +2225,18 @@ eval(fs.readFileSync('aConvertedFile.js')+'');</code></pre>
 </div>
 <div class="paragraph">
 <p>Little <a href="nodejs_example.html">guide</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_bower_package">Bower package</h3>
+<div class="paragraph">
+<p>You can add grooscript libs using <a href="http://bower.io/">Bower</a> with <code>&gt;bower install grooscript</code>, Then you can add grooscript.js,
+grooscript.min.js or grooscript-tools.js dependencies in your project.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-javascript" data-lang="javascript">&lt;script src="bower_components/grooscript/src/main/resources/META-INF/resources/grooscript.js"&gt;&lt;/script&gt;</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -2416,20 +2438,8 @@ We have nice stuff to do after 1.0 release.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-08-01 10:24:29 CEST
+Last updated 2015-09-19 00:25:53 +02:00
 </div>
 </div>
-<script>
-    //Google Analytics info
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-37511810-1']);
-    _gaq.push(['_trackPageview']);
-
-    (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-</script>
 </body>
 </html>

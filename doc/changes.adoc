@@ -2,13 +2,21 @@
 :author: Jorge Franco
 :source-highlighter: pygments
 
+=== What's new in 1.2.1
+
+* New conversion option to use nashorn console (nashornConsole), by default is false.
+* Add license in source files.
+* Little improvements in grooscript-tools.
+* Not generate empty javascript files of interfaces.
+* Add init and tail functions to lists.
+* Fixes.
+
 === What's new in 1.2.0
 
 * Mainly changes in conversion options.
 * Remove static methods to set conversion options. Now there is an optional parameter to set conversion options in conversions (org.grooscript.GrooScript).
 * Renamed conversion options, classPath -> classpath and requireJs -> requireJsModule
 * Add new conversion option includeDependencies. With this option, when you convert a file, dependency files will be converted and added to javascript result file.
-* Fixes
 
 === What's new in 1.1.2
 

@@ -446,11 +446,11 @@ groovy 2.0+ and we will use new plugin system in this demo. After install gradle
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">plugins {
-  id "org.grooscript.conversion" version "1.2.0"
+  id "org.grooscript.conversion" version "1.2.1"
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.4'
+    gradleVersion = '2.7'
 }</code></pre>
 </div>
 </div>
@@ -654,6 +654,10 @@ has some default conversion options. What files have to be converted? Where .js 
 <dd>
 <p>in the result javascript file, will be added conversion of dependencies. You can&#8217;t set both includeDependencies and requireJsModule to true.</p>
 </dd>
+<dt class="hdlist1">nashornConsole</dt>
+<dd>
+<p>when you set to true, then in javascript will be used 'print' function to write in console. 'console.log()' in sot supported by Nashorn.</p>
+</dd>
 </dl>
 </div>
 <div class="paragraph">
@@ -737,7 +741,7 @@ class Draw {
 }
 
 dependencies {
-    compile 'org.grooscript:grooscript:1.2.0'
+    compile 'org.grooscript:grooscript:1.2.1'
 }</code></pre>
 </div>
 </div>
@@ -768,7 +772,7 @@ site.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-08-01 12:15:39 CEST
+Last updated 2015-09-19 12:15:39 +02:00
 </div>
 </div>
 </body>
