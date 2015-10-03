@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.2">
 <meta name="author" content="Jorge Franco">
-<title>Using grooscript gradle plugin with Ratpack</title>
+<title>Using grooscript with Ratpack</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -416,7 +416,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article">
 <div id="header">
-<h1>Using <a href="index.html">grooscript</a> gradle plugin with <a href="http://ratpack.io">Ratpack</a></h1>
+<h1>Using <a href="index.html">grooscript</a> with <a href="http://ratpack.io">Ratpack</a></h1>
 <div class="details">
 <span id="author" class="author">Jorge Franco</span><br>
 <span id="email" class="email"><a href="mailto:grooscript@gmail.com">grooscript@gmail.com</a></span><br>
@@ -426,8 +426,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>There is no special integration support for Ratpack applications, just with the <a href="starting_gradle.html">gradle plugin</a> you can convert
-your groovy files to javascript and use in your browser.</p>
+<p>There is no special integration support for Ratpack, just with the <a href="https://github.com/chiquitinxx/grooscript-gradle-plugin">grooscript gradle plugin</a>
+you can convert your groovy files to javascript and use in your browser. You can use this
+plugin with any other framework or library, for example <a href="https://grails.org/">Grails</a>.</p>
 </div>
 <div class="paragraph">
 <p>The source code of this demo is available in <a href="https://github.com/chiquitinxx/ratpack-grooscript-demo">github</a>. A similar
@@ -437,7 +438,8 @@ Ratpack, any pull request to improve it is more than welcome. I don&#8217;t use 
 with the frameworks added.</p>
 </div>
 <div class="paragraph">
-<p>Is a single page, you can add groovy frameworks, and see the list of all the frameworks:</p>
+<p>Is a single page, to see a list of groovy libraries o frameworks. You can add new frameworks
+filling at least name and url, can include link to external image for logo.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -450,31 +452,30 @@ with the frameworks added.</p>
 <h2 id="_setup">Setup</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>I&#8217;m using ratpack gradle plugin, and I have added grooscript gradle plugin in build.gradle:</p>
+<p>I&#8217;m using Ratpack gradle plugin, and I have added grooscript gradle plugin in build.gradle:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">buildscript {
-  repositories {
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">apply plugin: 'org.grooscript.conversion'
+apply plugin: "io.ratpack.ratpack-groovy"
+apply plugin: "idea"
+
+repositories {
     jcenter()
-  }
-  dependencies {
-    classpath "io.ratpack:ratpack-gradle:0.9.18"
-    classpath "org.grooscript:grooscript-gradle-plugin:1.2.0"
-  }
 }
 
-apply plugin: "io.ratpack.ratpack-groovy"
-apply plugin: "org.grooscript.conversion"
-
 dependencies {
-    ...
-    compile 'org.grooscript:grooscript:1.2.0'
-    ...
+    runtime "org.slf4j:slf4j-simple:1.7.12"
+    compile('org.grooscript:grooscript:1.2.1') {
+        exclude module: 'groovy'
+        exclude module: 'groovy-json'
+    }
+
+    testCompile "org.spockframework:spock-core:1.0-groovy-2.4"
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.5'
+    gradleVersion = '2.7'
 }
 
 grooscript {
@@ -511,99 +512,370 @@ run.dependsOn convertThread <i class="conum" data-value="5"></i><b>(5)</b></code
 </tr>
 </table>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_ratpack_server">Ratpack server</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>To play with grooscript, clone the source code and run with <code>&gt; ./gradlew run</code>. Now you can modify the file FrameworksPresenter.groovy,
+<p>The server does two things, serve the index page, and add the new frameworks to the database.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import frameworks.*
+import ratpack.form.Form
+import ratpack.groovy.template.MarkupTemplateModule
+
+import static ratpack.groovy.Groovy.groovyMarkupTemplate
+import static ratpack.groovy.Groovy.ratpack
+import static ratpack.jackson.Jackson.json
+
+ratpack {
+    bindings {
+        module MarkupTemplateModule <i class="conum" data-value="1"></i><b>(1)</b>
+    }
+
+    handlers {
+        get {
+            def htmlFrameworks = FrameworksView.htmlFrameworks(FrameworksDb.listFrameworks)<i class="conum" data-value="2"></i><b>(2)</b>
+            render groovyMarkupTemplate([htmlFrameworks: htmlFrameworks], "index.gtpl")<i class="conum" data-value="3"></i><b>(3)</b>
+        }
+
+        post('addFramework') {
+            parse(Form).then { readForm -&gt;
+                Framework framework = new Framework(readForm)
+                def valErrors = framework.validate() <i class="conum" data-value="4"></i><b>(4)</b>
+                if (!valErrors &amp;&amp; FrameworksDb.addNewFramework(framework)) {
+                    render json(framework) <i class="conum" data-value="5"></i><b>(5)</b>
+                } else {
+                    render null
+                }
+            }
+        }
+
+        files { dir "public" } <i class="conum" data-value="6"></i><b>(6)</b>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Module to use groovy template engine.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Get the html of all the frameworks in the 'database'.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Render the groovy template, sending the frameworks html.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Validate the framework in the server.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>Send the validated framework back to client.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>Location of static files (css, js, &#8230;&#8203;).</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_index_page">Index page</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>For more info about groovy templates engine go <a href="http://docs.groovy-lang.org/latest/html/documentation/template-engines.html">here</a>.
+Our index page <code>index.gtpl</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">body {
+  head {
+        div(id: "newFramework") {
+        p { <i class="conum" data-value="1"></i><b>(1)</b>
+          yield 'Name:';input(type: 'text', id: 'nameFramework');yield '*'
+        }
+        p {
+          yield 'Url framework:';input(type: 'text', id: 'urlFramework');yield '*'
+        }
+        p {
+          yield 'Url image framework:';input(type: 'text', id: 'urlImageFramework')
+        }
+        input(type:"button", class:"doButton", id:"buttonAddFramework", value:"Add framework",
+               'data-anijs': "if: mousedown, do: shake animated, to: #validationError") {} <i class="conum" data-value="2"></i><b>(2)</b>
+        div(id: "validationError") {} <i class="conum" data-value="3"></i><b>(3)</b>
+        div(id: "mainTitle", 'data-anijs':"if: mouseenter, do: tada animated") {
+          yield 'Groovy Frameworks'
+        }
+        }
+  }
+
+  section {
+      div model.htmlFrameworks <i class="conum" data-value="4"></i><b>(4)</b>
+  }
+
+  ["lib/jquery-1.11.1.min.js", "lib/anijs-min.js", "lib/grooscript.min.js",
+      "lib/grooscript-tools.js", "scripts/FrameworksPresenter.js"].each {
+      script(src: it) {} <i class="conum" data-value="5"></i><b>(5)</b>
+  }
+  script {
+      yield '''
+          jQuery(document).ready(function() {
+              FrameworksPresenter({gQuery: GQueryImpl()}).start(); <i class="conum" data-value="6"></i><b>(6)</b>
+          });
+      '''
+  }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>New framework input fields.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Button to validate the input fields and send to the server.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Where validation and error messages are shown.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Draw the frameworks list html from the model passed to the template.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>Javascript libraries needed.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>Javascript code to start the presenter.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Anijs is used for nice animations, jQuery is used by grooscript-tools to do jQuery stuff,
+FrameworksPresenter.js is the javascript conversion of FrameworksPresenter.groovy and finally
+<strong>grooscript.js</strong> is needed to run any javascript code converted by grooscript.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_source_code">Source code</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>I&#8217;m using a MVP pattern for this little application. Is groovy code that will run in the client
+side, as javascript code. You can run the code in groovy and test it with any java / groovy
+test framework. Now I&#8217;ll show all the source code, the code itself is not important, the
+important thing is that <strong>is groovy and is running in your browser</strong>.</p>
+</div>
+<div class="paragraph">
+<p>The logic on my application is in <code>FrameworksPresenter.groovy</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">package frameworks
+
+import org.grooscript.jquery.GQuery
+
+class FrameworksPresenter {
+
+    String nameFramework
+    String urlFramework
+    String urlImageFramework
+    GQuery gQuery
+    View view
+
+    void start() {
+        gQuery.bindAll(this)
+        if (!view) view = new FrameworksView()
+    }
+
+    void buttonAddFrameworkClick() {
+
+        def framework = new Framework(name: nameFramework, url: urlFramework, urlImage: urlImageFramework)
+        def errors = framework.validate()
+        if (!errors) {
+            addFramework(framework, {newFramework -&gt;
+                view.addNewFramework newFramework
+            }, {error -&gt;
+                view.putError('Error from server: ' + error)
+            })
+        }
+        view.putError errors.join(' - ')
+    }
+
+    void addFramework(Framework framework, Closure onAdded, Closure onError = null) {
+        gQuery.doRemoteCall('/addFramework',
+                'POST', [name: framework.name, url: framework.url, urlImage: framework.urlImage],
+                onAdded, onError, Framework)
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>GQuery comes with grooscript, and is a wrap to work with jQuery.</p>
+</div>
+<div class="paragraph">
+<p>The presenter connects with the view <code>FrameworksView.groovy</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">package frameworks
+
+import org.grooscript.asts.GsNative
+import org.grooscript.builder.HtmlBuilder
+
+class FrameworksView implements View {
+
+    String frameworksListSelector = '#listFrameworks'
+    String errorSelector = '#validationError'
+
+    static String htmlFrameworks(List&lt;Framework&gt; frameworks) {
+        HtmlBuilder.build {
+            ul(id: 'listFrameworks') {
+                frameworks.each { framework -&gt;
+                    yieldUnescaped htmlFramework(framework)
+                }
+            }
+        }
+    }
+
+    static String htmlFramework(Framework framework) {
+        HtmlBuilder.build {
+            li {
+                div(class: 'logo', 'data-anijs': 'if: mouseenter, do: flip animated') {
+                    if (!framework.hasImage() &amp;&amp; framework.githubUrl()) {
+                        img src: 'images/github.png'
+                    } else {
+                        img src: framework.hasImage() ? framework.urlImage : 'images/nologo.png'
+                    }
+                }
+                a (href: framework.url, framework.name)
+            }
+        }
+    }
+
+    void addNewFramework(Framework framework) {
+        append frameworksListSelector, htmlFramework(framework)
+    }
+
+    void putError(String errorMessage) {
+        putHtml errorSelector, errorMessage
+    }
+
+    @GsNative
+    void putHtml(String selector, String html) {/*
+        $(selector).html(html);
+    */}
+
+    @GsNative
+    void append(String selector, String html) {/*
+        $(selector).append(html);
+        AniJS.run();
+    */}
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We use another grooscript feature, HtmlBuilder to create html code with a DSL, and it works
+in groovy and in javascript importing grooscript-tools.js. Also you can see I&#8217;m inserting
+javascript code with @GsNative.</p>
+</div>
+<div class="paragraph">
+<p>Finally the framework class with validations included, validations that are used in the
+server and in the client side, without repeating code.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">package frameworks
+
+class Framework {
+
+    String name
+    String url
+    String urlImage
+
+    List&lt;String&gt; validate() {
+        def validationErrors = []
+
+        if (!name) {
+            validationErrors &lt;&lt; 'Missing name framework'
+        }
+        if (!url) {
+            validationErrors &lt;&lt; 'Missing url framework'
+        }
+        if (url &amp;&amp; !validUrl(url)) {
+            validationErrors &lt;&lt; 'Wrong url framework'
+        }
+        if (urlImage &amp;&amp; !validUrl(urlImage)) {
+            validationErrors &lt;&lt; 'Wrong url image'
+        }
+        if ([name, url, urlImage].any(hasEvilChars)) {
+            validationErrors &lt;&lt; 'Wrong chars'
+        }
+        validationErrors
+    }
+
+    boolean hasImage() {
+        urlImage &amp;&amp; ['.GIF', '.PNG', '.JPG'].any { urlImage.toUpperCase().endsWith(it)}
+    }
+
+    boolean githubUrl()  {
+        url.contains('github.com')
+    }
+
+    private boolean validUrl(url) {
+        ['http://', 'https://'].any { url &amp;&amp; url.startsWith(it) }
+    }
+
+    private Closure hasEvilChars = { data -&gt;
+        data ? data.indexOf('&lt;') &gt;= 0 : false
+    }
+
+    boolean equals(Object other) {
+        other instanceof Framework &amp;&amp; other.name == this.name
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To play with grooscript, clone the source code and run with <code>&gt; ./gradlew run</code>. Now you can modify the source groovy files,
 each time you update that file, the .js file will be generated again, and you can reload the page <code><a href="http://localhost:5050/" class="bare">http://localhost:5050/</a></code> to see the changes.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_hybrid_render">Hybrid render</h2>
+<h2 id="_beyond_this_demo">Beyond this demo</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>One interesting feature of this demo, is the render of the framework list, that is done in the server. But, when a new
-framework is added, the same code is used to draw the new framework at the end of the list. Using the grooscript html
-builder, you can create html code with usual groovy dsl syntax, and will run in the server and in the client.</p>
+<p>Take a look at <a href="http://grooscript.org/doc.html">grooscript documentation</a> to check what is supported by grooscript.</p>
 </div>
 <div class="paragraph">
-<p>In the server <code>Ratpack.groovy</code>:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import static frameworks.FrameworksPresenter
-
-get {
-    def list = FrameworksPresenter.htmlFrameworks(FrameworksDb.listFrameworks)
-    render groovyMarkupTemplate([frameworks: list], "index.gtpl")
-}</code></pre>
-</div>
+<p>The grooscript gradle plugin has more features, as work with groovy templates in the browser,
+or create <a href="http://requirejs.org">Require.js</a> modules, or notify the server file changes using websockets. You
+can follow <a href="http://grooscript.org/starting_gradle.html">this</a> getting starting guide to understand better grooscript and the gradle plugin.</p>
 </div>
 <div class="paragraph">
-<p>And in the client <code>FrameworksPresenter.groovy</code>:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import org.grooscript.builder.HtmlBuilder
-
-def buttonAddFrameworkClick() {
-
-    ...
-        addFramework(framework, { newFramework -&gt;
-            append '#listFrameworks', htmlFramework(newFramework)
-        }, { error -&gt;
-            putHtml('#validationError', 'Error from server!')
-        })
-    }
-    ...
-}
-
-static String htmlFrameworks(List&lt;Framework&gt; frameworks) {
-    HtmlBuilder.build {
-        ul(id: 'listFrameworks') {
-            frameworks.each { framework -&gt;
-                yield htmlFramework(framework)
-            }
-        }
-    }
-}
-
-static String htmlFramework(Framework framework) {
-    HtmlBuilder.build {
-        li {
-            div(class: 'logo', 'data-anijs': 'if: mouseenter, do: flip animated') {
-                if (!framework.hasImage() &amp;&amp; framework.githubUrl()) {
-                    img src: 'images/github.png'
-                } else {
-                    img src: framework.hasImage() ? framework.urlImage : 'images/nologo.png'
-                }
-            }
-            a (href: framework.url, framework.name)
-        }
-    }
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_conclusion">Conclusion</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>If you use gradle with your Ratpack application, is very easy add grooscript to your application with the <a href="starting_gradle.html">gradle plugin</a>.</p>
-</div>
-<div class="paragraph">
-<p>You can explore grooscript features in <a href="doc.html">documentation</a>, also download grooscript .js files <a href="downloads.html">here</a></p>
-</div>
-<div class="paragraph">
-<p>Please, if you have comments, suggestions, problems,&#8230;&#8203; don&#8217;t hesitate to contact me at <a href="mailto:grooscript@gmail.com">grooscript@gmail.com</a>, or open
-an issue or feature in <a href="http://github.com/chiquitinxx/grooscript/issues?state=open">Github</a>.</p>
+<p>Visit <a href="http://grooscript.org">grooscript.org</a> for more info. Thank you for your time!</p>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-08-01 18:58:42 CEST
+Last updated 2015-10-03 12:26:28 +02:00
 </div>
 </div>
 </body>
