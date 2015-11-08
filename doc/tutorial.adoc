@@ -1,0 +1,86 @@
+= Getting started with http://grooscript.org[grooscript]
+:author: Jorge Franco
+:source-highlighter: pygments
+
+== Prerequisites
+
+You need http://www.groovy-lang.org[Groovy] installed in your machine to use grooscript. Also
+https://nodejs.org/[Node.js] to run javascript code.
+
+When you convert groovy code to javascript, that converted code needs *grooscript.js* to run. There is
+a npm package that do that work for you, so you need to install grooscript npm module:
+
+[source]
+--
+> npm install grooscript
+--
+
+== Create groovy source
+
+Create *source.groovy* file with content:
+
+[source,groovy]
+--
+class Hello {
+  def methodMissing(String name, args) {
+    println "Hello ${name}!"
+  }
+}
+
+def hello = new Hello()
+hello.Groovy()
+hello.Javascript()
+hello.grooscript()
+--
+
+
+== Create script to convert groovy source to javascript
+
+Create *convert.groovy* file with content:
+
+[source,groovy]
+[subs="verbatim,attributes"]
+--
+@Grab('org.grooscript:grooscript:{grooscript-version}')
+
+import org.grooscript.GrooScript
+
+def conversionOptions = [:]
+conversionOptions['initialText'] = "var gs = require('grooscript');"
+
+GrooScript.convert 'source.groovy', '.', conversionOptions
+--
+
+== Convert and run your groovy code in javascript
+
+As grooscript is a library, we will use *convert.groovy* script to make conversion:
+
+[source]
+--
+> groovy convert.groovy
+--
+
+A new file *source.js* will appear, and you car run it with node.js:
+
+[source]
+--
+> node source.js
+--
+
+And you are done, you have groovy file *source.groovy* and converted javascript file *source.js*. Both do the same,
+and you get same output in console:
+
+[source]
+--
+> node source.js
+
+Hello Groovy!
+Hello Javascript!
+Hello grooscript!
+
+> groovy source.groovy
+
+Hello Groovy!
+Hello Javascript!
+Hello grooscript!
+--

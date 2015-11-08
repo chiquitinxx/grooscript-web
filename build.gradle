@@ -23,7 +23,7 @@ task wrapper(type: Wrapper) {
 asciidoctor {
     sourceDir = project.file 'doc'
     sources { include 'changes.adoc', 'downloads.adoc',
-            'roadmap.adoc' }
+            'roadmap.adoc', 'tutorial.adoc' }
     attributes 'grooscript-version': '1.2.1',
             'gradle-plugin-version': '1.2.1',
             'gradle-version': '2.5',
