@@ -2,6 +2,13 @@
 :author: Jorge Franco
 :source-highlighter: pygments
 
+=== What's new in 1.2.2
+
+* Converted code now runs faster.
+* Support @TailRecursive and @Builder AST's.
+* Support closures memoize function.
+* Fixes.
+
 === What's new in 1.2.1
 
 * New conversion option to use nashorn console (nashornConsole), by default is false.
@@ -9,7 +16,6 @@
 * Little improvements in grooscript-tools.
 * Not generate empty javascript files of interfaces.
 * Add init and tail functions to lists.
-* Fixes.
 
 === What's new in 1.2.0
 

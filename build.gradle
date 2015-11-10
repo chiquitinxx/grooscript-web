@@ -1,8 +1,15 @@
-plugins {
-    id "org.asciidoctor.convert" version "1.5.2"
-    id "org.grooscript.conversion" version '1.2.0'
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath "org.grooscript:grooscript-gradle-plugin:1.2.2"
+        classpath "org.asciidoctor:asciidoctor-gradle-plugin:1.5.2"
+    }
 }
 
+apply plugin: "org.grooscript.conversion"
+apply plugin: "org.asciidoctor.convert"
 apply plugin: 'groovy'
 apply plugin: 'idea'
 
@@ -24,8 +31,8 @@ asciidoctor {
     sourceDir = project.file 'doc'
     sources { include 'changes.adoc', 'downloads.adoc',
             'roadmap.adoc', 'tutorial.adoc' }
-    attributes 'grooscript-version': '1.2.1',
-            'gradle-plugin-version': '1.2.1',
+    attributes 'grooscript-version': '1.2.2',
+            'gradle-plugin-version': '1.2.2',
             'gradle-version': '2.5',
             author: 'Jorge Franco',
             email: 'grooscript@gmail.com',

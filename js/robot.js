@@ -1,5 +1,5 @@
 function RobotGame() {
-  var gSobject = gs.inherit(gs.baseClass,'RobotGame');
+  var gSobject = gs.init('RobotGame');
   gSobject.clazz = { name: 'robot.RobotGame', simpleName: 'RobotGame'};
   gSobject.clazz.superclass = { name: 'java.lang.Object', simpleName: 'Object'};
   Object.defineProperty(gSobject, 'MIN_ROBOTS', { get: function() { return RobotGame.MIN_ROBOTS; }, set: function(gSval) { RobotGame.MIN_ROBOTS = gSval; }, enumerable: true });
@@ -319,7 +319,7 @@ RobotGame.IMPACT_DISTANCE = 4;
 RobotGame.IMPACT_DAMAGE = 30;
 RobotGame.COLLISION_DISTANCE = 3;
 function Robot() {
-  var gSobject = gs.inherit(gs.baseClass,'Robot');
+  var gSobject = gs.init('Robot');
   gSobject.clazz = { name: 'robot.Robot', simpleName: 'Robot'};
   gSobject.clazz.superclass = { name: 'java.lang.Object', simpleName: 'Object'};
   gSobject.name = null;
@@ -414,7 +414,7 @@ function Robot() {
   return gSobject;
 };
 function Position() {
-  var gSobject = gs.inherit(gs.baseClass,'Position');
+  var gSobject = gs.init('Position');
   gSobject.clazz = { name: 'robot.Position', simpleName: 'Position'};
   gSobject.clazz.superclass = { name: 'java.lang.Object', simpleName: 'Object'};
   gSobject.x = null;

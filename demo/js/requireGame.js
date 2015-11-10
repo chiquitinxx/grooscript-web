@@ -1,5 +1,5 @@
 require(['./common'], function () {
-    requirejs(['../js/jquery', '../js/grooscript.min', '../js/grooscript-tools'], function($) {
+    requirejs(['jquery', 'grooscript.min', 'grooscript-tools'], function($) {
         require(['Cell', 'Game', 'GamePresenter'], function() {
 
             $(document).ready(function() {
@@ -10,16 +10,16 @@ require(['./common'], function () {
             $(document).keydown(function(event) {
                 if (event.which == 37) {
                     presenter.move('left');
-                }
+                };
                 if (event.which == 38) {
                     presenter.move('up');
-                }
+                };
                 if (event.which == 39) {
                     presenter.move('right');
-                }
+                };
                 if (event.which == 40) {
                     presenter.move('down');
-                }
+                };
             });
         });
     });
