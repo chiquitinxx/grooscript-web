@@ -420,7 +420,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Jorge Franco</span><br>
 <span id="email" class="email"><a href="mailto:grooscript@gmail.com">grooscript@gmail.com</a></span><br>
-<span id="revnumber">version 1.1.2</span>
+<span id="revnumber">version 1.1.3</span>
 <br><span id="revremark">Grails plugin to convert groovy code to javascript in your gsp's</span>
 </div>
 <div id="toc" class="toc2">
@@ -430,7 +430,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_important">Important</a></li>
 <li><a href="#_requisites">Requisites</a></li>
-<li><a href="#_what_is_new_in_1_1_2_and_1_1_1">What is new in 1.1.2 and 1.1.1</a></li>
+<li><a href="#_what_is_new_in_1_1_3_1_1_2_and_1_1_1">What is new in 1.1.3, 1.1.2 and 1.1.1</a></li>
 <li><a href="#_what_is_new_in_1_1_0">What is new in 1.1.0</a></li>
 <li><a href="#_changes_version_1_0_0">Changes version 1.0.0</a></li>
 </ul>
@@ -451,14 +451,18 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_remoteDomain">&lt;grooscript:remoteModel&gt;</a></li>
 </ul>
 </li>
-<li><a href="#_demos">Demos</a></li>
-<li><a href="#_websockets_support_demo">Websockets support demo</a>
+<li><a href="#_websockets_step_by_step_guide">Websockets step by step guide</a>
 <ul class="sectlevel2">
-<li><a href="#_server_side">Server side</a></li>
-<li><a href="#_client_side">Client side</a></li>
+<li><a href="#_create_your_grails_3_application">Create your grails 3 application</a></li>
+<li><a href="#_add_websocket_support">Add websocket support</a></li>
+<li><a href="#_add_grooscript_grails_plugin">Add grooscript grails plugin</a></li>
+<li><a href="#_check_websockets_are_available">Check websockets are available</a></li>
+<li><a href="#_send_messages_to_the_server">Send messages to the server</a></li>
+<li><a href="#_receive_messages_from_the_server">Receive messages from the server</a></li>
 </ul>
 </li>
-<li><a href="#_using_remote_domain_classes_demo">Using remote domain classes demo</a>
+<li><a href="#_demo">Demo</a></li>
+<li><a href="#_using_remote_domain_classes">Using remote domain classes</a>
 <ul class="sectlevel2">
 <li><a href="#_starting">Starting</a></li>
 <li><a href="#_grooscript_remote_domain_classes">Grooscript remote domain classes</a></li>
@@ -538,16 +542,22 @@ but I don&#8217;t know if people use or is interested in this plugin. So, if you
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dependencies {
     ...
-    compile "org.grails.plugins:grooscript:1.1.2"
+    compile "org.grails.plugins:grooscript:1.1.3"
     ...
 }</code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_what_is_new_in_1_1_2_and_1_1_1">What is new in 1.1.2 and 1.1.1</h3>
+<h3 id="_what_is_new_in_1_1_3_1_1_2_and_1_1_1">What is new in 1.1.3, 1.1.2 and 1.1.1</h3>
 <div class="ulist">
 <ul>
+<li>
+<p>Upgrade to grooscript 1.2.2</p>
+</li>
+<li>
+<p>Now can set the websockets endpoint</p>
+</li>
 <li>
 <p>Fixes</p>
 </li>
@@ -657,6 +667,18 @@ class GrooscriptGrails {
 <td>Send a message to server via websockets</td>
 </tr>
 </table>
+</div>
+<div class="paragraph">
+<p>For example</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">&lt;grooscript:code&gt;
+	GrooscriptGrails,doRemoteCall('books', 'addBook', [title: 'A title'], {
+		println 'All was Ok'
+	}, { println 'Error adding book' })
+&lt;/grooscript:code&gt;</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -880,7 +902,7 @@ to secure access to your data. Only supports json results.</p>
 
 import grails.rest.Resource
 
-@Resource(uri='/books')
+@Resource(uri='/books', formats=['json'])
 class Book {
 
     String title
@@ -909,12 +931,229 @@ see in action, please see demo below.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_demos">Demos</h2>
+<h2 id="_websockets_step_by_step_guide">Websockets step by step guide</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This is a step by step guide to use grails 3 with websockets only with groovy.</p>
+</div>
+<div class="sect2">
+<h3 id="_create_your_grails_3_application">Create your grails 3 application</h3>
+<div class="paragraph">
+<p>I suppose you have <a href="https://grails.org/">grails 3</a> installed in your computer, then run:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>&gt; grails create-app websockets-sample</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Move to created folder <code>websockets-sample</code></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_add_websocket_support">Add websocket support</h3>
+<div class="paragraph">
+<p>There are a few ways to add websocket support to your grails application, for this guide we will use
+spring boot <a href="http://spring.io/guides/gs/messaging-stomp-websocket/">support</a> and we will not use plugins.
+First of all we have to add dependencies to our <code>build.gradle</code> file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dependencies {
+    ...
+    compile "org.springframework.boot:spring-boot-starter-websocket"
+    ...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Later, let&#8217;s enable websockets in the application, create file <code>WebSocketConfig</code> in folder <code>src/main/groovy/websockets/sample</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">package websockets.sample
+
+import org.springframework.context.annotation.Configuration
+import org.springframework.messaging.simp.config.MessageBrokerRegistry
+import org.springframework.web.socket.config.annotation.AbstractWebSocketMessageBrokerConfigurer
+import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker
+import org.springframework.web.socket.config.annotation.StompEndpointRegistry
+
+@Configuration
+@EnableWebSocketMessageBroker
+public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
+
+    @Override
+    public void configureMessageBroker(MessageBrokerRegistry config) {
+        config.enableSimpleBroker("/topic")
+        config.setApplicationDestinationPrefixes("/app")
+    }
+
+    @Override
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
+        registry.addEndpoint("/hello").withSockJS()
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After, we have to add this bean to spring, and we will do in a old grails way, in <code>grails-app/conf/spring/resources.groovy</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import websockets.sample.WebSocketConfig
+
+// Place your Spring DSL code here
+beans = {
+    webSocketConfig(WebSocketConfig)
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now you can use websockets in the server side. To use webseckets in the client side, we have to download
+<a href="https://github.com/sockjs/sockjs-client/blob/master/dist/sockjs-0.3.4.min.js">SockJs</a> and
+<a href="http://jmesnil.net/stomp-websocket/doc/">Stomp.js</a> javascript libraries, and put that javascript files in
+<code>grails-app/assets/javascripts</code> folder.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_add_grooscript_grails_plugin">Add grooscript grails plugin</h3>
+<div class="paragraph">
+<p>Before test that websockets are up in our gsp&#8217;s, we are going to add the plugin in <code>build.gradle</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dependencies {
+    ...
+    compile "org.grails.plugins:grooscript:1.1.3"
+    ...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now, we can use grooscript tags in our gsp&#8217;s to improve websocket experience with groovy.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_check_websockets_are_available">Check websockets are available</h3>
+<div class="paragraph">
+<p>First, create a controller with:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code>&gt; grails create-controller websockets.sample.Hello</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now, create a view for that controller  <code>grails-app/views/hello/index.gsp</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;!doctype html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Hello websockets&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;asset:javascript src="jquery-2.1.3.js" /&gt;
+    &lt;asset:javascript src="grooscript-grails" /&gt;
+    &lt;asset:javascript src="sockjs-0.3.4.min.js" /&gt;
+    &lt;asset:javascript src="stomp" /&gt;
+
+    &lt;grooscript:initSpringWebsocket endPoint="/hello"&gt;
+        $('body').html '&lt;p&gt;Hello from websockets!&lt;/p&gt;'
+    &lt;/grooscript:initSpringWebsocket&gt;
+
+    &lt;asset:deferredScripts/&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now, that controller and view are ready, we can start application with <code>&gt; grails run-app</code> and navigate
+to <a href="http://localhost:8080/hello/index">http://localhost:8080/hello/index</a> to see that message
+<strong>Hello from websockets!</strong>. Your websocket connection is up and ready for action in your server and in your
+gsp&#8217;s.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_send_messages_to_the_server">Send messages to the server</h3>
+<div class="paragraph">
+<p>To send a message just use function <code>sendWebsocketMessage</code> that grooscript helpers offer:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;grooscript:initSpringWebsocket endPoint="/hello"&gt;
+	$('body').html '&lt;p&gt;Hello from websockets!&lt;/p&gt;'
+	GrooscriptGrails.sendWebsocketMessage("/app/hello", "I'm the client!")
+&lt;/grooscript:initSpringWebsocket&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then in the server, let&#8217;s create a new controller for websocket connections in
+<code>src/main/groovy/websockets/sample/WebsocketsController.groovy</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">package websockets.sample
+
+import org.springframework.messaging.handler.annotation.MessageMapping
+import org.springframework.messaging.handler.annotation.SendTo
+import org.springframework.stereotype.Controller
+
+@Controller
+class WebsocketsController {
+
+    @MessageMapping("/hello")
+    @SendTo("/topic/greetings")
+    Map greeting(String message) throws Exception {
+        [message: "Hello, my friend! You said: ${message}".toString()]
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Is a normal spring controller, not a grails controller, so we have to register this bean:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import websockets.sample.WebSocketConfig
+import websockets.sample.WebsocketsController
+
+// Place your Spring DSL code here
+beans = {
+    webSocketConfig(WebSocketConfig)
+    websocketsController(WebsocketsController)
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_receive_messages_from_the_server">Receive messages from the server</h3>
+<div class="paragraph">
+<p>Before, in <code>WebsocketsController</code> we sent as response a map to the client. To catch that message just add
+to the gsp:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;grooscript:onServerEvent path="/topic/greetings"&gt;
+	$("body").append '&lt;p&gt;'+data.message+'&lt;/p&gt;'
+&lt;/grooscript:onServerEvent&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now, you have to see in the html <strong>Hello, my friend! You said: "I&#8217;m the client!"</strong>. The client expects
+messages as maps or lists, and that map or list is <strong>data</strong> inside the tag.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_demo">Demo</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>You need grails 3.0+ installed in your system. Create a new project with grooscript plugin. Also remember you
-have to add jquery, and need use asset and cache plugins. If you are planning to use websocket support, you can
-use the <a href="http://grails.org/plugin/spring-websocket">websocket plugin</a>, or use spring boot websocket support.</p>
+have to add jquery, and need use asset and cache plugins.</p>
 </div>
 <div class="paragraph">
 <p>To add grooscript plugin, add to your build.gradle:</p>
@@ -923,149 +1162,18 @@ use the <a href="http://grails.org/plugin/spring-websocket">websocket plugin</a>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dependencies {
     ...
-    compile "org.grails.plugins:grooscript:1.1.2"
+    compile "org.grails.plugins:grooscript:1.1.3"
     ...
 }</code></pre>
 </div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_websockets_support_demo">Websockets support demo</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_server_side">Server side</h3>
 <div class="paragraph">
-<p>In the server side you have to use websockets support, for example:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import org.springframework.messaging.handler.annotation.MessageMapping
-import org.springframework.messaging.handler.annotation.SendTo
-
-class ExamplesController {
-
-    @MessageMapping("/hello")
-    @SendTo("/topic/hello")
-    protected Map hello(String world) {
-        def str = "Message received: ${world}"
-        return [msg: str.toString()]
-    }
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_client_side">Client side</h3>
-<div class="paragraph">
-<p>There are two tags, first tag init connection and execute any groovy code when connection is up:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head&gt;
-    &lt;asset:javascript src="jquery" /&gt;
-    &lt;asset:javascript src="grooscript-grails" /&gt;
-    &lt;asset:javascript src="spring-websocket" /&gt;
-&lt;/head&gt;
-&lt;body&gt;
-
-    &lt;grooscript:initSpringWebsocket/&gt;
-
-    &lt;!-- or --&gt;
-
-    &lt;grooscript:initSpringWebsocket withDebug="true"&gt; //You can activate debug in console
-        println 'Websocket is up!'
-    &lt;/grooscript:initSpringWebsocket&gt;
-
-    &lt;asset:deferredScripts/&gt;
-
-&lt;/body&gt;
-&lt;/html&gt;</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The connection between server and the client uses sockjs and stomp, see
-<a href="https://github.com/zyro23/grails-spring-websocket">websocket plugin</a> for more info. In javascript there is a variable called
-<strong>websocketClient</strong> with the stomp client object. You can send websocket messages to the server with:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">&lt;grooscript:initSpringWebsocket&gt;
-    GrooscriptGrails.sendWebsocketMessage("/app/hello", "world")
-&lt;/grooscript:initSpringWebsocket&gt;</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The other tag, is for react to events that come from the server. If you have send an event in the server, then you
-can listen that event using groovy:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;grooscript:onServerEvent path="/topic/hello"&gt;
-    $("#helloDiv").append '&lt;p&gt;'+data+'&lt;/p&gt;' <i class="conum" data-value="1"></i><b>(1)</b>
-&lt;/grooscript:onServerEvent&gt;
-
-&lt;grooscript:onServerEvent path="/topic/books"&gt;
-    data.each { book -&gt;
-        $("#helloDiv").append '&lt;p&gt;'+book.title+'&lt;/p&gt;'
-    }
-&lt;/grooscript:onServerEvent&gt;
-
-&lt;asset:deferredScripts/&gt; <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td><strong>data</strong> is the variable with the 'groovy' object that come from the server.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>grooscript plugin uses asset pipeline plugin. Use this tag to process <em>grooscript</em> tags.</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>And that&#8217;s all, just use groovy in the server and in the client. Don&#8217;t have to write javascript code or worry
-about browser stuff. Grooscript and spring websocket plugins do the work for you.</p>
-</div>
-<div class="paragraph">
-<p>Also, you can work with groovy objects in the client side. For example if you send from the server a list of books,
- and that book is a domain class like this:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class Book {
-
-    String title
-    String author
-
-    String coolFormat() {
-        "${title.split(' ').collect { it.capitalize() }.join ' '} - ${author.toUpperCase()}"
-    }
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Then, in your gsp, if you convert that code to javascript and included in the gsp, you can use groovy object functions:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;grooscript:onServerEvent path="/topic/books" type="Book"&gt;
-    data.each { book -&gt;
-        $("#helloDiv").append '&lt;p&gt;'+book.coolFormat()+'&lt;/p&gt;'
-    }
-&lt;/grooscript:onServerEvent&gt;</code></pre>
-</div>
-</div>
+<p>There is a complete demo using websockets and remote domain classes in <a href="https://github.com/chiquitinxx/circles">Github</a></p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_using_remote_domain_classes_demo">Using remote domain classes demo</h2>
+<h2 id="_using_remote_domain_classes">Using remote domain classes</h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_starting">Starting</h3>
@@ -1078,7 +1186,7 @@ about browser stuff. Grooscript and spring websocket plugins do the work for you
 
 import grails.rest.Resource
 
-@Resource(uri='/books')
+@Resource(uri='/books', formats=['json'])
 class Book {
 
     String title
@@ -1346,7 +1454,7 @@ or
 <div class="sectionbody">
 <div class="paragraph">
 <p>Please, if you have ideas to improve the plugin, or find bugs, please open issues in
-<a href="https://github.com/chiquitinxx/grooscript-grails3-plugin/issues">Github</a>.</p>
+<a href="https://github.com/chiquitinxx/grooscript-grails3-plugin/issues">Github</a> or email me at <a href="mailto:grooscript@gmail.com">grooscript@gmail.com</a>.</p>
 </div>
 <div class="paragraph">
 <p>Thank you!</p>
@@ -1356,8 +1464,8 @@ or
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.1.2<br>
-Last updated 2015-09-06 19:02:38 +02:00
+Version 1.1.3<br>
+Last updated 2015-11-19 23:43:16 +01:00
 </div>
 </div>
 </body>
