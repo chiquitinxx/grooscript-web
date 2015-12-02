@@ -420,7 +420,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Jorge Franco</span><br>
 <span id="email" class="email"><a href="mailto:grooscript@gmail.com">grooscript@gmail.com</a></span><br>
-<span id="revnumber">version 1.1.3</span>
+<span id="revnumber">version 1.1.4</span>
 <br><span id="revremark">Grails plugin to convert groovy code to javascript in your gsp's</span>
 </div>
 <div id="toc" class="toc2">
@@ -430,6 +430,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_important">Important</a></li>
 <li><a href="#_requisites">Requisites</a></li>
+<li><a href="#_what_is_new_in_1_1_4">What is new in 1.1.4</a></li>
 <li><a href="#_what_is_new_in_1_1_3_1_1_2_and_1_1_1">What is new in 1.1.3, 1.1.2 and 1.1.1</a></li>
 <li><a href="#_what_is_new_in_1_1_0">What is new in 1.1.0</a></li>
 <li><a href="#_changes_version_1_0_0">Changes version 1.0.0</a></li>
@@ -493,11 +494,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="_introduction">Introduction</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This plugin convert your groovy code to javascript, allowing to use your groovy code in your gsp&#8217;s.</p>
+<p>The plugin converts your Groovy code to javascript, allowing to use your Groovy code in your gsp files.</p>
 </div>
 <div class="paragraph">
-<p>If you want to convert groovy files to javascript, use groovy templates in the client side, generate
-require.js modules from your groovy code, &#8230;&#8203; please use <a href="https://github.com/chiquitinxx/grooscript-gradle-plugin">gradle plugin</a>.
+<p>If you want to convert groovy files to javascript, use groovy templates on the client side, generate
+require.js modules from your groovy code. Don&#8217;t forget to use <a href="https://github.com/chiquitinxx/grooscript-gradle-plugin">gradle plugin</a>.
 You can use both plugins in your grails 3 project.</p>
 </div>
 <div class="paragraph">
@@ -506,9 +507,30 @@ You can use both plugins in your grails 3 project.</p>
 <div class="sect2">
 <h3 id="_important">Important</h3>
 <div class="paragraph">
-<p>I have a lot of ideas to improve this plugin, use grooscript phantomjs support, compile static your templates, improve domain classes options,&#8230;&#8203;
-but I don&#8217;t know if people use or is interested in this plugin. So, if you want or need something, just <strong>open the issue or improvement</strong> in
-<a href="https://github.com/chiquitinxx/grooscript-grails3-plugin/issues">Github</a> or email me at <a href="mailto:grooscript@gmail.com">grooscript@gmail.com</a></p>
+<p>If you have any ideas on how to</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>improve this plugin,</p>
+</li>
+<li>
+<p>use grooscript phantomjs support,</p>
+</li>
+<li>
+<p>statically compile your templates,</p>
+</li>
+<li>
+<p>or improve domain classes options,</p>
+</li>
+<li>
+<p>or anything else&#8230;&#8203;</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>don&#8217;t hesitate to <strong>open an issue or improvement</strong> on <a href="https://github.com/chiquitinxx/grooscript-grails3-plugin/issues">Github</a>
+or email me at <a href="mailto:grooscript@gmail.com">grooscript@gmail.com</a>.</p>
 </div>
 <div class="paragraph">
 <p>I have created this documentation with <a href="http://asciidoctor.org/">asciidoctor</a>!</p>
@@ -517,35 +539,45 @@ but I don&#8217;t know if people use or is interested in this plugin. So, if you
 <div class="sect2">
 <h3 id="_requisites">Requisites</h3>
 <div class="paragraph">
-<p>This plugin works for Grails 3, and you need assets pipeline and cache plugin.</p>
+<p>This plugin works with Grails 3. You also need assets pipeline and the cache plugin.</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Use <em>&lt;asset:deferredScripts/&gt;</em> in your gsp&#8217;s with grooscript tags.</p>
+<p>Use <em>&lt;asset:deferredScripts/&gt;</em> in your gsp files with grooscript tags.</p>
 </li>
 <li>
 <p>You have to import <strong>grosscript-grails.js</strong> when you use grooscript tags.</p>
 </li>
 <li>
-<p>Plugin use <em>jquery</em>, so remember add that dependency.</p>
+<p>The plugin uses <em>jquery</em>, so remember to add that dependency.</p>
 </li>
 <li>
-<p>Work with domain classes still experimental, <strong>don&#8217;t use in production</strong>, as explained <a href="#_use_in_production">here</a></p>
+<p>Domain classes support is still experimental, <strong>don&#8217;t use it in production code</strong>, as explained <a href="#_use_in_production">here</a>.</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>To use it, just add the plugin to your grails 3 dependencies in your build.gradle:</p>
+<p>To use the plugin just add it to your grails 3 dependencies in your build.gradle:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dependencies {
     ...
-    compile "org.grails.plugins:grooscript:1.1.3"
+    compile "org.grails.plugins:grooscript:1.1.4"
     ...
 }</code></pre>
 </div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_what_is_new_in_1_1_4">What is new in 1.1.4</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Fix remote domain classes in windows</p>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect2">
@@ -553,10 +585,10 @@ but I don&#8217;t know if people use or is interested in this plugin. So, if you
 <div class="ulist">
 <ul>
 <li>
-<p>Upgrade to grooscript 1.2.2</p>
+<p>Upgraded to grooscript 1.2.2</p>
 </li>
 <li>
-<p>Now can set the websockets endpoint</p>
+<p>Now you can set the websockets endpoint</p>
 </li>
 <li>
 <p>Fixes</p>
@@ -597,17 +629,17 @@ but I don&#8217;t know if people use or is interested in this plugin. So, if you
 <div class="sectionbody">
 <div class="paragraph">
 <p>This little framework is the engine of the plugin. It converts Groovy code to javascript.
-You don&#8217;t need to know Grooscript, the plugin do the work for you. But you can
-take a look to <a href="http://grooscript.org/doc.html" class="bare">http://grooscript.org/doc.html</a> to get more info. Grooscript compile the code,
-inspect the AST tree, and generate the javascript code.</p>
+You don&#8217;t need to know Grooscript, the plugin does the work for you. But you can
+take a look to <a href="http://grooscript.org/doc.html" class="bare">http://grooscript.org/doc.html</a> to get more info. Grooscript compiles the code,
+inspects the AST tree, and generates the javascript code.</p>
 </div>
 <div class="paragraph">
-<p>Just remember you need <code>grooscript-grails.js</code> to run converted code. Add <code>&lt;asset:javascript src="grooscript-grails.js"/&gt;</code> to your gsp.</p>
+<p>Just remember you need <code>grooscript-grails.js</code> to run some converted code. Add <code>&lt;asset:javascript src="grooscript-grails.js"/&gt;</code> to your gsp.</p>
 </div>
 <div class="sect2">
 <h3 id="_spring_bean">Spring bean</h3>
 <div class="paragraph">
-<p>There is <strong>grooscriptConverter</strong> bean, for convert groovy code to javascript. You can inject in your grails artifacts:</p>
+<p>There is <strong>grooscriptConverter</strong> bean to convert Groovy code to javascript. You can inject it in your grails artifacts:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -635,8 +667,7 @@ inspect the AST tree, and generate the javascript code.</p>
 <p>Grooscript and this plugin offer some helpers to work with html, javascript or grails from your groovy code.</p>
 </div>
 <div class="paragraph">
-<p>You can use GrooscriptGrails class from your groovy code, in grooscript tags or groovy code, but will do
-things only running in your browser:</p>
+<p>You can use the <code>GrooscriptGrails</code> class from your groovy code, in grooscript tags or groovy code. The code will run only in your browser (client side), no server calls will be made.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -666,14 +697,14 @@ class GrooscriptGrails {
 </table>
 </div>
 <div class="paragraph">
-<p>For example</p>
+<p>Example (calls <code>addBook</code> on controller <code>books</code>):</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">&lt;grooscript:code&gt;
-	GrooscriptGrails,doRemoteCall('books', 'addBook', [title: 'A title'], {
-		println 'All was Ok'
-	}, { println 'Error adding book' })
+	GrooscriptGrails.doRemoteCall('books', 'addBook', [title: 'A title'],
+                                      { println 'All was Ok' },
+                                      { println 'Error adding book' })
 &lt;/grooscript:code&gt;</code></pre>
 </div>
 </div>
@@ -1022,7 +1053,7 @@ beans = {
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dependencies {
     ...
-    compile "org.grails.plugins:grooscript:1.1.3"
+    compile "org.grails.plugins:grooscript:1.1.4"
     ...
 }</code></pre>
 </div>
@@ -1159,7 +1190,7 @@ have to add jquery, and need use asset and cache plugins.</p>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dependencies {
     ...
-    compile "org.grails.plugins:grooscript:1.1.3"
+    compile "org.grails.plugins:grooscript:1.1.4"
     ...
 }</code></pre>
 </div>
@@ -1450,7 +1481,7 @@ or
 <h2 id="_feedback">Feedback</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Please, if you have ideas to improve the plugin, or find bugs, please open issues in
+<p>If you have ideas on how to improve the plugin or if you find any bugs, please open issues at
 <a href="https://github.com/chiquitinxx/grooscript-grails3-plugin/issues">Github</a> or email me at <a href="mailto:grooscript@gmail.com">grooscript@gmail.com</a>.</p>
 </div>
 <div class="paragraph">
@@ -1461,7 +1492,7 @@ or
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.1.3<br>
+Version 1.1.4<br>
 Last updated 2015-11-19 23:43:16 +01:00
 </div>
 </div>
