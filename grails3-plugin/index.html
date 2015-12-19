@@ -420,7 +420,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Jorge Franco</span><br>
 <span id="email" class="email"><a href="mailto:grooscript@gmail.com">grooscript@gmail.com</a></span><br>
-<span id="revnumber">version 1.1.4</span>
+<span id="revnumber">version 1.2.0</span>
 <br><span id="revremark">Grails plugin to convert groovy code to javascript in your gsp's</span>
 </div>
 <div id="toc" class="toc2">
@@ -430,9 +430,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_important">Important</a></li>
 <li><a href="#_requisites">Requisites</a></li>
-<li><a href="#_what_is_new_in_1_1_4">What is new in 1.1.4</a></li>
-<li><a href="#_what_is_new_in_1_1_3_1_1_2_and_1_1_1">What is new in 1.1.3, 1.1.2 and 1.1.1</a></li>
-<li><a href="#_what_is_new_in_1_1_0">What is new in 1.1.0</a></li>
+<li><a href="#_what_is_new_in_1_2_0">What is new in 1.2.0</a></li>
+<li><a href="#_what_is_new_in_1_1_x">What is new in 1.1.x</a></li>
 <li><a href="#_changes_version_1_0_0">Changes version 1.0.0</a></li>
 </ul>
 </li>
@@ -450,6 +449,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#__grooscript_onserverevent">&lt;grooscript:onServerEvent&gt;</a></li>
 <li><a href="#_onEvent">&lt;grooscript:onEvent&gt;</a></li>
 <li><a href="#_remoteDomain">&lt;grooscript:remoteModel&gt;</a></li>
+<li><a href="#_component">&lt;grooscript:component&gt;</a></li>
 </ul>
 </li>
 <li><a href="#_websockets_step_by_step_guide">Websockets step by step guide</a>
@@ -564,47 +564,37 @@ or email me at <a href="mailto:grooscript@gmail.com">grooscript@gmail.com</a>.</
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dependencies {
     ...
-    compile "org.grails.plugins:grooscript:1.1.4"
+    compile "org.grails.plugins:grooscript:1.2.0"
     ...
 }</code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_what_is_new_in_1_1_4">What is new in 1.1.4</h3>
+<h3 id="_what_is_new_in_1_2_0">What is new in 1.2.0</h3>
 <div class="ulist">
 <ul>
 <li>
-<p>Fix remote domain classes in windows</p>
+<p>Use groovy classes as web components in your gsp&#8217;s</p>
 </li>
 </ul>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_what_is_new_in_1_1_3_1_1_2_and_1_1_1">What is new in 1.1.3, 1.1.2 and 1.1.1</h3>
+<h3 id="_what_is_new_in_1_1_x">What is new in 1.1.x</h3>
 <div class="ulist">
 <ul>
 <li>
-<p>Upgraded to grooscript 1.2.2</p>
+<p>Generation of remote domain classes code for production</p>
 </li>
 <li>
-<p>Now you can set the websockets endpoint</p>
+<p>Set the websockets endpoint name</p>
+</li>
+<li>
+<p>Upgrade grooscript version</p>
 </li>
 <li>
 <p>Fixes</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_what_is_new_in_1_1_0">What is new in 1.1.0</h3>
-<div class="ulist">
-<ul>
-<li>
-<p>Generation of remote domain classes code for production.</p>
-</li>
-<li>
-<p>Use grooscript version 1.2.0</p>
 </li>
 </ul>
 </div>
@@ -956,6 +946,173 @@ class is converted to javascript, and you can use properties and methods in the 
 see in action, please see demo below.</p>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_component">&lt;grooscript:component&gt;</h3>
+<div class="imageblock" style="float: right">
+<div class="content">
+<img src="./images/comp.png" alt="Component">
+</div>
+</div>
+<div class="paragraph">
+<p>You can use your groovy classes as web components and use them in your gsp&#8217;s.</p>
+</div>
+<div class="paragraph">
+<p><strong>This is an incubating feature</strong></p>
+</div>
+<div class="sect3">
+<h4 id="_requisites_2">Requisites</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>You have to define your class from src/main/groovy, not in grails-app.</p>
+</li>
+<li>
+<p>grooscript is used to convert the class, so take care with library limitations <a href="http://grooscript.org" class="bare">http://grooscript.org</a>.</p>
+</li>
+<li>
+<p>You have to add webcomponents lib if browser don&#8217;t support it. That library is available in
+<a href="http://webcomponents.org/" class="bare">http://webcomponents.org/</a> or in the plugin (add with: &lt;asset:javascript src="webcomponents.min.js"/&gt;).</p>
+</li>
+<li>
+<p>To use in production, you have to create conversions before create jar/war.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_create_component_class">Create component class</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">package components
+
+class Counter {
+    static style = ''' <i class="conum" data-value="1"></i><b>(1)</b>
+        div {
+            width: 100px;
+        }
+    '''
+    static renderAfter = ['inc', 'dec'] <i class="conum" data-value="2"></i><b>(2)</b>
+    int value = 0
+    void inc() {
+        value++
+    }
+    void dec() {
+        value--
+    }
+    def render() { <i class="conum" data-value="3"></i><b>(3)</b>
+        div {
+            h1 value.toString()
+            p {
+                button(onclick: 'dec', '-') <i class="conum" data-value="4"></i><b>(4)</b>
+                button(onclick: 'inc', '+')
+            }
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>You can define <strong>style</strong> to apply to the component. It&#8217;s shadow dom, so not affected by page css.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>You can define methods that will execute render when executed with <strong>renderAfter</strong>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Define the html of your component with a groovy dsl (Groovy template engine).</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>You can define component methods to execute in onXXX events with the name of the method as a string.</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_use_your_component_in_your_gsp_s">Use your component in your gsp&#8217;s</h4>
+<div class="paragraph">
+<p>To use this component in your gsp&#8217;s you have to use component tag.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;grooscript:component src="components.Counter" name="my-counter"/&gt;</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>scr</strong> is mandatory, full class name of the component.</p>
+</li>
+<li>
+<p><strong>name</strong> is optional to set the name of the tag to use the component. Some tag names are not allowed,
+as counter. If you don&#8217;t set the name of the tag will use the name of the class without upper case and with
+-'s (MyComp &#8594; my-comp)</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_all_together">All together</h4>
+<div class="paragraph">
+<p>Then you can use your groovy component in your html, as a web component:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;html&gt;
+&lt;head&gt;
+    &lt;asset:javascript src="grooscript-grails.js"/&gt;
+    &lt;asset:javascript src="webcomponents.min.js"/&gt;
+    &lt;grooscript:component src="components.Counter" name="my-counter"/&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;p&gt;Hello World!&lt;/p&gt;
+    &lt;my-counter&gt;&lt;/my-counter&gt;
+    &lt;my-counter value="3"&gt;&lt;/my-counter&gt; <i class="conum" data-value="1"></i><b>(1)</b>
+&lt;asset:deferredScripts/&gt;</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>You can set properties of your component. Also you can use content of the tag with a property <strong>content</strong>
+available in the groovy class at runtime.</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_generate_components_for_production">Generate components for production</h4>
+<div class="paragraph">
+<p>In development, class source is used to convert to javascript. In production source is not available, so
+you have to generate that conversion before create jar / war.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-shell" data-lang="shell">&gt; grails generate-component components.Counter</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_helpers_2">Helpers</h4>
+<div class="paragraph">
+<p>You can access a component by id:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;my-counter id="first"&gt;&lt;/my-counter&gt;
+&lt;script&gt;
+	GrooscriptGrails.findComponentById("first")
+&lt;/script&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -1053,7 +1210,7 @@ beans = {
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dependencies {
     ...
-    compile "org.grails.plugins:grooscript:1.1.4"
+    compile "org.grails.plugins:grooscript:1.2.0"
     ...
 }</code></pre>
 </div>
@@ -1190,7 +1347,7 @@ have to add jquery, and need use asset and cache plugins.</p>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dependencies {
     ...
-    compile "org.grails.plugins:grooscript:1.1.4"
+    compile "org.grails.plugins:grooscript:1.2.0"
     ...
 }</code></pre>
 </div>
@@ -1492,8 +1649,8 @@ or
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.1.4<br>
-Last updated 2015-11-19 23:43:16 +01:00
+Version 1.2.0<br>
+Last updated 2015-12-19 18:25:30 +01:00
 </div>
 </div>
 </body>
