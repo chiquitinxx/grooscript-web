@@ -2,12 +2,16 @@
 :author: Jorge Franco
 :source-highlighter: pygments
 
+=== What's new in 1.2.3
+
+* Upgrade groovy and gradle versions.
+* Fixes.
+
 === What's new in 1.2.2
 
 * Converted code now runs faster.
 * Support @TailRecursive and @Builder AST's.
 * Support closures memoize function.
-* Fixes.
 
 === What's new in 1.2.1
 
