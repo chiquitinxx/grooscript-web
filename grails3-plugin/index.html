@@ -420,7 +420,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Jorge Franco</span><br>
 <span id="email" class="email"><a href="mailto:grooscript@gmail.com">grooscript@gmail.com</a></span><br>
-<span id="revnumber">version 1.2.0</span>
+<span id="revnumber">version 1.2.1</span>
 <br><span id="revremark">Grails plugin to convert groovy code to javascript in your gsp's</span>
 </div>
 <div id="toc" class="toc2">
@@ -430,7 +430,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_important">Important</a></li>
 <li><a href="#_requisites">Requisites</a></li>
-<li><a href="#_what_is_new_in_1_2_0">What is new in 1.2.0</a></li>
+<li><a href="#_what_is_new_in_1_2_1">What is new in 1.2.1</a></li>
+<li><a href="#_what_is_new_in_1_2">What is new in 1.2</a></li>
 <li><a href="#_what_is_new_in_1_1_x">What is new in 1.1.x</a></li>
 <li><a href="#_changes_version_1_0_0">Changes version 1.0.0</a></li>
 </ul>
@@ -445,8 +446,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_groovyCode">&lt;grooscript:code&gt;</a></li>
 <li><a href="#_templates">&lt;grooscript:template&gt;</a></li>
-<li><a href="#__grooscript_initspringwebsocket">&lt;grooscript:initSpringWebsocket&gt;</a></li>
+<li><a href="#_websocket-tags">&lt;grooscript:initSpringWebsocket&gt;</a></li>
 <li><a href="#__grooscript_onserverevent">&lt;grooscript:onServerEvent&gt;</a></li>
+<li><a href="#__grooscript_reloadon">&lt;grooscript:reloadOn&gt;</a></li>
 <li><a href="#_onEvent">&lt;grooscript:onEvent&gt;</a></li>
 <li><a href="#_remoteDomain">&lt;grooscript:remoteModel&gt;</a></li>
 <li><a href="#_component">&lt;grooscript:component&gt;</a></li>
@@ -564,14 +566,24 @@ or email me at <a href="mailto:grooscript@gmail.com">grooscript@gmail.com</a>.</
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dependencies {
     ...
-    compile "org.grails.plugins:grooscript:1.2.0"
+    compile "org.grails.plugins:grooscript:1.2.1"
     ...
 }</code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_what_is_new_in_1_2_0">What is new in 1.2.0</h3>
+<h3 id="_what_is_new_in_1_2_1">What is new in 1.2.1</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>New tag for reload pages in development</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_what_is_new_in_1_2">What is new in 1.2</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -645,7 +657,7 @@ inspects the AST tree, and generates the javascript code.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>All conversion done with bean or tags use classPath ''src/main/groovy'' by default.</p>
+<p>All conversion done with bean or tags use classpath ''src/main/groovy'' by default.</p>
 </div>
 </div>
 </div>
@@ -819,7 +831,7 @@ is available inside the template tag, that is the param used in the template fun
 </div>
 </div>
 <div class="sect2">
-<h3 id="__grooscript_initspringwebsocket">&lt;grooscript:initSpringWebsocket&gt;</h3>
+<h3 id="_websocket-tags">&lt;grooscript:initSpringWebsocket&gt;</h3>
 <div class="paragraph">
 <p>Websocket support explained below. With this tag you start websocket connections on the client.</p>
 </div>
@@ -835,7 +847,13 @@ is available inside the template tag, that is the param used in the template fun
 </div>
 </div>
 <div class="paragraph">
-<p>You can put groovy code inside the tag, and that code will run in your browser after websocket connection done.</p>
+<p>You can put groovy code inside the tag, and that code will run in your browser after websocket connection done.
+You can define the websocket entrypoint (default is <em>/stomp</em>) or activate debug:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;grooscript:initSpringWebsocket withDebug="true" endPoint="/hello"/&gt;</code></pre>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -858,6 +876,34 @@ is available inside the template tag, that is the param used in the template fun
 </div>
 <div class="paragraph">
 <p><em>type</em> is optional parameter with the type name of the <em>data</em> that come from the server.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="__grooscript_reloadon">&lt;grooscript:reloadOn&gt;</h3>
+<div class="paragraph">
+<p>You can activate page reload if a websocket message come from the server:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;grooscript:reloadOn path="/topic/reload"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If any message comes for that path, then the page reloads.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If you use <em>reloadOn</em> or <em>onServerEvent</em>, no need to start websocket connection with <em>initSpringWebsocket</em> tag</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect2">
@@ -1210,7 +1256,7 @@ beans = {
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dependencies {
     ...
-    compile "org.grails.plugins:grooscript:1.2.0"
+    compile "org.grails.plugins:grooscript:1.2.1"
     ...
 }</code></pre>
 </div>
@@ -1347,7 +1393,7 @@ have to add jquery, and need use asset and cache plugins.</p>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dependencies {
     ...
-    compile "org.grails.plugins:grooscript:1.2.0"
+    compile "org.grails.plugins:grooscript:1.2.1"
     ...
 }</code></pre>
 </div>
@@ -1649,8 +1695,8 @@ or
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.2.0<br>
-Last updated 2015-12-19 18:25:30 +01:00
+Version 1.2.1<br>
+Last updated 2016-02-11 23:27:59 +01:00
 </div>
 </div>
 </body>
