@@ -2,10 +2,20 @@
 :author: Jorge Franco
 :source-highlighter: pygments
 
+=== What's new in 1.3.0
+
+* Removed PhantomJs tests.
+* Removed jquery lib and gquery wraps around.
+* Removed Observable.
+* No more grooscript-tools.js file, now only grooscript-html-builder.js.
+* Improved speed in conversions.
+* Smaller jar and less dependencies.
+* Faster build and upgrade to gradle 3.
+* Fixes, thanks new contributors.
+
 === What's new in 1.2.3
 
 * Upgrade groovy and gradle versions.
-* Fixes.
 
 === What's new in 1.2.2
 

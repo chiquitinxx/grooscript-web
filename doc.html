@@ -446,16 +446,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_combine_both_worlds">Combine both worlds</a></li>
 </ul>
 </li>
-<li><a href="#_phantomjs_tests">PhantomJs tests</a>
-<ul class="sectlevel2">
-<li><a href="#_requirements_2">Requirements</a></li>
-<li><a href="#_script">Script</a></li>
-<li><a href="#_details">Details</a></li>
-<li><a href="#_groovytestcase">GroovyTestCase</a></li>
-<li><a href="#_spock_integration">Spock integration</a></li>
-<li><a href="#_resume">Resume</a></li>
-</ul>
-</li>
 <li><a href="#_annotations">Annotations</a>
 <ul class="sectlevel2">
 <li><a href="#_gsnative">GsNative</a></li>
@@ -465,8 +455,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_helper_tools">Helper Tools</a>
 <ul class="sectlevel2">
 <li><a href="#_htmlbuilder">HtmlBuilder</a></li>
-<li><a href="#_gquery">gQuery</a></li>
-<li><a href="#_observable">Observable</a></li>
 </ul>
 </li>
 <li><a href="#_tips">Tips</a></li>
@@ -567,9 +555,8 @@ groovy dependencies:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'org.grooscript:grooscript:1.2.3', {
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">compile 'org.grooscript:grooscript:1.3.0', {
     exclude module: "groovy"
-    exclude module: "groovy-json"
 }</code></pre>
 </div>
 </div>
@@ -586,7 +573,7 @@ groovy dependencies:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@Grab('org.grooscript:grooscript:1.2.3')
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@Grab('org.grooscript:grooscript:1.3.0')
 
 import org.grooscript.GrooScript
 
@@ -598,8 +585,8 @@ println result</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>If you want to make conversions in your groovy / java project, you need <a href="jars/grooscript-1.2.3.jar">grooscript.jar</a>.
-You can get from mavenCentral or bintray <code>org.grooscript:grooscript:1.2.3</code> in your project&#8217;s dependencies. Also need <code>grooscript.js</code>,
+<p>If you want to make conversions in your groovy / java project, you need <a href="jars/grooscript-1.3.0.jar">grooscript.jar</a>.
+You can get from mavenCentral or bintray <code>org.grooscript:grooscript:1.3.0</code> in your project&#8217;s dependencies. Also need <code>grooscript.js</code>,
 inside the jar or download from <a href="downloads.html">here</a> to run the converted code in your javascript environment.</p>
 </div>
 <div class="paragraph">
@@ -1671,235 +1658,6 @@ toJsObj(map)
 </div>
 </div>
 <div class="sect1">
-<h2 id="_phantomjs_tests">PhantomJs tests</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p><a href="http://phantomjs.org/">PhantomJS</a> is a javascript library for functional testing your web applications or html files.
-It has it&#8217;s own embedded browser, and you can evaluate DOM handling, CSS selector, JSON, Canvas, and SVG. This library,
-comes with an executable to run a test in a .js file. With <a href="http://grooscript.org">grooscript</a> you can run a
-PhantomJS test to <strong>evaluate groovy code</strong>.</p>
-</div>
-<div class="sect2">
-<h3 id="_requirements_2">Requirements</h3>
-<div class="paragraph">
-<p>To run your <a href="http://phantomjs.org/download.html">PhantomJS</a> tests from Groovy, you need both installed.
-Create an environment variable in your computer &gt; export PHANTOMJS_HOME=/path/to/phantomjs, this isn&#8217;t
-mandatory step, but with this variable you don&#8217;t have to define that system property in your groovy project.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_script">Script</h3>
-<div class="paragraph">
-<p>You can run a PhantomJS test from a groovy script, for example myScript.groovy:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@GrabConfig(systemClassLoader=true)
-@Grab('org.grooscript:grooscript:1.2.3') <i class="conum" data-value="1"></i><b>(1)</b>
-
-import org.grooscript.asts.PhantomJsTest
-
-System.setProperty('PHANTOMJS_HOME', '/path/to/phantomjs/folder') <i class="conum" data-value="2"></i><b>(2)</b>
-
-@PhantomJsTest(url = 'http://beta.groovy-lang.org/') <i class="conum" data-value="3"></i><b>(3)</b>
-void testCountLinks() {
-    def links = $('a') <i class="conum" data-value="4"></i><b>(4)</b>
-    assert links.size() &gt; 40, "Number of links in page are ${links.size()}"
-    links.toArray().collect { it.toString() }.each { link -&gt; <i class="conum" data-value="5"></i><b>(5)</b>
-         println link
-    }
-}
-
-testCountLinks() <i class="conum" data-value="6"></i><b>(6)</b></code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Grab grooscript jar.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>If you haven&#8217;t define environment variable, you can set system property.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>The AST that will change the method in a new method that run a PhantomJS test.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>Groovy code that will be converted to javascript and will be evaluated.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="5"></i><b>5</b></td>
-<td>jQuery has it owns each, so I have to use collect to get a 'groovy' collection.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="6"></i><b>6</b></td>
-<td>You have to execute the method to run the test.</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>If you execute this script with &gt; groovy myScript.groovy, then a PhantomJS will run. The browser will open the
-url <a href="http://beta.groovy-lang.org/" class="bare">http://beta.groovy-lang.org/</a> and will evaluate the groovy code converted to javascript. JQuery and grooscript.js are
-injected to PhantomJS and you can use that libraries in your evaluation.</p>
-</div>
-<div class="paragraph">
-<p>You get some info of the test running in console:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-bash" data-lang="bash">[PhantomJs Test] Starting Test in http://beta.groovy-lang.org/
-  [Console]  https://github.com/groovy/groovy-core
-     ...
-  [Console]  http://www.apache.org/licenses/LICENSE-2.0.html
-[PhantomJs Test] Number of tests: 1
-[PhantomJs Test] Result SUCCESS.</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_details">Details</h3>
-<div class="paragraph">
-<p>@PhantomJsTest annotation transform the code of your function in a new method that runs PhantomJS with groovy
-scripting capabilities. Also a temporally .js file is created for the execution, with the evaluation of the groovy
-code. If some assert fails in the evaluation a groovy assert fail will be raised.</p>
-</div>
-<div class="paragraph">
-<p>Use this feature for simple and fast tests. If you planning a lot of function tests, please consider
-use <a href="http://www.gebish.org/">Geb</a>. Interaction with the DOM and jQuery functions inside PhantomJS test have
-some strange behavior.</p>
-</div>
-<div class="paragraph">
-<p>With @PhantomJsTest you can use more parameters, only <em>url</em> is mandatory:</p>
-</div>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">waitSeconds</dt>
-<dd>
-<p>If you want to wait some seconds after page loaded before evaluate your code.</p>
-</dd>
-<dt class="hdlist1">info</dt>
-<dd>
-<p>To show more info in console.</p>
-</dd>
-<dt class="hdlist1">capture</dt>
-<dd>
-<p>To capture an image of page at the end of evaluation.</p>
-</dd>
-</dl>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@PhantomJsTest(url = 'myFile.html', waitSeconds = 2, info = true, capture = 'image.png')
-void testWithAllOptions() {
-    assert $('title').text().contains('Welcome')
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>You can pass basic parameters as numbers or strings to your function / method annotated with @PhantomJsTest</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@PhantomJsTest(url = 'http://localhost:8000/test')
-void testExpectedElements(element, expectedSize) {
-    assert $(element).size == expectedSize,"Number of '${element}' in page is ${$(element).size()}"
-}
-
-void testPassParameters() {
-    testExpectedElements('p', 1)
-    testExpectedElements('body', 1)
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>You can also get data from the test. That data is parsed to JSON, and return back to groovy parsing that JSON:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@PhantomJsTest(url = 'http://localhost:8000/test')
-def returnMap() {
-    [list: [1,2], str: 'string', number: 9, dec: 8.34, jq: $('p').text()]
-}
-
-void testReturnMap() {
-    def result = returnMap()
-    assert result == [ list: [1,2], str: 'string', number: 9, dec: 8.34, jq: 'Welcome']
-}</code></pre>
-</div>
-</div>
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
-</td>
-<td class="content">
-In windows systems, there is a limit in data size. The result can be shorter than expected. See github
-<a href="https://github.com/chiquitinxx/grooscript/issues/45">issue</a> for details.
-</td>
-</tr>
-</table>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_groovytestcase">GroovyTestCase</h3>
-<div class="paragraph">
-<p>You can annotate a test in a GroovyTestCase with @PhantomJsTest and will work as expected, the test
-will be evaluated in PhantomJs.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class TestPhantomJs extends GroovyTestCase {
-
-    @PhantomJsTest(url = 'http://localhost:8000/test')
-    void testDirectPhantomJs() {
-        println $('p').text()
-        assert $('p').text().contains('Welcome'), "p html is 'Welcome'"
-    }
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_spock_integration">Spock integration</h3>
-<div class="paragraph">
-<p>The integration with <a href="https://code.google.com/p/spock/">Spock</a> isn&#8217;t very good. The best way, is create a private
-method with @PhantomJsTest in your specification, and call it from your tests.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import spock.lang.Specification
-
-class MySpec extends Specification {
-
-    void 'correct number of divs in test page'() {
-        expect:
-        expectedElements('div', 18)
-    }
-
-    @PhantomJsTest(url = 'http://localhost:8000/test')
-    private void expectedElements(element, expectedSize) {
-        assert $(element).size == expectedSize,"Number of '${element}' in page is ${$(element).size()}"
-    }
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_resume">Resume</h3>
-<div class="paragraph">
-<p>This phantomJs tests are nice for fast and small tests. Is very easy to create a little script or add browser
-tests without too much dependencies. Take care with jQuery in your evaluations, for example I have had some
-problems using 'each' function.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
 <h2 id="_annotations">Annotations</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -1980,7 +1738,7 @@ class A {
 <div class="sectionbody">
 <div class="paragraph">
 <p>Grooscript comes with some tools. This tools are some classes that you can use in your groovy code. If you convert
-code that use this tools, you need the js code of that tools. This code is in <code>grooscript-tools.js</code> file. You
+code that use this tools, you need the js code of that tools. Actually only <code>grooscript-html-builder.js</code> file. You
 can find it inside the jar or you can <a href="downloads.html">download</a> it.</p>
 </div>
 <div class="paragraph">
@@ -2040,7 +1798,7 @@ class HtmlBuilder {
 </div>
 </div>
 <div class="paragraph">
-<p>The groovy code can be converted to javascript and will run if you add <code>grooscript-tools.js</code></p>
+<p>The groovy code can be converted to javascript and will run if you add <code>grooscript-html-builder.js</code></p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2079,121 +1837,6 @@ result == "&lt;body&gt;&lt;ul class='list' id='mainList'&gt;&lt;li&gt;0Hello!&lt
 </ul>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_gquery">gQuery</h3>
-<div class="paragraph">
-<p>If you use <a href="http://jquery.com/">jquery</a> in your projects, maybe you want to use from your groovy code that will be
-converted to javascript. I have created an interface <code>Gquery</code> and the implementation <code>GqueryImpl</code> to work with it.
-The implementation is added to <code>grooscript-tools.js</code>. The interface is:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">package org.grooscript.jquery
-
-import org.grooscript.rx.Observable
-
-interface GQuery {
-    //Bind a selector to a property of an object
-    GQueryList bind(String selector, target, String nameProperty)
-    GQueryList bind(String selector, target, String nameProperty, Closure closure)
-    GQueryList bindProperty(String selector, target, String nameProperty)
-    GQueryList bindProperty(String selector, target, String nameProperty, GQueryList parent)
-    //Exist selector
-    boolean existsSelector(String selector)
-    boolean existsSelector(String selector, GQueryList parent)
-    //Exist dom element with id
-    boolean existsId(String id)
-    boolean existsId(String id, GQueryList parent)
-    //Exist dom element with name
-    boolean existsName(String name)
-    boolean existsName(String name, GQueryList parent)
-    //Exist dom radio group with that name
-    boolean existsGroup(String name)
-    boolean existsGroup(String name, GQueryList parent)
-    //Launch closure on dom event, closure not receive params
-    GQueryList onEvent(String selector, String nameEvent, Closure func)
-    GQueryList onEvent(String selector, String nameEvent, Closure func, GQueryList parent)
-    //Remote call to server to receive JSON
-    void doRemoteCall(String url, String type, params, Closure onSuccess, Closure onFailure)
-    void doRemoteCall(String url, String type, params, Closure onSuccess, Closure onFailure, objectResult)
-    //Launch closure when page loaded
-    void onReady(Closure func)
-    //Atach methods of an object to dom elements with that id (Click, Submit, Change)
-    void attachMethodsToDomEvents(target)
-    void attachMethodsToDomEvents(target, GQueryList parent)
-    //Launch closure on input change event, closure receive a param with the new value
-    GQueryList onChange(String selector, Closure closure)
-    GQueryList onChange(String selector, Closure closure, GQueryList parent)
-    //Focus dom object, on input put cursor at the end
-    GQueryList focusEnd(String selector)
-    GQueryList focusEnd(String selector, GQueryList parent)
-    //Bind all properties of an object to dom elements, find dom elements by id or name
-    void bindAllProperties(target)
-    void bindAllProperties(target, GQueryList parent)
-    //Bind all
-    void bindAll(target)
-    void bindAll(target, GQueryList parent)
-    //Returns an Observable from a event
-    Observable observeEvent(String selector, String nameEvent)
-    Observable observeEvent(String selector, String nameEvent, Map data)
-    //Call
-    GQueryList call(String selector)
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p><code>GQueryList</code> is a class with a method missing to execute jquery functions in the result of the selector
-finder, like <code>gQuery('body').append('Hello!')</code>. See in action:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import org.grooscript.jquery.GQueryImpl
-
-def result = new Result()
-def gQuery = new GQueryImpl()
-gQuery.onReady {
-    gQuery.doRemoteCall('${JSON_ADDRESS}', 'GET', null, { res -&gt;
-        gQuery('.result').html('OK')
-        result = res
-    }, {
-        result = 'FAIL!'
-    }, Result)
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_observable">Observable</h3>
-<div class="paragraph">
-<p>I think reactive programming is very interesting, and I have added a little implementation of Observable in grooscript.
-Take a look at this <a href="https://github.com/chiquitinxx/grooscript/blob/master/src/test/groovy/org/grooscript/rx/ObservableSpec.groovy">tests</a>
-to see what can you do. Just subscribe to events, map and filter. There are two functions in gQuery that returns observable.</p>
-</div>
-<div class="paragraph">
-<p>This is just an introduction, if you&#8217;re curious about reactive programming google it!</p>
-</div>
-<div class="paragraph">
-<p>Little example:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import org.grooscript.jquery.GQueryImpl
-
-def clicks = [number: 0]
-def gQuery = new GQueryImpl()
-gQuery.onReady {
-    println 'Ready!'
-    def observable = gQuery.observeEvent('p','click', clicks)
-    observable.map { event -&gt; 2 }.
-      subscribe { num -&gt; clicks.number = clicks.number + num }
-    observable.map { event -&gt; 5 }.
-      subscribe { num -&gt; clicks.number = clicks.number + num }
-    $('p').click()
-}
-// clicks.number == 7</code></pre>
-</div>
-</div>
-</div>
 </div>
 </div>
 <div class="sect1">
@@ -2220,7 +1863,7 @@ gQuery.onReady {
 <p>You can activate <code>debug</code> console info in javascript with <code>gs.consoleInfo = true;</code>.</p>
 </li>
 <li>
-<p>Remember import <code>grooscript-tools.js</code> if you use Observable, HtmlBuilder or GQuery.</p>
+<p>Remember import <code>grooscript-html-builder.js</code> if you use HtmlBuilder.</p>
 </li>
 <li>
 <p>Use grooscript gradle plugin daemon task to do groovy changes, and see immediately in your browser.</p>
@@ -2287,7 +1930,7 @@ eval(fs.readFileSync('aConvertedFile.js')+'');</code></pre>
 <h3 id="_bower_package">Bower package</h3>
 <div class="paragraph">
 <p>You can add grooscript libs using <a href="http://bower.io/">Bower</a> with <code>&gt;bower install grooscript</code>, Then you can add grooscript.js,
-grooscript.min.js or grooscript-tools.js dependencies in your project.</p>
+grooscript.min.js or grooscript-html-builder.js dependencies in your project.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2407,7 +2050,7 @@ requirejs(['lib/grooscript.min'], function() {
         jquery: '../lib/jquery'
     },
     shim: {
-        'bookDemo': ['lib/grooscript.min', 'lib/grooscript-tools']
+        'bookDemo': ['lib/grooscript.min', 'lib/grooscript-html-builder']
     }
 });
 
@@ -2494,7 +2137,7 @@ We have nice stuff to do after 1.0 release.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-08-24 00:25:53 +02:00
+Last updated 2016-09-12 21:55:36 +02:00
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
