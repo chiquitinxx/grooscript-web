@@ -4,14 +4,14 @@
 <meta charset="UTF-8">
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 1.5.2">
+<meta name="generator" content="Asciidoctor 1.5.3">
 <meta name="author" content="Jorge Franco">
 <title>Grooscript Grails 3 Plugin</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
-/* Remove the comments around the @import statement below when using this as a custom stylesheet */
-/*@import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400";*/
+/* Remove comment around @import statement below when using as a custom stylesheet */
+/*@import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700";*/
 article,aside,details,figcaption,figure,footer,header,hgroup,main,nav,section,summary{display:block}
 audio,canvas,video{display:inline-block}
 audio:not([controls]){display:none;height:0}
@@ -58,7 +58,6 @@ a:hover{cursor:pointer}
 img,object,embed{max-width:100%;height:auto}
 object,embed{height:100%}
 img{-ms-interpolation-mode:bicubic}
-#map_canvas img,#map_canvas embed,#map_canvas object,.map_canvas img,.map_canvas embed,.map_canvas object{max-width:none!important}
 .left{float:left!important}
 .right{float:right!important}
 .text-left{text-align:left!important}
@@ -66,10 +65,12 @@ img{-ms-interpolation-mode:bicubic}
 .text-center{text-align:center!important}
 .text-justify{text-align:justify!important}
 .hide{display:none}
-.antialiased,body{-webkit-font-smoothing:antialiased}
-img{display:inline-block;vertical-align:middle}
+body{-webkit-font-smoothing:antialiased}
+img,object,svg{display:inline-block;vertical-align:middle}
 textarea{height:auto;min-height:50px}
 select{width:100%}
+.center{margin-left:auto;margin-right:auto}
+.spread{width:100%}
 p.lead,.paragraph.lead>p,#preamble>.sectionbody>.paragraph:first-of-type p{font-size:1.21875em;line-height:1.6}
 .subheader,.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{line-height:1.45;color:#7a2518;font-weight:400;margin-top:0;margin-bottom:.25em}
 div,dl,dt,dd,ul,ol,li,h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6,pre,form,p,blockquote,th,td{margin:0;padding:0;direction:ltr}
@@ -112,12 +113,14 @@ blockquote,blockquote p{line-height:1.6;color:rgba(0,0,0,.85)}
 h1{font-size:2.75em}
 h2{font-size:2.3125em}
 h3,#toctitle,.sidebarblock>.content>.title{font-size:1.6875em}
-h4{font-size:1.4375em}}table{background:#fff;margin-bottom:1.25em;border:solid 1px #dedede}
+h4{font-size:1.4375em}}
+table{background:#fff;margin-bottom:1.25em;border:solid 1px #dedede}
 table thead,table tfoot{background:#f7f8f7;font-weight:bold}
 table thead tr th,table thead tr td,table tfoot tr th,table tfoot tr td{padding:.5em .625em .625em;font-size:inherit;color:rgba(0,0,0,.8);text-align:left}
 table tr th,table tr td{padding:.5625em .625em;font-size:inherit;color:rgba(0,0,0,.8)}
 table tr.even,table tr.alt,table tr:nth-of-type(even){background:#f8f8f7}
 table thead tr th,table tfoot tr th,table tbody tr td,table tr td,table tfoot tr td{display:table-cell;line-height:1.6}
+body{tab-size:4}
 h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2;word-spacing:-.05em}
 h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title strong,h4 strong,h5 strong,h6 strong{font-weight:400}
 .clearfix:before,.clearfix:after,.float-group:before,.float-group:after{content:" ";display:table}
@@ -125,7 +128,7 @@ h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title str
 *:not(pre)>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background-color:#f7f7f8;-webkit-border-radius:4px;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed}
 pre,pre>code{line-height:1.45;color:rgba(0,0,0,.9);font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;text-rendering:optimizeSpeed}
 .keyseq{color:rgba(51,51,51,.8)}
-kbd{display:inline-block;color:rgba(0,0,0,.8);font-size:.75em;line-height:1.4;background-color:#f7f7f7;border:1px solid #ccc;-webkit-border-radius:3px;border-radius:3px;-webkit-box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em white inset;box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em #fff inset;margin:-.15em .15em 0 .15em;padding:.2em .6em .2em .5em;vertical-align:middle;white-space:nowrap}
+kbd{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;display:inline-block;color:rgba(0,0,0,.8);font-size:.65em;line-height:1.45;background-color:#f7f7f7;border:1px solid #ccc;-webkit-border-radius:3px;border-radius:3px;-webkit-box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em white inset;box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em #fff inset;margin:0 .15em;padding:.2em .5em;vertical-align:middle;position:relative;top:-.1em;white-space:nowrap}
 .keyseq kbd:first-child{margin-left:0}
 .keyseq kbd:last-child{margin-right:0}
 .menuseq,.menu{color:rgba(0,0,0,.8)}
@@ -156,29 +159,33 @@ p a>code:hover{color:rgba(0,0,0,.9)}
 #toc ul.sectlevel0>li>a{font-style:italic}
 #toc ul.sectlevel0 ul.sectlevel1{margin:.5em 0}
 #toc ul{font-family:"Open Sans","DejaVu Sans",sans-serif;list-style-type:none}
+#toc li{line-height:1.3334;margin-top:.3334em}
 #toc a{text-decoration:none}
 #toc a:active{text-decoration:underline}
 #toctitle{color:#7a2518;font-size:1.2em}
 @media only screen and (min-width:768px){#toctitle{font-size:1.375em}
 body.toc2{padding-left:15em;padding-right:0}
 #toc.toc2{margin-top:0!important;background-color:#f8f8f7;position:fixed;width:15em;left:0;top:0;border-right:1px solid #efefed;border-top-width:0!important;border-bottom-width:0!important;z-index:1000;padding:1.25em 1em;height:100%;overflow:auto}
-#toc.toc2 #toctitle{margin-top:0;font-size:1.2em}
+#toc.toc2 #toctitle{margin-top:0;margin-bottom:.8rem;font-size:1.2em}
 #toc.toc2>ul{font-size:.9em;margin-bottom:0}
 #toc.toc2 ul ul{margin-left:0;padding-left:1em}
 #toc.toc2 ul.sectlevel0 ul.sectlevel1{padding-left:0;margin-top:.5em;margin-bottom:.5em}
 body.toc2.toc-right{padding-left:0;padding-right:15em}
-body.toc2.toc-right #toc.toc2{border-right-width:0;border-left:1px solid #efefed;left:auto;right:0}}@media only screen and (min-width:1280px){body.toc2{padding-left:20em;padding-right:0}
+body.toc2.toc-right #toc.toc2{border-right-width:0;border-left:1px solid #efefed;left:auto;right:0}}
+@media only screen and (min-width:1280px){body.toc2{padding-left:20em;padding-right:0}
 #toc.toc2{width:20em}
 #toc.toc2 #toctitle{font-size:1.375em}
 #toc.toc2>ul{font-size:.95em}
 #toc.toc2 ul ul{padding-left:1.25em}
-body.toc2.toc-right{padding-left:0;padding-right:20em}}#content #toc{border-style:solid;border-width:1px;border-color:#e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;-webkit-border-radius:4px;border-radius:4px}
+body.toc2.toc-right{padding-left:0;padding-right:20em}}
+#content #toc{border-style:solid;border-width:1px;border-color:#e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;-webkit-border-radius:4px;border-radius:4px}
 #content #toc>:first-child{margin-top:0}
 #content #toc>:last-child{margin-bottom:0}
 #footer{max-width:100%;background-color:rgba(0,0,0,.8);padding:1.25em}
 #footer-text{color:rgba(255,255,255,.8);line-height:1.44}
 .sect1{padding-bottom:.625em}
-@media only screen and (min-width:768px){.sect1{padding-bottom:1.25em}}.sect1+.sect1{border-top:1px solid #efefed}
+@media only screen and (min-width:768px){.sect1{padding-bottom:1.25em}}
+.sect1+.sect1{border-top:1px solid #efefed}
 #content h1>a.anchor,h2>a.anchor,h3>a.anchor,#toctitle>a.anchor,.sidebarblock>.content>.title>a.anchor,h4>a.anchor,h5>a.anchor,h6>a.anchor{position:absolute;z-index:1001;width:1.5ex;margin-left:-1.5ex;display:block;text-decoration:none!important;visibility:hidden;text-align:center;font-weight:400}
 #content h1>a.anchor:before,h2>a.anchor:before,h3>a.anchor:before,#toctitle>a.anchor:before,.sidebarblock>.content>.title>a.anchor:before,h4>a.anchor:before,h5>a.anchor:before,h6>a.anchor:before{content:"\00A7";font-size:.85em;display:block;padding-top:.1em}
 #content h1:hover>a.anchor,#content h1>a.anchor:hover,h2:hover>a.anchor,h2>a.anchor:hover,h3:hover>a.anchor,#toctitle:hover>a.anchor,.sidebarblock>.content>.title:hover>a.anchor,h3>a.anchor:hover,#toctitle>a.anchor:hover,.sidebarblock>.content>.title>a.anchor:hover,h4:hover>a.anchor,h4>a.anchor:hover,h5:hover>a.anchor,h5>a.anchor:hover,h6:hover>a.anchor,h6>a.anchor:hover{visibility:visible}
@@ -207,7 +214,9 @@ table.tableblock #preamble>.sectionbody>.paragraph:first-of-type p{font-size:inh
 .sidebarblock .literalblock pre,.sidebarblock .listingblock pre:not(.highlight),.sidebarblock .listingblock pre[class="highlight"],.sidebarblock .listingblock pre[class^="highlight "],.sidebarblock .listingblock pre.CodeRay,.sidebarblock .listingblock pre.prettyprint{background:#f2f1f1}
 .literalblock pre,.literalblock pre[class],.listingblock pre,.listingblock pre[class]{-webkit-border-radius:4px;border-radius:4px;word-wrap:break-word;padding:1em;font-size:.8125em}
 .literalblock pre.nowrap,.literalblock pre[class].nowrap,.listingblock pre.nowrap,.listingblock pre[class].nowrap{overflow-x:auto;white-space:pre;word-wrap:normal}
-@media only screen and (min-width:768px){.literalblock pre,.literalblock pre[class],.listingblock pre,.listingblock pre[class]{font-size:.90625em}}@media only screen and (min-width:1280px){.literalblock pre,.literalblock pre[class],.listingblock pre,.listingblock pre[class]{font-size:1em}}.literalblock.output pre{color:#f7f7f8;background-color:rgba(0,0,0,.9)}
+@media only screen and (min-width:768px){.literalblock pre,.literalblock pre[class],.listingblock pre,.listingblock pre[class]{font-size:.90625em}}
+@media only screen and (min-width:1280px){.literalblock pre,.literalblock pre[class],.listingblock pre,.listingblock pre[class]{font-size:1em}}
+.literalblock.output pre{color:#f7f7f8;background-color:rgba(0,0,0,.9)}
 .listingblock pre.highlightjs{padding:0}
 .listingblock pre.highlightjs>code{padding:1em;-webkit-border-radius:4px;border-radius:4px}
 .listingblock pre.prettyprint{border-width:0}
@@ -217,7 +226,7 @@ table.tableblock #preamble>.sectionbody>.paragraph:first-of-type p{font-size:inh
 .listingblock.terminal pre .command:before{content:attr(data-prompt);padding-right:.5em;color:#999}
 .listingblock.terminal pre .command:not([data-prompt]):before{content:"$"}
 table.pyhltable{border-collapse:separate;border:0;margin-bottom:0;background:none}
-table.pyhltable td{vertical-align:top;padding-top:0;padding-bottom:0}
+table.pyhltable td{vertical-align:top;padding-top:0;padding-bottom:0;line-height:1.45}
 table.pyhltable td.code{padding-left:.75em;padding-right:0}
 pre.pygments .lineno,table.pyhltable td:not(.code){color:#999;padding-left:0;padding-right:.5em;border-right:1px solid #ddddd8}
 pre.pygments .lineno{display:inline-block;margin-right:.25em}
@@ -238,13 +247,12 @@ table.pyhltable .linenodiv{background:none!important;padding-right:0!important}
 .verseblock .attribution{margin-top:1.25rem;margin-left:.5ex}
 .quoteblock .attribution,.verseblock .attribution{font-size:.9375em;line-height:1.45;font-style:italic}
 .quoteblock .attribution br,.verseblock .attribution br{display:none}
-.quoteblock .attribution cite,.verseblock .attribution cite{display:block;letter-spacing:-.05em;color:rgba(0,0,0,.6)}
+.quoteblock .attribution cite,.verseblock .attribution cite{display:block;letter-spacing:-.025em;color:rgba(0,0,0,.6)}
 .quoteblock.abstract{margin:0 0 1.25em 0;display:block}
 .quoteblock.abstract blockquote,.quoteblock.abstract blockquote p{text-align:left;word-spacing:0}
 .quoteblock.abstract blockquote:before,.quoteblock.abstract blockquote p:first-of-type:before{display:none}
 table.tableblock{max-width:100%;border-collapse:separate}
 table.tableblock td>.paragraph:last-child p>p:last-child,table.tableblock th>p:last-child,table.tableblock td>p:last-child{margin-bottom:0}
-table.spread{width:100%}
 table.tableblock,th.tableblock,td.tableblock{border:0 solid #dedede}
 table.grid-all th.tableblock,table.grid-all td.tableblock{border-width:0 1px 1px 0}
 table.grid-all tfoot>tr>th.tableblock,table.grid-all tfoot>tr>td.tableblock{border-width:1px 1px 0 0}
@@ -290,8 +298,8 @@ ol.upperroman{list-style-type:upper-roman}
 ol.lowergreek{list-style-type:lower-greek}
 .hdlist>table,.colist>table{border:0;background:none}
 .hdlist>table>tbody>tr,.colist>table>tbody>tr{background:none}
-td.hdlist1{padding-right:.75em;font-weight:bold}
-td.hdlist1,td.hdlist2{vertical-align:top}
+td.hdlist1,td.hdlist2{vertical-align:top;padding:0 .625em}
+td.hdlist1{font-weight:bold;padding-bottom:1.25em}
 .literalblock+.colist,.listingblock+.colist{margin-top:-.5em}
 .colist>table tr>td:first-of-type{padding:0 .75em;line-height:1}
 .colist>table tr>td:last-of-type{padding:.25em 0}
@@ -304,13 +312,14 @@ td.hdlist1,td.hdlist2{vertical-align:top}
 .image.left,.image.right{margin-top:.25em;margin-bottom:.25em;display:inline-block;line-height:0}
 .image.left{margin-right:.625em}
 .image.right{margin-left:.625em}
-a.image{text-decoration:none}
-span.footnote,span.footnoteref{vertical-align:super;font-size:.875em}
-span.footnote a,span.footnoteref a{text-decoration:none}
-span.footnote a:active,span.footnoteref a:active{text-decoration:underline}
+a.image{text-decoration:none;display:inline-block}
+a.image object{pointer-events:none}
+sup.footnote,sup.footnoteref{font-size:.875em;position:static;vertical-align:super}
+sup.footnote a,sup.footnoteref a{text-decoration:none}
+sup.footnote a:active,sup.footnoteref a:active{text-decoration:underline}
 #footnotes{padding-top:.75em;padding-bottom:.75em;margin-bottom:.625em}
 #footnotes hr{width:20%;min-width:6.25em;margin:-.25em 0 .75em 0;border-width:1px 0 0 0}
-#footnotes .footnote{padding:0 .375em;line-height:1.3;font-size:.875em;margin-left:1.2em;text-indent:-1.2em;margin-bottom:.2em}
+#footnotes .footnote{padding:0 .375em 0 .225em;line-height:1.3334;font-size:.875em;margin-left:1.2em;text-indent:-1.05em;margin-bottom:.2em}
 #footnotes .footnote a:first-of-type{font-weight:bold;text-decoration:none}
 #footnotes .footnote:last-of-type{margin-bottom:0}
 #content #footnotes{margin-top:-.625em;margin-bottom:0;padding:.75em 0}
@@ -368,11 +377,10 @@ span.icon>.fa{cursor:default}
 pre .conum[data-value]{position:relative;top:-.125em}
 b.conum *{color:inherit!important}
 .conum:not([data-value]):empty{display:none}
-h1,h2{letter-spacing:-.01em}
-dt,th.tableblock,td.content{text-rendering:optimizeLegibility}
-p,td.content{letter-spacing:-.01em}
-p strong,td.content strong{letter-spacing:-.005em}
-p,blockquote,dt,td.content{font-size:1.0625rem}
+dt,th.tableblock,td.content,div.footnote{text-rendering:optimizeLegibility}
+h1,h2,p,td.content,span.alt{letter-spacing:-.01em}
+p strong,td.content strong,div.footnote strong{letter-spacing:-.005em}
+p,blockquote,dt,td.content,span.alt{font-size:1.0625rem}
 p{margin-bottom:1.25rem}
 .sidebarblock p,.sidebarblock dt,.sidebarblock td.content,p.tableblock{font-size:1em}
 .exampleblock>.content{background-color:#fffef7;border-color:#e0e0dc;-webkit-box-shadow:0 1px 4px #e0e0dc;box-shadow:0 1px 4px #e0e0dc}
@@ -383,9 +391,9 @@ a{color:inherit!important;text-decoration:underline!important}
 a.bare,a[href^="#"],a[href^="mailto:"]{text-decoration:none!important}
 a[href^="http:"]:not(.bare):after,a[href^="https:"]:not(.bare):after{content:"(" attr(href) ")";display:inline-block;font-size:.875em;padding-left:.25em}
 abbr[title]:after{content:" (" attr(title) ")"}
-pre,blockquote,tr,img{page-break-inside:avoid}
+pre,blockquote,tr,img,object,svg{page-break-inside:avoid}
 thead{display:table-header-group}
-img{max-width:100%!important}
+svg{max-width:100%}
 p,blockquote,dt,td.content{font-size:1em;orphans:3;widows:3}
 h2,h3,#toctitle,.sidebarblock>.content>.title{page-break-after:avoid}
 #toc,.sidebarblock,.exampleblock>.content{background:none!important}
@@ -409,10 +417,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 .hide-for-print{display:none!important}
 .show-for-print{display:inherit!important}}
 </style>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
-<script>document.addEventListener('DOMContentLoaded', prettyPrint)</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
 </head>
 <body class="article toc2 toc-right">
 <div id="header">
@@ -420,7 +425,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Jorge Franco</span><br>
 <span id="email" class="email"><a href="mailto:grooscript@gmail.com">grooscript@gmail.com</a></span><br>
-<span id="revnumber">version 1.2.1</span>
+<span id="revnumber">version 1.3.0</span>
 <br><span id="revremark">Grails plugin to convert groovy code to javascript in your gsp's</span>
 </div>
 <div id="toc" class="toc2">
@@ -430,7 +435,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_important">Important</a></li>
 <li><a href="#_requisites">Requisites</a></li>
-<li><a href="#_what_is_new_in_1_2_1">What is new in 1.2.1</a></li>
+<li><a href="#_what_is_new_in_1_3_0">What is new in 1.3.0</a></li>
+<li><a href="#_what_is_new_in_1_2_x">What is new in 1.2.x</a></li>
 <li><a href="#_what_is_new_in_1_2">What is new in 1.2</a></li>
 <li><a href="#_what_is_new_in_1_1_x">What is new in 1.1.x</a></li>
 <li><a href="#_changes_version_1_0_0">Changes version 1.0.0</a></li>
@@ -447,32 +453,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_groovyCode">&lt;grooscript:code&gt;</a></li>
 <li><a href="#_templates">&lt;grooscript:template&gt;</a></li>
 <li><a href="#_websocket-tags">&lt;grooscript:initSpringWebsocket&gt;</a></li>
-<li><a href="#__grooscript_onserverevent">&lt;grooscript:onServerEvent&gt;</a></li>
+<li><a href="#__grooscript_onwebsocket">&lt;grooscript:onWebsocket&gt;</a></li>
 <li><a href="#__grooscript_reloadon">&lt;grooscript:reloadOn&gt;</a></li>
-<li><a href="#_onEvent">&lt;grooscript:onEvent&gt;</a></li>
-<li><a href="#_remoteDomain">&lt;grooscript:remoteModel&gt;</a></li>
+<li><a href="#_onEvent">&lt;grooscript:onGrailsEvent&gt;</a></li>
 <li><a href="#_component">&lt;grooscript:component&gt;</a></li>
 </ul>
 </li>
-<li><a href="#_websockets_step_by_step_guide">Websockets step by step guide</a>
-<ul class="sectlevel2">
-<li><a href="#_create_your_grails_3_application">Create your grails 3 application</a></li>
-<li><a href="#_add_websocket_support">Add websocket support</a></li>
-<li><a href="#_add_grooscript_grails_plugin">Add grooscript grails plugin</a></li>
-<li><a href="#_check_websockets_are_available">Check websockets are available</a></li>
-<li><a href="#_send_messages_to_the_server">Send messages to the server</a></li>
-<li><a href="#_receive_messages_from_the_server">Receive messages from the server</a></li>
-</ul>
-</li>
-<li><a href="#_demo">Demo</a></li>
-<li><a href="#_using_remote_domain_classes">Using remote domain classes</a>
-<ul class="sectlevel2">
-<li><a href="#_starting">Starting</a></li>
-<li><a href="#_grooscript_remote_domain_classes">Grooscript remote domain classes</a></li>
-<li><a href="#_add_books">Add books</a></li>
-<li><a href="#_use_in_production">Use in production</a></li>
-</ul>
-</li>
+<li><a href="#_demos_or_examples">Demos or examples</a></li>
 <li><a href="#_feedback">Feedback</a></li>
 </ul>
 </div>
@@ -501,7 +488,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="paragraph">
 <p>If you want to convert groovy files to javascript, use groovy templates on the client side, generate
 require.js modules from your groovy code. Don&#8217;t forget to use <a href="https://github.com/chiquitinxx/grooscript-plugins/tree/master/gradle-plugin">gradle plugin</a>.
-You can use both plugins in your grails 3 project.</p>
+You can use both plugins in your grails 3 project, and you must use both if you use grooscript:component tag.</p>
 </div>
 <div class="paragraph">
 <p>So, your <strong>groovy code will run in your browser</strong>!</p>
@@ -517,13 +504,10 @@ You can use both plugins in your grails 3 project.</p>
 <p>improve this plugin,</p>
 </li>
 <li>
-<p>use grooscript phantomjs support,</p>
-</li>
-<li>
 <p>statically compile your templates,</p>
 </li>
 <li>
-<p>or improve domain classes options,</p>
+<p>or improve component options,</p>
 </li>
 <li>
 <p>or anything else&#8230;&#8203;</p>
@@ -531,7 +515,7 @@ You can use both plugins in your grails 3 project.</p>
 </ul>
 </div>
 <div class="paragraph">
-<p>don&#8217;t hesitate to <strong>open an issue or improvement</strong> on <a href="https://github.com/chiquitinxx/grooscript-plugins/issues">Github</a>
+<p>don&#8217;t hesitate to <strong>open an issue or improvement</strong> on <a href="https://github.com/chiquitinxx/grooscript-plugins">Github</a>
 or email me at <a href="mailto:grooscript@gmail.com">grooscript@gmail.com</a>.</p>
 </div>
 <div class="paragraph">
@@ -541,7 +525,7 @@ or email me at <a href="mailto:grooscript@gmail.com">grooscript@gmail.com</a>.</
 <div class="sect2">
 <h3 id="_requisites">Requisites</h3>
 <div class="paragraph">
-<p>This plugin works with Grails 3. You also need assets pipeline and the cache plugin.</p>
+<p>This plugin works with Grails 3. It also need assets pipeline and the cache plugin.</p>
 </div>
 <div class="ulist">
 <ul>
@@ -549,13 +533,10 @@ or email me at <a href="mailto:grooscript@gmail.com">grooscript@gmail.com</a>.</
 <p>Use <em>&lt;asset:deferredScripts/&gt;</em> in your gsp files with grooscript tags.</p>
 </li>
 <li>
-<p>You have to import <strong>grosscript-grails.js</strong> when you use grooscript tags.</p>
+<p>You don&#8217;t have to import <strong>grosscript-grails.js</strong> when you use grooscript tags, plugin does for you.</p>
 </li>
 <li>
-<p>The plugin uses <em>jquery</em>, so remember to add that dependency.</p>
-</li>
-<li>
-<p>Domain classes support is still experimental, <strong>don&#8217;t use it in production code</strong>, as explained <a href="#_use_in_production">here</a>.</p>
+<p>The plugin <strong>don&#8217;t</strong> need <em>jquery</em>, but you can work with it.</p>
 </li>
 </ul>
 </div>
@@ -566,14 +547,39 @@ or email me at <a href="mailto:grooscript@gmail.com">grooscript@gmail.com</a>.</
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dependencies {
     ...
-    compile "org.grails.plugins:grooscript:1.2.1"
+    compile "org.grails.plugins:grooscript:1.3.0"
     ...
 }</code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_what_is_new_in_1_2_1">What is new in 1.2.1</h3>
+<h3 id="_what_is_new_in_1_3_0">What is new in 1.3.0</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Use grails events between server and client using websockets.</p>
+</li>
+<li>
+<p>No need to add grooscript libs in your gsp&#8217;s.</p>
+</li>
+<li>
+<p>Removed jquery as dependency.</p>
+</li>
+<li>
+<p>Removes grooscript:remoteDomain feature.</p>
+</li>
+<li>
+<p>Improve file generation of components for the jar / war, no need execute a task, gradle plugin does it automatically.</p>
+</li>
+<li>
+<p>Add more tests.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_what_is_new_in_1_2_x">What is new in 1.2.x</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -635,9 +641,6 @@ You don&#8217;t need to know Grooscript, the plugin does the work for you. But y
 take a look to <a href="http://grooscript.org/doc.html" class="bare">http://grooscript.org/doc.html</a> to get more info. Grooscript compiles the code,
 inspects the AST tree, and generates the javascript code.</p>
 </div>
-<div class="paragraph">
-<p>Just remember you need <code>grooscript-grails.js</code> to run some converted code. Add <code>&lt;asset:javascript src="grooscript-grails.js"/&gt;</code> to your gsp.</p>
-</div>
 <div class="sect2">
 <h3 id="_spring_bean">Spring bean</h3>
 <div class="paragraph">
@@ -676,9 +679,10 @@ inspects the AST tree, and generates the javascript code.</p>
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">package org.grooscript.grails.util
 
 class GrooscriptGrails {
-    static void sendClientMessage(String channel, message) <i class="conum" data-value="1"></i><b>(1)</b>
+    static findComponentById(String id) <i class="conum" data-value="1"></i><b>(1)</b>
     static void doRemoteCall(String controller, String action, Map params, Closure onSuccess, Closure onFailure) <i class="conum" data-value="2"></i><b>(2)</b>
     static void sendWebsocketMessage(String channel, message) <i class="conum" data-value="3"></i><b>(3)</b>
+    static void notifyEvent(String eventName, data) <i class="conum" data-value="4"></i><b>(4)</b>
 }</code></pre>
 </div>
 </div>
@@ -686,7 +690,7 @@ class GrooscriptGrails {
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Send a message to event listeners</td>
+<td>Finf a component by id</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
@@ -695,6 +699,10 @@ class GrooscriptGrails {
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
 <td>Send a message to server via websockets</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Send a grails event</td>
 </tr>
 </table>
 </div>
@@ -716,17 +724,7 @@ class GrooscriptGrails {
 <h2 id="_tags">Tags</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Remember, when using tags, you have to add grooscript lib, and maybe jquery. Asset pipeline plugin is used.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;asset:javascript src="grooscript-grails.js"/&gt;
-&lt;asset:javascript src="jquery.js"/&gt;
-
-    ... your grooscript tags here ...
-
-&lt;asset:deferredScripts/&gt;</code></pre>
-</div>
+<p>This plugin offers a few tags, when you use that tags, some javascript dependencies will be added, all manages by asset pipeline plugin.</p>
 </div>
 <div class="sect2">
 <h3 id="_groovyCode">&lt;grooscript:code&gt;</h3>
@@ -798,10 +796,6 @@ some html builders, this is a simple one, that is available inside grooscript js
 <dd>
 <p>jquery selector of the dom object where html code will be injected.</p>
 </dd>
-<dt class="hdlist1">onEvent</dt>
-<dd>
-<p>to execute the function when event or events are launched.</p>
-</dd>
 </dl>
 </div>
 <div class="paragraph">
@@ -857,21 +851,21 @@ You can define the websocket entrypoint (default is <em>/stomp</em>) or activate
 </div>
 </div>
 <div class="sect2">
-<h3 id="__grooscript_onserverevent">&lt;grooscript:onServerEvent&gt;</h3>
+<h3 id="__grooscript_onwebsocket">&lt;grooscript:onWebsocket&gt;</h3>
 <div class="paragraph">
 <p>You can react to websocket events from the server:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;grooscript:onServerEvent path="/topic/hello"&gt;
+<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;grooscript:onWebsocket path="/topic/hello"&gt;
     $("#helloDiv").append '&lt;p&gt;'+data+'&lt;/p&gt;'
-&lt;/grooscript:onServerEvent&gt;
+&lt;/grooscript:onWebsocket&gt;
 
-&lt;grooscript:onServerEvent path="/topic/books" type="Book"&gt;
+&lt;grooscript:onWebsocket path="/topic/books" type="Book"&gt;
     data.each { book -&gt;
         $("#helloDiv").append '&lt;p&gt;'+book.coolFormat()+'&lt;/p&gt;'
     }
-&lt;/grooscript:onServerEvent&gt;</code></pre>
+&lt;/grooscript:onWebsocket&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -899,7 +893,7 @@ You can define the websocket entrypoint (default is <em>/stomp</em>) or activate
 </td>
 <td class="content">
 <div class="paragraph">
-<p>If you use <em>reloadOn</em> or <em>onServerEvent</em>, no need to start websocket connection with <em>initSpringWebsocket</em> tag</p>
+<p>If you use <em>reloadOn</em> or <em>onWebsocket</em>, no need to start websocket connection with <em>initSpringWebsocket</em> tag</p>
 </div>
 </td>
 </tr>
@@ -907,89 +901,46 @@ You can define the websocket entrypoint (default is <em>/stomp</em>) or activate
 </div>
 </div>
 <div class="sect2">
-<h3 id="_onEvent">&lt;grooscript:onEvent&gt;</h3>
+<h3 id="_onEvent">&lt;grooscript:onGrailsEvent&gt;</h3>
 <div class="paragraph">
-<p>You can react to events launched in the client. In your gsp, there is a variable called <strong>gsEvents</strong> that implements this:</p>
+<p>You can react to events launched in the server and the client. To use this feature, you need spring websockets
+working. Uses the grails 3 support of events, for example in a controller you can send events:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">interface EventHandler {
-    void sendMessage(String channel, Map data)
-    void onEvent(String channel, Closure action)
-    void close()
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import grails.events.Events
+
+class MyController implements Events {
+
+    def doEvents() {
+        notify "hello", "hello world!"
+        render "Ok"
+    }
 }</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Can react or launch events at any point, using <strong>gsEvents</strong> variable:</p>
+<p>And then react in to them in your gsp&#8217;s:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;grooscript:onGrailsEvent name="hello"&gt;
+    console.log data
+&lt;/grooscript:onEvent&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Can create events in your clients with <strong>GrooscriptGrails</strong> helper class:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;grooscript:code&gt;
-    $(document).ready {
-        def eventData = 'Application started.'
-        gsEvents.sendMessage('newEvent', eventData)
-        gsEvents.onEvent('delete', { book -&gt;
-            $('#deleteEvent').html 'Deleted ' + book.title
-        })
-    }
+    GrooscriptGrails.notifyEvent('somethingHappened', 'First!')
 &lt;/grooscript:code&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Also can use <em>grooscript:onEvent</em> to react to any event launched. Param <strong>name</strong> of the event is mandatory.
-A variable called <em>event</em> is available inside with the data of the event.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;grooscript:onEvent name="myCustomEvent"&gt;
-    console.log event
-&lt;/grooscript:onEvent&gt;</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_remoteDomain">&lt;grooscript:remoteModel&gt;</h3>
-<div class="paragraph">
-<p>With this tag you can use your domain classes in the browser / client. The domain class is available in
-your groovy code and actions on that domain will be performed asynchronous in your server. You have to annotate
-your domain class as a REST resource with @Resource(uri='/anyUrl', formats=['json']). The access to
-the data is controlled by grails, you can use <a href="http://grails.org/plugin/spring-security-rest">spring secure rest plugin</a>
-to secure access to your data. Only supports json results.</p>
-</div>
-<div class="paragraph">
-<p><strong>This tag is still experimental, don&#8217;t use in production, as explained <a href="#_use_in_production">here</a></strong></p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">package rest
-
-import grails.rest.Resource
-
-@Resource(uri='/books', formats=['json'])
-class Book {
-
-    String title
-    String author
-
-    static constraints = {
-        author nullable: true
-    }
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Activate use in your gsp&#8217;s with:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;grooscript:remoteModel domainClass="Book"/&gt;</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>In the <em>domainClass</em> you have to put the name of the domain class annotated with <em>@Resource</em>. The code of the domain
-class is converted to javascript, and you can use properties and methods in the client. If you want to
-see in action, please see demo below.</p>
+<p>You can take a look at some example <a href="https://github.com/chiquitinxx/grooscript-plugins/tree/master/websockets-test-app-sources">here</a></p>
 </div>
 </div>
 <div class="sect2">
@@ -1162,521 +1113,10 @@ you have to generate that conversion before create jar / war.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_websockets_step_by_step_guide">Websockets step by step guide</h2>
+<h2 id="_demos_or_examples">Demos or examples</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This is a step by step guide to use grails 3 with websockets only with groovy.</p>
-</div>
-<div class="sect2">
-<h3 id="_create_your_grails_3_application">Create your grails 3 application</h3>
-<div class="paragraph">
-<p>I suppose you have <a href="https://grails.org/">grails 3</a> installed in your computer, then run:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code>&gt; grails create-app websockets-sample</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Move to created folder <code>websockets-sample</code></p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_add_websocket_support">Add websocket support</h3>
-<div class="paragraph">
-<p>There are a few ways to add websocket support to your grails application, for this guide we will use
-spring boot <a href="http://spring.io/guides/gs/messaging-stomp-websocket/">support</a> and we will not use plugins.
-First of all we have to add dependencies to our <code>build.gradle</code> file:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dependencies {
-    ...
-    compile "org.springframework.boot:spring-boot-starter-websocket"
-    ...
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Later, let&#8217;s enable websockets in the application, create file <code>WebSocketConfig</code> in folder <code>src/main/groovy/websockets/sample</code></p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">package websockets.sample
-
-import org.springframework.context.annotation.Configuration
-import org.springframework.messaging.simp.config.MessageBrokerRegistry
-import org.springframework.web.socket.config.annotation.AbstractWebSocketMessageBrokerConfigurer
-import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker
-import org.springframework.web.socket.config.annotation.StompEndpointRegistry
-
-@Configuration
-@EnableWebSocketMessageBroker
-public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
-
-    @Override
-    public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/topic")
-        config.setApplicationDestinationPrefixes("/app")
-    }
-
-    @Override
-    public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/hello").withSockJS()
-    }
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>After, we have to add this bean to spring, and we will do in a old grails way, in <code>grails-app/conf/spring/resources.groovy</code>:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import websockets.sample.WebSocketConfig
-
-// Place your Spring DSL code here
-beans = {
-    webSocketConfig(WebSocketConfig)
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Now you can use websockets in the server side. To use webseckets in the client side, we have to download
-<a href="https://github.com/sockjs/sockjs-client/blob/master/dist/sockjs-0.3.4.min.js">SockJs</a> and
-<a href="https://raw.githubusercontent.com/jmesnil/stomp-websocket/master/lib/stomp.min.js">Stomp.js</a> javascript libraries, and put that javascript files in
-<code>grails-app/assets/javascripts</code> folder.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_add_grooscript_grails_plugin">Add grooscript grails plugin</h3>
-<div class="paragraph">
-<p>Before test that websockets are up in our gsp&#8217;s, we are going to add the plugin in <code>build.gradle</code>:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dependencies {
-    ...
-    compile "org.grails.plugins:grooscript:1.2.1"
-    ...
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Now, we can use grooscript tags in our gsp&#8217;s to improve websocket experience with groovy.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_check_websockets_are_available">Check websockets are available</h3>
-<div class="paragraph">
-<p>First, create a controller with:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code>&gt; grails create-controller websockets.sample.Hello</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Now, create a view for that controller  <code>grails-app/views/hello/index.gsp</code>:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;!doctype html&gt;
-&lt;html&gt;
-&lt;head&gt;
-    &lt;title&gt;Hello websockets&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;asset:javascript src="jquery-2.1.3.js" /&gt;
-    &lt;asset:javascript src="grooscript-grails" /&gt;
-    &lt;asset:javascript src="sockjs-0.3.4.min.js" /&gt;
-    &lt;asset:javascript src="stomp.min.js" /&gt;
-
-    &lt;grooscript:initSpringWebsocket endPoint="/hello"&gt;
-        $('body').html '&lt;p&gt;Hello from websockets!&lt;/p&gt;'
-    &lt;/grooscript:initSpringWebsocket&gt;
-
-    &lt;asset:deferredScripts/&gt;
-&lt;/body&gt;
-&lt;/html&gt;</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Now, that controller and view are ready, we can start application with <code>&gt; grails run-app</code> and navigate
-to <a href="http://localhost:8080/hello/index">http://localhost:8080/hello/index</a> to see that message
-<strong>Hello from websockets!</strong>. Your websocket connection is up and ready for action in your server and in your
-gsp&#8217;s.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_send_messages_to_the_server">Send messages to the server</h3>
-<div class="paragraph">
-<p>To send a message just use function <code>sendWebsocketMessage</code> that grooscript helpers offer:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;grooscript:initSpringWebsocket endPoint="/hello"&gt;
-	$('body').html '&lt;p&gt;Hello from websockets!&lt;/p&gt;'
-	GrooscriptGrails.sendWebsocketMessage("/app/hello", "I'm the client!")
-&lt;/grooscript:initSpringWebsocket&gt;</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Then in the server, let&#8217;s create a new controller for websocket connections in
-<code>src/main/groovy/websockets/sample/WebsocketsController.groovy</code>:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">package websockets.sample
-
-import org.springframework.messaging.handler.annotation.MessageMapping
-import org.springframework.messaging.handler.annotation.SendTo
-import org.springframework.stereotype.Controller
-
-@Controller
-class WebsocketsController {
-
-    @MessageMapping("/hello")
-    @SendTo("/topic/greetings")
-    Map greeting(String message) throws Exception {
-        [message: "Hello, my friend! You said: ${message}".toString()]
-    }
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Is a normal spring controller, not a grails controller, so we have to register this bean:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import websockets.sample.WebSocketConfig
-import websockets.sample.WebsocketsController
-
-// Place your Spring DSL code here
-beans = {
-    webSocketConfig(WebSocketConfig)
-    websocketsController(WebsocketsController)
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_receive_messages_from_the_server">Receive messages from the server</h3>
-<div class="paragraph">
-<p>Before, in <code>WebsocketsController</code> we sent as response a map to the client. To catch that message just add
-to the gsp:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;grooscript:onServerEvent path="/topic/greetings"&gt;
-	$("body").append '&lt;p&gt;'+data.message+'&lt;/p&gt;'
-&lt;/grooscript:onServerEvent&gt;</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Now, you have to see in the html <strong>Hello, my friend! You said: "I&#8217;m the client!"</strong>. The client expects
-messages as maps or lists, and that map or list is <strong>data</strong> inside the tag.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_demo">Demo</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>You need grails 3.0+ installed in your system. Create a new project with grooscript plugin. Also remember you
-have to add jquery, and need use asset and cache plugins.</p>
-</div>
-<div class="paragraph">
-<p>To add grooscript plugin, add to your build.gradle:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dependencies {
-    ...
-    compile "org.grails.plugins:grooscript:1.2.1"
-    ...
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>There is a complete demo using websockets and remote domain classes in <a href="https://github.com/chiquitinxx/circles">Github</a></p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_using_remote_domain_classes">Using remote domain classes</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_starting">Starting</h3>
-<div class="paragraph">
-<p>Let&#8217;s create a rest domain class, for example in grails-app/domain/rest/Book.groovy</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">package rest
-
-import grails.rest.Resource
-
-@Resource(uri='/books', formats=['json'])
-class Book {
-
-    String title
-    String author
-
-    static constraints = {
-        author nullable: true
-    }
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Now let&#8217;s add some books in BootStrap.groovy:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import rest.Book
-
-class BootStrap {
-
-    def init = { servletContext -&gt;
-        new Book(title: 'First Book').save()
-        new Book(title: 'Second Book', author: 'some author').save()
-    }
-    def destroy = {
-    }
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>And finally let&#8217;s see that books in the browser, changing grails-app/views/index.gsp:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head&gt;
-    &lt;title&gt;Rest grooscript demo&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;h2&gt;List of books&lt;/h2&gt;
-    &lt;g:each in="${rest.Book.list()}" var="book"&gt;
-        &lt;p&gt;Title: ${book.title} - Author: ${book.author?:'unknown'}&lt;/p&gt;
-    &lt;/g:each&gt;
-&lt;/body&gt;
-&lt;/html&gt;</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Ok, now we have our application ready. Run the app &gt; grails run-app and check that all is correct in your
-browser at http://localhost:8080/rest-demo. You must see the two book added in the bootstrap.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_grooscript_remote_domain_classes">Grooscript remote domain classes</h3>
-<div class="paragraph">
-<p>Now let&#8217;s add grooscript grails support for rest domain classes. Then, we can work with our domain classes
-from the client, and save data in our server just saving our classes in the client side. First let&#8217;s change our
-view, and get the list of books from the client side.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head&gt;
-    &lt;title&gt;Rest grooscript demo&lt;/title&gt;
-    &lt;asset:javascript src="jquery.js"/&gt; <i class="conum" data-value="1"></i><b>(1)</b>
-    &lt;asset:javascript src="grooscript-grails.js"/&gt; <i class="conum" data-value="2"></i><b>(2)</b>
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;grooscript:remoteModel domainClass="Book"/&gt; <i class="conum" data-value="3"></i><b>(3)</b>
-    &lt;h2&gt;List of books&lt;/h2&gt;
-    &lt;div id="bookList"/&gt;
-
-    &lt;grooscript:code&gt; <i class="conum" data-value="4"></i><b>(4)</b>
-        import rest.Book
-
-        def drawBooks = { <i class="conum" data-value="5"></i><b>(5)</b>
-            Book.list().then { list -&gt; <i class="conum" data-value="6"></i><b>(6)</b>
-                $('#bookList').html ''
-                list.each {
-                    $('#bookList').append('&lt;p&gt;Title: '+it.title+' - Author: '+ (it.author?: 'unknown') +'&lt;/p&gt;') <i class="conum" data-value="7"></i><b>(7)</b>
-                }
-            }
-        }
-
-        $(document).ready {
-            drawBooks() <i class="conum" data-value="8"></i><b>(8)</b>
-        }
-    &lt;/grooscript:code&gt;
-
-    &lt;asset:deferredScripts/&gt; <i class="conum" data-value="9"></i><b>(9)</b>
-&lt;/body&gt;
-&lt;/html&gt;</code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Need import jQuery to work with grooscript tags.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>grooscript-grails.js is also needed, because contains grooscript.js and some helper utilities.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>With this tag we can now use Book domain class in the client.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>With this tag you can write groovy code that will be converted to javascript and will run in your browser.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="5"></i><b>5</b></td>
-<td>Define function to draw a list of books using jQuery.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="6"></i><b>6</b></td>
-<td>You can call domain methods as <strong>list</strong>, and you get a promise, with a <strong>then</strong> method that will run if all is ok.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="7"></i><b>7</b></td>
-<td>Add books to the DOM.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="8"></i><b>8</b></td>
-<td>Run <strong>drawBooks</strong> when the page is ready in tle client.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="9"></i><b>9</b></td>
-<td>You have to add asset pipeline deferredScripts to process grooscript tags.</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>The difference between old code and the new code is that now, the <strong>render of the books is done in the client</strong>. This
-is the bigger change when you use grooscript tags. You are creating groovy code that is converted to
-javascript, and is running in the client side. The server now has less work to do. The conversion process is slower,
-but only is done 1 time in production, because it uses cache plugin.</p>
-</div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>When you insert groovy code in grooscript tags, don&#8217;t use ${}, because grails will try to process that code in the gsp.</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>The actions available with your rest domain class are: <strong>get(id)</strong>, <strong>save()</strong> to create or update, <strong>list()</strong> to retrieve
-a list of objects, and <strong>delete()</strong>. You can use them as you use in your controller or services, but grooscript will
-return a promise of the result, because in the client an ajax call is done. The interface of the promise is the
-following, and fail closure is optional:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">interface GsPromise {
-    def then(Closure success, Closure fail)
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_add_books">Add books</h3>
-<div class="paragraph">
-<p>I don&#8217;t wanna make this demo too long, and explain all grooscript and plugin stuff, but let&#8217;s add more
-functionality to this demo. Let&#8217;s add more books from the client. First let&#8217;s add inputs and the button:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-html" data-lang="html">&lt;h3&gt;Add a new book&lt;/h3&gt;
-&lt;p&gt;Title: &lt;input type="text" id="title"&gt;&lt;/p&gt;
-&lt;p&gt;Author: &lt;input type="text" id="author"&gt;&lt;/p&gt;
-&lt;button type="button" onclick="addBook()"&gt;Add book&lt;/button&gt;</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Now let&#8217;s add the function to save the book in server database and add to list:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import rest.Book
-
-def drawBooks = {
-    Book.list().then { list -&gt;
-        $('#bookList').html ''
-        list.each {
-            appendBookToList(it)
-        }
-    }
-}
-
-def appendBookToList = { book -&gt;
-    $('#bookList').append('&lt;p&gt;Title: '+book.title+' - Author: '+ (book.author?: 'unknown') +'&lt;/p&gt;')
-}
-
-def addBook = {
-    def title = $('#title').val()
-    def author = $('#author').val()
-    new Book(title: title, author: author).save().then {
-        appendBookToList(it)
-    }
-}
-
-$(document).ready {
-    drawBooks()
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>If you reload the page, now you can add books to the list, and books are saved in your database. You can check
-that the book is added with the url of the list of books http://localhost:8080/rest-demo/books.</p>
-</div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>You can use javascript objects in your groovy code as <em>$</em> or <em>console</em>. <strong>println</strong> do a console.log().</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_use_in_production">Use in production</h3>
-<div class="paragraph">
-<p>The remote domain classes feature is still experimental, but if you want to use in production you have to generate
-remote domain classes files. When this feature is used in development, it search for your domain classes in
-your filesystem, convert them to javascript, and added js code to your gsp.</p>
-</div>
-<div class="paragraph">
-<p>In production you have to generate files that will be added to your ./build/resources dir. You have to execute
-a script to do that conversion:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-shell" data-lang="shell">&gt; grails generate-remote-domain example.Book
-
-or
-
-&gt; grails generate-remote-domain example.Book example.Library ...</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>And later generate the war / jar.</p>
-</div>
+<p>Pending, please if you need a guide or better explanation in something, contact me.</p>
 </div>
 </div>
 </div>
@@ -1695,9 +1135,12 @@ or
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.2.1<br>
-Last updated 2016-02-11 23:27:59 +01:00
+Version 1.3.0<br>
+Last updated 2017-01-31 22:48:24 +01:00
 </div>
 </div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
 </body>
 </html>
