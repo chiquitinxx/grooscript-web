@@ -970,9 +970,6 @@ class MyController implements Events {
 <p>You have to add webcomponents lib if browser don&#8217;t support it. That library is available in
 <a href="http://webcomponents.org/" class="bare">http://webcomponents.org/</a> or in the plugin (add with: &lt;asset:javascript src="webcomponents.min.js"/&gt;).</p>
 </li>
-<li>
-<p>To use in production, you have to create conversions before create jar/war.</p>
-</li>
 </ul>
 </div>
 </div>
@@ -1087,12 +1084,7 @@ available in the groovy class at runtime.</td>
 <h4 id="_generate_components_for_production">Generate components for production</h4>
 <div class="paragraph">
 <p>In development, class source is used to convert to javascript. In production source is not available, so
-you have to generate that conversion before create jar / war.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-shell" data-lang="shell">&gt; grails generate-component components.Counter</code></pre>
-</div>
+just add grooscript gradle plugin &gt; 1.3.0 that will do that work for you.</p>
 </div>
 </div>
 <div class="sect3">
