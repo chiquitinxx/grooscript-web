@@ -1,4 +1,4 @@
 grooscript-web
 ===
 
-Grooscript static web http://grooscript.org
+Grooscript static web http://chiquitinxx.github.io/grooscript-web/
